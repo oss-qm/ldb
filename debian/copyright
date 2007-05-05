@@ -1,0 +1,25 @@
+This package was debianized by Jelmer Vernooij <jelmer@samba.org> on
+Fri May  4 12:40:10 CEST 2007.
+
+The tarball was extracted from Subversion by running:
+svn export svn://svn.samba.org/samba/tags/LDB_0_9_0 ldb-0.9.0
+cd ldb-0.9.0 && ./autogen.sh && cd ..
+tar cvz ldb-0.9.0 > ldb-0.9.0.tar.gz
+
+Upstream Authors and copyright:
+ Andrew Tridgell <tridge@samba.org>
+ Simo Sorce <idra@samba.org>
+ Andrew Bartlett <abartlet@samba.org>
+ Stefan Metzmacher <metze@samba.org>
+ Derrell Lipman <derrell@samba.org>
+ Jelmer Vernooij <jelmer@samba.org>
+  
+License:
+
+The binary utilities in this package are distributed under the terms 
+of the GNU General Public License. The text of the license is available
+on Debian systems in the /usr/share/common-licenses/GPL file.
+
+The shared library in this package is distributed under the terms
+of the GNU Lesser General Public License. The text of the license is
+available on Debian systems in the /usr/share/common-licenses/LGPL file.

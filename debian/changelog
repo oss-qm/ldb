@@ -1,0 +1,5 @@
+ldb (0.9.0-1) unstable; urgency=low
+
+  * Initial release. (Closes: #421573)
+
+ -- Jelmer Vernooij <jelmer@samba.org>  Fri, 04 May 2007 12:39:19 +0200
