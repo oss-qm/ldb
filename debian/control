@@ -2,7 +2,7 @@ Source: ldb
 Section: devel
 Priority: optional
 Maintainer: Jelmer Vernooij <jelmer@samba.org>
-Build-Depends: debhelper (>> 5.0.0), quilt (>= 0.40), tdb-dev (>= 1.1.0), libtalloc-dev
+Build-Depends: debhelper (>> 5.0.0), quilt (>= 0.40), tdb-dev (>= 1.1.0), libtalloc-dev, pkg-config, libpopt-dev, docbook-xsl, docbook-xml, xsltproc
 Standards-Version: 3.7.2
 
 Package: libldb0
@@ -36,7 +36,7 @@ Description: LDAP-like embedded database - tools
 Package: libldb-dev
 Section: libs
 Architecture: any
-Depends: libc6-dev, libldb0 (= ${Source-Version}), libtalloc-dev
+Depends: libc6-dev, libldb0 (= ${Source-Version}), libtalloc-dev, pkg-config
 Description: LDAP-like embedded database - development files
  ldb is a LDAP-like embedded database built on top of TDB.
  .
