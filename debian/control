@@ -36,7 +36,7 @@ Description: LDAP-like embedded database - tools
 Package: libldb-dev
 Section: libdevel
 Architecture: any
-Depends: libc6-dev, libldb0 (= ${Source-Version}), libtalloc-dev, pkg-config
+Depends: libc6-dev, libldb0 (= ${binary:Version}), libtalloc-dev, pkg-config
 Description: LDAP-like embedded database - development files
  ldb is a LDAP-like embedded database built on top of TDB.
  .

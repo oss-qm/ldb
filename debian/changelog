@@ -2,8 +2,9 @@ ldb (0.9.0-2) unstable; urgency=low
 
   * Put libldb-dev in libdevel section. (Closes: #427582)
   * Don't build shared version of ldbadd. (Closes: #427527)
+  * Use ${binary:Version} rather than obsolete ${Source-Version}.
 
- -- Jelmer Vernooij <jelmer@samba.org>  Wed, 06 Jun 2007 19:14:39 +0200
+ -- Jelmer Vernooij <jelmer@samba.org>  Wed, 06 Jun 2007 22:59:28 +0200
 
 ldb (0.9.0-1) unstable; urgency=low
 
