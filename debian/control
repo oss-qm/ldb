@@ -2,7 +2,7 @@ Source: ldb
 Section: devel
 Priority: optional
 Maintainer: Jelmer Vernooij <jelmer@samba.org>
-Build-Depends: debhelper (>> 5.0.0), quilt (>= 0.40), tdb-dev (>= 1.1.0), libtalloc-dev, pkg-config, libpopt-dev, docbook-xsl, docbook-xml, xsltproc
+Build-Depends: debhelper (>> 5.0.0), quilt (>= 0.40), tdb-dev (>= 1.1.0), libtalloc-dev, libtalloc1, pkg-config, libpopt-dev, docbook-xsl, docbook-xml, xsltproc
 Standards-Version: 3.7.2
 
 Package: libldb0
@@ -34,7 +34,7 @@ Description: LDAP-like embedded database - tools
  This package contains bundled test and utility binaries
 
 Package: libldb-dev
-Section: libs
+Section: libdevel
 Architecture: any
 Depends: libc6-dev, libldb0 (= ${Source-Version}), libtalloc-dev, pkg-config
 Description: LDAP-like embedded database - development files

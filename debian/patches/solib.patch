@@ -63,15 +63,6 @@ diff -u ldb-0.9.0/Makefile.in ldb-0.9.0-debian/Makefile.in
  dirs:
  	@mkdir -p $(DIRS)
  
-@@ -99,7 +110,7 @@
- 	$(CC) -shared -Wl,-soname,libnss_ldb.so.2 -o lib/libnss_ldb.so.2 $(NSS_OBJ) $(OBJS) $(LIB_FLAGS)
- 
- bin/ldbadd: tools/ldbadd.o tools/cmdline.o $(LIBS)
--	$(CC) -o bin/ldbadd tools/ldbadd.o tools/cmdline.o $(LIB_FLAGS)
-+	$(CC) -shared -o bin/ldbadd tools/ldbadd.o tools/cmdline.o $(LIB_FLAGS)
- 
- bin/ldbsearch: tools/ldbsearch.o tools/cmdline.o $(LIBS)
- 	$(CC) -o bin/ldbsearch tools/ldbsearch.o tools/cmdline.o $(LIB_FLAGS)
 @@ -128,7 +139,7 @@
  examples/ldifreader: examples/ldifreader.o $(LIBS)
  	$(CC) -o examples/ldifreader examples/ldifreader.o $(LIB_FLAGS)
