@@ -1,6 +1,6 @@
 ldb (0.9.0-3) UNRELEASED; urgency=low
 
-  * Improve long description a bit. (#438657)
+  * Improve long description a bit. (Closes: #438657)
 
  -- Jelmer Vernooij <jelmer@samba.org>  Sat, 25 Aug 2007 16:51:37 +0200
 
