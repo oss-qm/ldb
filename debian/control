@@ -3,7 +3,7 @@ Section: devel
 Priority: optional
 Maintainer: Jelmer Vernooij <jelmer@samba.org>
 Homepage: http://ldb.samba.org/
-Build-Depends: debhelper (>> 5.0.0), quilt (>= 0.40), tdb-dev (>= 1.1.0), libtalloc-dev, libtalloc1 (>= 1.0.2~), pkg-config, libpopt-dev, docbook-xsl, docbook-xml, xsltproc
+Build-Depends: debhelper (>> 5.0.0), quilt (>= 0.40), tdb-dev (>= 1.1.0), libtalloc-dev, libtalloc1 (>= 1.1.0~), pkg-config, libpopt-dev, docbook-xsl, docbook-xml, xsltproc
 Standards-Version: 3.7.2
 
 Package: libldb0
