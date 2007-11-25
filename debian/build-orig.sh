@@ -2,7 +2,7 @@
 # Build a source tarball for ldb
 
 samba4_repos=svn://svn.samba.org/samba/branches/SAMBA_4_0
-version=$( dpkg-parsechangelog -lldb/debian/changelog | sed -n 's/^Version: \(.*:\|\)//p' | sed 's/-[0-9.]\+$//' )
+version=$( dpkg-parsechangelog -l`dirname $0`/changelog | sed -n 's/^Version: \(.*:\|\)//p' | sed 's/-[0-9.]\+$//' )
 
 if echo $version | grep svn > /dev/null; then
 	# SVN Snapshot
