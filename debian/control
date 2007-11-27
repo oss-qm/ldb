@@ -2,8 +2,8 @@ Source: ldb
 Section: devel
 Priority: optional
 Maintainer: Jelmer Vernooij <jelmer@samba.org>
+Build-Depends: debhelper (>> 5.0.0), quilt (>= 0.40), tdb-dev (>= 1.1.0), libtalloc-dev, libtalloc1 (>= 1.1.0~), pkg-config, libpopt-dev, docbook-xsl, docbook-xml, xsltproc, python-dev, python-support (>= 0.4), swig
 Homepage: http://ldb.samba.org/
-Build-Depends: debhelper (>> 5.0.0), quilt (>= 0.40), tdb-dev (>= 1.1.0), libtalloc-dev, libtalloc1 (>= 1.1.0~), pkg-config, libpopt-dev, docbook-xsl, docbook-xml, xsltproc
 Standards-Version: 3.7.2
 
 Package: libldb0
@@ -47,3 +47,13 @@ Description: LDAP-like embedded database - development files
  database.
  .
  This package contains the development files.
+
+Package: python-ldb
+Section: python
+Architecture: any
+Depends: ${python:Depends}, libldb0 (= ${binary:Version})
+Provides: ${python:Provides}
+Description: Python bindings for LDB
+ ldb is a LDAP-like embedded database built on top of TDB.
+ .
+ This package contains the Python bindings.

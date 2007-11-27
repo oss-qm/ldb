@@ -21,7 +21,7 @@ configure-stamp:
 build: configure build-stamp
 build-stamp:
 	dh_testdir
-	$(MAKE)
+	$(MAKE) all build-python
 	touch build-stamp
 
 clean: clean-patched unpatch
@@ -38,6 +38,7 @@ install: build
 	dh_clean -k
 	dh_installdirs
 	$(MAKE) install DESTDIR=$(DESTDIR)
+	./setup.py install --root=$(DESTDIR)
 	# Don't install ldbtest
 	rm -f $(DESTDIR)/usr/bin/ldbtest
 	ln -s libldb.so.0.9.0 $(DESTDIR)/usr/lib/libldb.so.0
@@ -57,6 +58,7 @@ binary-arch: build install
 	dh_compress
 	dh_fixperms
 	dh_makeshlibs
+	dh_pysupport
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol
