@@ -15,7 +15,7 @@ DESTDIR=$(CURDIR)/debian/tmp
 configure: patch configure-stamp
 configure-stamp:
 	dh_testdir
-	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr
+	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --with-ldap=no
 	touch configure-stamp
 
 build: configure build-stamp
