@@ -1,4 +1,4 @@
-ldb (0.9.1~svn26117-1) unstable; urgency=low
+ldb (0.9.1~svn26179-1) unstable; urgency=low
 
   * Improve long description a bit. (Closes: #438657)
   * Set homepage field.
