@@ -1,8 +1,9 @@
 ldb (0.9.1~svn26185-2) UNRELEASED; urgency=low
 
   * Set Vcs-Svn field.
+  * Fix building twice in a row. (Closes: #442625)
 
- -- Jelmer Vernooij <jelmer@samba.org>  Fri, 30 Nov 2007 14:06:10 +0000
+ -- Jelmer Vernooij <jelmer@samba.org>  Fri, 30 Nov 2007 18:15:06 +0100
 
 ldb (0.9.1~svn26185-1) unstable; urgency=low
 

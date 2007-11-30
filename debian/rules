@@ -30,6 +30,8 @@ clean-patched:
 	dh_testroot
 	rm -f build-stamp configure-stamp
 	[ ! -f Makefile ] || $(MAKE) distclean
+	./setup.py clean
+	rm -rf build
 	dh_clean
 
 install: build
