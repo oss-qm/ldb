@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Jelmer Vernooij <jelmer@samba.org>
 Build-Depends: debhelper (>> 5.0.0), quilt (>= 0.40), tdb-dev (>= 1.1.0), libtalloc-dev, libtalloc1 (>= 1.1.0~), pkg-config, libpopt-dev, docbook-xsl, docbook-xml, xsltproc, python-dev, python-support (>= 0.4), swig
 Homepage: http://ldb.samba.org/
-Standards-Version: 3.7.2
+Standards-Version: 3.7.3
 Vcs-Svn: svn://svn.debian.org/pkg-samba/trunk/ldb
 XS-DM-Upload-Allowed: yes
 
