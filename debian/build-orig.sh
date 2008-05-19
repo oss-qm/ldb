@@ -1,11 +1,10 @@
 #!/bin/bash
-GIT_URL=$1
-REFSPEC=$2
+REFSPEC=$1
+GIT_URL=$2
 shift 2
 
 if [ -z "$GIT_URL" ]; then
-	echo "Usage: $0 <samba4-git-url> [<refspec>]"
-	exit 1
+	GIT_URL=git://git.samba.org/samba.git
 fi
 
 LDBTMP=$TMPDIR/$RANDOM.ldb.git

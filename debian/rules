@@ -20,6 +20,9 @@ configure-stamp:
 	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --with-ldap=no
 	touch configure-stamp
 
+get-orig-source:
+	sh debian/build-orig.sh
+
 build: configure build-stamp
 build-stamp:
 	dh_testdir
