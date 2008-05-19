@@ -21,7 +21,7 @@ configure-stamp:
 	touch configure-stamp
 
 get-orig-source:
-	sh debian/build-orig.sh
+	./debian/build-orig.sh
 
 build: configure build-stamp
 build-stamp:
