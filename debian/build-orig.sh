@@ -22,6 +22,7 @@ fi
 
 mv $LDBTMP/source/lib/ldb "ldb-$version"
 mv $LDBTMP/source/lib/replace "ldb-$version/libreplace"
+mv $LDBTMP/source/lib/events "ldb-$version/events"
 mv $LDBTMP/source/lib/tdb "ldb-$version/tdb"
 mv $LDBTMP/source/lib/talloc "ldb-$version/talloc"
 rm -rf $LDBTMP
