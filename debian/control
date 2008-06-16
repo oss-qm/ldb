@@ -53,7 +53,7 @@ Description: LDAP-like embedded database - development files
 Package: python-ldb
 Section: python
 Architecture: any
-Depends: ${python:Depends}, libldb0 (= ${binary:Version})
+Depends: ${python:Depends}, libldb0 (= ${binary:Version}), ${shlibs:Depends}
 Provides: ${python:Provides}
 Description: Python bindings for LDB
  ldb is a LDAP-like embedded database built on top of TDB.

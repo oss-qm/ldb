@@ -6,7 +6,15 @@ svn export svn://svn.samba.org/samba/tags/LDB_0_9_0 ldb-0.9.0
 cd ldb-0.9.0 && ./autogen.sh && cd ..
 tar cvz ldb-0.9.0 > ldb-0.9.0.tar.gz
 
-Upstream Authors and copyright:
+Upstream Authors:
+ Andrew Tridgell <tridge@samba.org>
+ Simo Sorce <idra@samba.org>
+ Andrew Bartlett <abartlet@samba.org>
+ Stefan Metzmacher <metze@samba.org>
+ Derrell Lipman <derrell@samba.org>
+ Jelmer Vernooij <jelmer@samba.org>
+
+Copyright (C) 2004-2008:
  Andrew Tridgell <tridge@samba.org>
  Simo Sorce <idra@samba.org>
  Andrew Bartlett <abartlet@samba.org>
