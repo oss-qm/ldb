@@ -1,0 +1,17 @@
+Goal: Avoid dependency on libevents, which is not packaged yet.
+
+Status wrt upstream: Debian-specific
+
+diff -ur ldb-0.92~git20080616/ldb.pc.in ldb-0.92~git20080616-fixed/ldb.pc.in
+--- ldb-0.92~git20080616/ldb.pc.in	2008-06-16 21:03:50.000000000 +0200
++++ ldb-0.92~git20080616-fixed/ldb.pc.in	2008-06-16 21:05:14.000000000 +0200
+@@ -8,7 +8,7 @@
+ Description: An LDAP-like embedded database
+ Version: @PACKAGE_VERSION@
+ Requires.private: tdb
+-Requires: talloc events
++Requires: talloc
+ Libs: -L${libdir} -lldb
+ Libs.private: @LDAP_LIBS@
+ Cflags: -I${includedir} 
+Nur in ldb-0.92~git20080616-fixed: ldb.pc.in~.
