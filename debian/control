@@ -6,7 +6,7 @@ Build-Depends: debhelper (>> 5.0.0), quilt (>= 0.40), tdb-dev (>= 1.1.0), libtal
 Homepage: http://ldb.samba.org/
 Standards-Version: 3.8.0
 Vcs-Svn: svn://svn.debian.org/pkg-samba/trunk/ldb
-XS-DM-Upload-Allowed: yes
+DM-Upload-Allowed: yes
 
 Package: libldb0
 Architecture: any
