@@ -8,7 +8,7 @@ if [ -z "$GIT_URL" ]; then
 fi
 
 if [ -z "$REFSPEC" ]; then
-	REFSPEC=origin/v4-0-test
+	REFSPEC=origin/master
 fi
 
 LDBTMP=$TMPDIR/$RANDOM.ldb.git
@@ -20,11 +20,11 @@ if [ ! -z "$REFSPEC" ]; then
 	popd
 fi
 
-mv $LDBTMP/source/lib/ldb "ldb-$version"
-mv $LDBTMP/source/lib/replace "ldb-$version/libreplace"
-mv $LDBTMP/source/lib/events "ldb-$version/events"
-mv $LDBTMP/source/lib/tdb "ldb-$version/tdb"
-mv $LDBTMP/source/lib/talloc "ldb-$version/talloc"
+mv $LDBTMP/source4/lib/ldb "ldb-$version"
+mv $LDBTMP/lib/replace "ldb-$version/libreplace"
+mv $LDBTMP/lib/tevent "ldb-$version/tevent"
+mv $LDBTMP/lib/tdb "ldb-$version/tdb"
+mv $LDBTMP/lib/talloc "ldb-$version/talloc"
 rm -rf $LDBTMP
 pushd "ldb-$version" && ./autogen.sh && popd
 tar cvz "ldb-$version" > "ldb_$version.orig.tar.gz"

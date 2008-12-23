@@ -1,3 +1,9 @@
+ldb (1:0.9.2~git20081223-1) unstable; urgency=low
+
+  * New upstream snapshot.
+
+ -- Jelmer Vernooij <jelmer@samba.org>  Tue, 23 Dec 2008 04:11:39 +0100
+
 ldb (1:0.9.2~git20080616-1) unstable; urgency=low
 
   * Fix version number accidently messed up by typo earlier.
