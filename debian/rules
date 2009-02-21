@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-CFLAGS = -g -Wall
+CFLAGS = -g -Wall -Wl,--as-needed
 
 version=$(shell dpkg-parsechangelog -l$(CURDIR)/debian/changelog | sed -n 's/^Version: \(.*:\|\)//p' | sed 's/-[0-9.]\+$$//' | sed 's/~.\+$$//')
 

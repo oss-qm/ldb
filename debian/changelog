@@ -1,8 +1,10 @@
-ldb (1:0.9.2~git20090101-1) UNRELEASED; urgency=low
+ldb (1:0.9.3~git20090101-1) UNRELEASED; urgency=low
 
   * New upstream snapshot.
   * Switch to python-central.
   * Add dummy watch file explaining how to obtain an upstream tarball.
+  * Build against tevent.
+  * Compile with -Wl,--as-needed.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Thu, 01 Jan 2009 06:47:33 +0100
 
