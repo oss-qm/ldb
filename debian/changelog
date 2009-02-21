@@ -1,4 +1,4 @@
-ldb (1:0.9.3~git20090101-1) UNRELEASED; urgency=low
+ldb (1:0.9.3~git20090221-1) unstable; urgency=low
 
   * New upstream snapshot.
   * Switch to python-central.
