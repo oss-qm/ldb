@@ -1,3 +1,10 @@
+ldb (1:0.9.5~git20090617-1) unstable; urgency=low
+
+  * New upstream snapshot.
+  * Bump standards version to 3.8.1.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Thu, 18 Jun 2009 00:32:05 +0200
+
 ldb (1:0.9.3~git20090221-1) unstable; urgency=low
 
   * New upstream snapshot.
