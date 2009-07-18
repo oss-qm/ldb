@@ -1,8 +1,15 @@
-ldb (1:0.9.5~git20090617-1) unstable; urgency=low
+ldb (1:0.9.6~git20090718-1) unstable; urgency=low
+
+  * New upstream snapshot.
+  * Bump standards version to 3.8.2.
+  * Link Python modules only against necessary libraries.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Sat, 18 Jul 2009 10:55:47 +0200
+
+ldb (1:0.9.6~git20090617-1) unstable; urgency=low
 
   * New upstream snapshot.
   * Bump standards version to 3.8.1.
-  * Bump standards version to 3.8.2.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Fri, 17 Jul 2009 20:37:51 +0200
 
