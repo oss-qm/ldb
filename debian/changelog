@@ -1,3 +1,9 @@
+ldb (1:0.9.6~git20090912-1) unstable; urgency=low
+
+  * New upstream snapshot.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Fri, 11 Sep 2009 23:34:22 +0200
+
 ldb (1:0.9.6~git20090718-2) unstable; urgency=low
 
   * Remove unused patch.
