@@ -12,11 +12,9 @@ else
 CFLAGS += -O2
 endif
 
-include /usr/share/quilt/quilt.make
-
 DESTDIR=$(CURDIR)/debian/tmp
 
-configure: patch configure-stamp
+configure: configure-stamp
 configure-stamp:
 	dh_testdir
 	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --with-ldap=no
@@ -31,8 +29,7 @@ build-stamp:
 	$(MAKE) all build-python LDFLAGS="$(LDFLAGS)" SHLD_FLAGS="$(SHLD_FLAGS)"
 	touch build-stamp
 
-clean: clean-patched unpatch
-clean-patched:
+clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp configure-stamp
