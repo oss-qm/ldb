@@ -1,3 +1,10 @@
+ldb (1:0.9.10~git20091212-1) karmic; urgency=low
+
+  * New upstream version.
+  * Depend on libtdb-dev rather than tdb-dev.
+
+ -- Jelmer Vernooij <jelmer@ganieda.vernstok.nl>  Sat, 12 Dec 2009 22:04:36 +0100
+
 ldb (1:0.9.6~git20090912-1) unstable; urgency=low
 
   * New upstream snapshot.

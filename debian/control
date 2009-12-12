@@ -2,7 +2,7 @@ Source: ldb
 Section: devel
 Priority: optional
 Maintainer: Jelmer Vernooij <jelmer@debian.org>
-Build-Depends: debhelper (>> 5.0.0), tdb-dev (>= 1.1.3~git20081222-2), libtalloc-dev (>= 1.1.0~), libtevent-dev (>= 0.9.6~), pkg-config, libpopt-dev, docbook-xsl, docbook-xml, xsltproc, python-dev, python-central (>= 0.5.6)
+Build-Depends: debhelper (>> 5.0.0), libtdb-dev (>= 1.1.3~git20081222-2), libtalloc-dev (>= 1.1.0~), libtevent-dev (>= 0.9.6~), pkg-config, libpopt-dev, docbook-xsl, docbook-xml, xsltproc, python-dev, python-central (>= 0.5.6)
 Homepage: http://ldb.samba.org/
 Standards-Version: 3.8.3
 Vcs-Svn: svn://svn.debian.org/pkg-samba/trunk/ldb
@@ -39,7 +39,7 @@ Description: LDAP-like embedded database - tools
 Package: libldb-dev
 Section: libdevel
 Architecture: any
-Depends: libc6-dev, libldb0 (= ${binary:Version}), libtalloc-dev, pkg-config, tdb-dev
+Depends: libc6-dev, libldb0 (= ${binary:Version}), libtalloc-dev, pkg-config, libtdb-dev
 Description: LDAP-like embedded database - development files
  ldb is a LDAP-like embedded database built on top of TDB.
  .
