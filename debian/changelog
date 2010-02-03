@@ -1,8 +1,10 @@
-ldb (1:0.9.10~git20100103-1) unstable; urgency=low
+ldb (1:0.9.10~git20100203-1) unstable; urgency=low
 
   * New upstream snapshot.
+  * Bump standards version to 3.8.4.
+  * Switch to dpkg-source 3.0 (quilt) format
 
- -- Jelmer Vernooij <jelmer@debian.org>  Sat, 26 Dec 2009 22:25:20 +0100
+ -- Jelmer Vernooij <jelmer@debian.org>  Wed, 03 Feb 2010 16:16:48 +0100
 
 ldb (1:0.9.10~git20091212-1) unstable; urgency=low
 
