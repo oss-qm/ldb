@@ -11,7 +11,7 @@ XS-Python-Version: all
 Package: libldb0
 Architecture: any
 Section: libs
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: LDAP-like embedded database - shared library
  ldb is a LDAP-like embedded database built on top of TDB.
  .
@@ -25,7 +25,7 @@ Description: LDAP-like embedded database - shared library
 Package: ldb-tools
 Section: utils
 Architecture: any
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: LDAP-like embedded database - tools
  ldb is a LDAP-like embedded database built on top of TDB.
  .
@@ -39,7 +39,7 @@ Description: LDAP-like embedded database - tools
 Package: libldb-dev
 Section: libdevel
 Architecture: any
-Depends: libc6-dev, libldb0 (= ${binary:Version}), libtalloc-dev, pkg-config, libtdb-dev
+Depends: libc6-dev, libldb0 (= ${binary:Version}), libtalloc-dev, pkg-config, libtdb-dev, ${misc:Depends}
 Description: LDAP-like embedded database - development files
  ldb is a LDAP-like embedded database built on top of TDB.
  .
@@ -53,7 +53,7 @@ Description: LDAP-like embedded database - development files
 Package: python-ldb
 Section: python
 Architecture: any
-Depends: ${python:Depends}, libldb0 (= ${binary:Version}), ${shlibs:Depends}
+Depends: ${python:Depends}, libldb0 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
 Provides: ${python:Provides}
 XB-Python-Version: ${python:Versions}
 Description: Python bindings for LDB
