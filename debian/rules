@@ -1,10 +1,6 @@
 #!/usr/bin/make -f
 
 CFLAGS = -g -Wall 
-LDFLAGS = -Wl,--as-needed
-SHLD_FLAGS = -shared $(LDFLAGS)
-
-version=$(shell dpkg-parsechangelog -l$(CURDIR)/debian/changelog | sed -n 's/^Version: \(.*:\|\)//p' | sed 's/-[0-9.]\+$$//' | sed 's/~.\+$$//')
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 CFLAGS += -O0
@@ -24,25 +20,21 @@ configure-stamp:
 get-orig-source:
 	./debian/build-orig.sh
 
-build: configure build-stamp
-build-stamp:
-	dh_testdir
-	$(MAKE)
-	touch build-stamp
-
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp configure-stamp
+	rm -f configure-stamp
 	[ ! -f Makefile ] || $(MAKE) distclean
 	dh_clean
 
-install: build
+install: configure
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	DESTDIR=$(DESTDIR) $(MAKE) install
+	$(MAKE) install DESTDIR=$(DESTDIR)
+	# Work around waf bug
+	mv $(DESTDIR)/usr/include/ldb.inst.h $(DESTDIR)/usr/include/ldb.h
 	# Don't install ldbtest
 	rm -f $(DESTDIR)/usr/bin/ldbtest
 	dh_install --fail-missing --list-missing --sourcedir=$(DESTDIR)
