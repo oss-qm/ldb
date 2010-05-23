@@ -18,7 +18,7 @@ configure: configure-stamp
 configure-stamp:
 	dh_testdir
 	./autogen-waf.sh
-	PYTHON=`which python` PYTHON_CONFIG=`which python-config` CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --with-ldap=no --disable-rpath
+	PYTHON=`which python` PYTHON_CONFIG=`which python-config` CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath --disable-rpath-install
 	touch configure-stamp
 
 get-orig-source:
@@ -27,7 +27,7 @@ get-orig-source:
 build: configure build-stamp
 build-stamp:
 	dh_testdir
-	$(MAKE) all build-python LDFLAGS="$(LDFLAGS)" SHLD_FLAGS="$(SHLD_FLAGS)"
+	$(MAKE)
 	touch build-stamp
 
 clean:
@@ -42,11 +42,9 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	$(MAKE) install DESTDIR=$(DESTDIR)
+	DESTDIR=$(DESTDIR) $(MAKE) install
 	# Don't install ldbtest
 	rm -f $(DESTDIR)/usr/bin/ldbtest
-	ln -s libldb.so.$(version) $(DESTDIR)/usr/lib/libldb.so.0
-	ln -s libldb.so.0 $(DESTDIR)/usr/lib/libldb.so
 	dh_install --fail-missing --list-missing --sourcedir=$(DESTDIR)
 
 binary-indep: 

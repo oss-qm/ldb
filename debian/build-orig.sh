@@ -14,11 +14,11 @@ if [ ! -z "$REFSPEC" ]; then
 	git checkout $REFSPEC || exit 1
 	popd
 fi
-pushd $LDBTMP/lib/ldb
+pushd $LDBTMP/source4/lib/ldb
 ./autogen-waf.sh
 ./configure
 make dist
 popd
 version=$( dpkg-parsechangelog -l`dirname $0`/changelog | sed -n 's/^Version: \(.*:\|\)//p' | sed 's/-[0-9.]\+$//' )
-mv $LDBTMP/lib/ldb/ldb-*.tar.gz ldb-$version.tar.gz
+mv $LDBTMP/source4/lib/ldb/ldb-*.tar.gz ldb_$version.orig.tar.gz
 rm -rf $LDBTMP
