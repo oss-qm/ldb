@@ -7,7 +7,7 @@ if [ -z "$GIT_URL" ]; then
 	GIT_URL=git://git.samba.org/samba.git
 fi
 
-LDBTMP=$TMPDIR/$RANDOM.ldb.git
+LDBTMP=`mktemp -d`
 git clone --depth 1 $GIT_URL $LDBTMP
 if [ ! -z "$REFSPEC" ]; then
 	pushd $LDBTMP
