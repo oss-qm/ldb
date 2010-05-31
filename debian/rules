@@ -13,8 +13,9 @@ DESTDIR=$(CURDIR)/debian/tmp
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
-	./autogen.sh
-	PYTHON=`which python` PYTHON_CONFIG=`which python-config` CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath --disable-rpath-install
+	./autogen-waf.sh
+	PYTHON=`which python` PYTHON_CONFIG=`which python-config` CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath --disable-rpath-install \
+		--bundled-libraries=NONE
 	touch configure-stamp
 
 get-orig-source:
@@ -33,9 +34,9 @@ install: configure
 	dh_clean -k
 	dh_installdirs
 	$(MAKE) install DESTDIR=$(DESTDIR)
+	rm -f $(DESTDIR)//usr/lib/python*/*-packages/tdb.so
+	ar cr $(DESTDIR)/usr/lib/libldb.a bin/default/common/*.o
 	# Don't install ldbtest
-	ln -s libldb.so.0.9.10 $(DESTDIR)/usr/lib/libldb.so.0
-	ln -s libldb.so.0.9.10 $(DESTDIR)/usr/lib/libldb.so
 	rm -f $(DESTDIR)/usr/bin/ldbtest
 	dh_install --fail-missing --list-missing --sourcedir=$(DESTDIR)
 
