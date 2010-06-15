@@ -1,3 +1,9 @@
+ldb (1:0.9.12~git20100615-1) lucid; urgency=low
+
+  * New upstream snapshot.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Tue, 15 Jun 2010 20:25:26 +0200
+
 ldb (1:0.9.11~git20100531-1) experimental; urgency=low
 
   * New upstream snapshot.

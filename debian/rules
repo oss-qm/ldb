@@ -38,6 +38,7 @@ install: configure
 	ar cr $(DESTDIR)/usr/lib/libldb.a bin/default/common/*.o
 	# Don't install ldbtest
 	rm -f $(DESTDIR)/usr/bin/ldbtest
+	rm -f $(DESTDIR)/usr/lib/libpyldb-util.so
 	dh_install --fail-missing --list-missing --sourcedir=$(DESTDIR)
 
 binary-indep: 
