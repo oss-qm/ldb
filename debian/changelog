@@ -1,3 +1,13 @@
+ldb (1:0.9.13~git20100820-1) experimental; urgency=low
+
+  * New upstream snapshot.
+    + Builds against system default Python rather than most recent supported
+      python. Closes: #577436.
+  * Bump standards version to 3.9.1.
+  * Switch to Bazaar.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Sun, 22 Aug 2010 15:18:28 +0200
+
 ldb (1:0.9.12~git20100615-1) experimental; urgency=low
 
   * New upstream snapshot.
