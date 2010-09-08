@@ -1,3 +1,10 @@
+ldb (1:0.9.13~git20100908-1) maverick; urgency=low
+
+  * New upstream snapshot.
+  * Support older versions of tdb.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Wed, 08 Sep 2010 03:53:47 +0200
+
 ldb (1:0.9.13~git20100820-1) experimental; urgency=low
 
   * New upstream snapshot.
