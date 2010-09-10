@@ -16,7 +16,7 @@ configure-stamp:
 	./autogen-waf.sh
 	PYTHON=`which python` PYTHON_CONFIG=`which python-config` CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath --disable-rpath-install \
 		--bundled-libraries=NONE \
-		--minimum-library-version=tdb:1.2.2
+		--minimum-library-version=tdb:1.2.1
 	touch configure-stamp
 
 get-orig-source:

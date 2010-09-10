@@ -1,3 +1,9 @@
+ldb (1:0.9.13~git20100908-2) experimental; urgency=low
+
+  * Support tdb 1.2.1.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Fri, 10 Sep 2010 17:17:40 +0200
+
 ldb (1:0.9.13~git20100908-1) experimental; urgency=low
 
   * New upstream snapshot.
