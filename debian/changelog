@@ -1,3 +1,9 @@
+ldb (1:0.9.13~git20100908-3) UNRELEASED; urgency=low
+
+  * Support talloc 2.0.1.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Mon, 13 Sep 2010 15:11:46 +0200
+
 ldb (1:0.9.13~git20100908-2) experimental; urgency=low
 
   * Support tdb 1.2.1.
