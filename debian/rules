@@ -9,6 +9,7 @@ CFLAGS += -O2
 endif
 
 DESTDIR=$(CURDIR)/debian/tmp
+WAF=buildtools/bin/waf
 
 configure: configure-stamp
 configure-stamp:
@@ -26,7 +27,9 @@ clean:
 	dh_testdir
 	dh_testroot
 	rm -f configure-stamp
-	[ ! -f Makefile ] || $(MAKE) distclean
+	-$(WAF) clean
+	rm -rf buildtools/bin/.waf-*
+	rm -f buildtools/wafsamba/*.pyc
 	dh_clean
 
 install: configure
@@ -35,11 +38,8 @@ install: configure
 	dh_clean -k
 	dh_installdirs
 	$(MAKE) install DESTDIR=$(DESTDIR)
-	rm -f $(DESTDIR)//usr/lib/python*/*-packages/tdb.so
+	rm $(DESTDIR)//usr/lib/python*/*-packages/tdb.so
 	ar cr $(DESTDIR)/usr/lib/libldb.a bin/default/common/*.o
-	# Don't install ldbtest
-	rm -f $(DESTDIR)/usr/bin/ldbtest
-	rm -f $(DESTDIR)/usr/lib/libpyldb-util.so
 	dh_install --fail-missing --list-missing --sourcedir=$(DESTDIR)
 
 binary-indep: 
