@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in 
+    remove|upgrade|deconfigure)
+		update-alternatives --remove ldb-ldap /usr/lib/ldb/ldap.openldap.so
+	;;
+esac
+
+#DEBHELPER#
+
+exit 0

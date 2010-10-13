@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "configure" ]
+then
+	update-alternatives --install \
+		/usr/lib/ldb/ldap.so ldb-ldap /usr/lib/ldb/ldap.openldap.so 10
+fi
+
+#DEBHELPER#
+
+exit 0
