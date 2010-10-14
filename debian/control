@@ -5,7 +5,7 @@ Maintainer: Jelmer Vernooij <jelmer@debian.org>
 Build-Depends: debhelper (>> 5.0.0), libtdb-dev (>= 1.2.1~), libtalloc-dev (>= 2.0.1~), libtevent-dev (>= 0.9.9~), pkg-config, libpopt-dev, docbook-xsl, docbook-xml, xsltproc, python-dev, python-central (>= 0.5.6), python-tdb
 Homepage: http://ldb.samba.org/
 Standards-Version: 3.9.1
-Vcs-Svn: http://bzr.debian.org/pkg-samba/ldb/unstable
+Vcs-Bzr: http://bzr.debian.org/pkg-samba/ldb/experimental
 XS-Python-Version: all
 
 Package: libldb0
