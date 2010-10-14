@@ -17,7 +17,7 @@ configure-stamp:
 	./autogen-waf.sh
 	PYTHON=`which python` PYTHON_CONFIG=`which python-config` CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath --disable-rpath-install \
 		--bundled-libraries=NONE \
-		--minimum-library-version=tdb:1.2.1,talloc:2.0.1 \
+		--minimum-library-version=tdb:1.2.6,talloc:2.0.1,pytdb:1.2.6 \
 		--with-modulesdir=/usr/lib
 	touch configure-stamp
 
