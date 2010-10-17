@@ -1,10 +1,4 @@
-ldb (1:0.9.15~git20101013-2) UNRELEASED; urgency=low
-
-  * Upload to unstable.
-
- -- Jelmer Vernooij <jelmer@debian.org>  Fri, 15 Oct 2010 00:30:41 +0200
-
-ldb (1:0.9.15~git20101013-1) experimental; urgency=low
+ldb (1:0.9.15~git20101017-1) unstable; urgency=low
 
   * New upstream snapshot.
    + Use alternatives to manage new /usr/lib/ldap.so link.
