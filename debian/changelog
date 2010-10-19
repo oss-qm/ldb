@@ -1,3 +1,9 @@
+ldb (1:0.9.16~git20101019-1) unstable; urgency=low
+
+  * New upstream snapshot.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Tue, 19 Oct 2010 23:56:19 +0200
+
 ldb (1:0.9.15~git20101017-1) unstable; urgency=low
 
   * New upstream snapshot.
