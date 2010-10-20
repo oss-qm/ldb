@@ -4,7 +4,6 @@
 # Licensed under the GNU GPL, version 2 or later.
 
 import ConfigParser
-from debian.deb822 import Deb822, PkgRelation
 import optparse
 import os
 import sys
@@ -22,8 +21,8 @@ if len(args) != 1:
     else:
         parser.print_usage()
         sys.exit(1)
-
-tree = args[0]
+else:
+    tree = args[0]
 
 def update_relation(line, pkg, kind, version):
     """Update a relation in a control field.
@@ -90,6 +89,7 @@ def find_version(path):
 def update_control():
     """Update the debian control file.
     """
+    from debian.deb822 import Deb822, PkgRelation
     f = open('debian/control', 'r')
     iter = Deb822.iter_paragraphs(f)
     source = iter.next()
