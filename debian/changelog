@@ -4,6 +4,8 @@ ldb (1:0.9.16~git20101019-1) unstable; urgency=low
    + Use alternatives to manage new /usr/lib/ldap.so link.
   * OpenLDAP support is now always built.
   * Fixes references to ldb(3) in manpages. Closes: #584227
+  * Override modules directory to be /usr/lib/ldb, rather
+    than /usr/modules/ldb as is now the upstream default. Closes: #600824
 
  -- Jelmer Vernooij <jelmer@debian.org>  Wed, 13 Oct 2010 16:45:29 +0200
 
