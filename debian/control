@@ -60,3 +60,17 @@ Description: Python bindings for LDB
  ldb is a LDAP-like embedded database built on top of TDB.
  .
  This package contains the Python bindings.
+
+Package: python-ldb-dev
+Section: libdevel
+Architecture: any
+Depends: libc6-dev, python-ldb (= ${binary:Version}), libldb-dev, pkg-config, ${misc:Depends}
+Description: LDB python bindings - development files
+ ldb is a LDAP-like embedded database built on top of TDB.
+ .
+ What ldb does is provide a fast database with an LDAP-like API designed
+ to be used within an application. In some ways it can be seen as a
+ intermediate solution between key-value pair databases and a real LDAP
+ database.
+ .
+ This package contains the development files for the Python bindings.

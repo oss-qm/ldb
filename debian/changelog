@@ -1,3 +1,10 @@
+ldb (1:0.9.17~git20101023-1) UNRELEASED; urgency=low
+
+  * New upstream snapshot.
+   + Add python-ldb-dev package.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Sat, 23 Oct 2010 20:00:40 +0200
+
 ldb (1:0.9.16~git20101019-1) unstable; urgency=low
 
   * New upstream snapshot.
