@@ -1,4 +1,4 @@
-usr/include/*
+usr/include/ldb*.h
 usr/lib/pkgconfig/ldb.pc
 usr/lib/libldb.a
 usr/lib/libldb.so
