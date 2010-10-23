@@ -1,4 +1,4 @@
-ldb (1:0.9.17~git20101023-1) UNRELEASED; urgency=low
+ldb (1:0.9.17~git20101024-1) UNRELEASED; urgency=low
 
   * New upstream snapshot.
    + Add python-ldb-dev package.
