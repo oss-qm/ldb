@@ -18,7 +18,7 @@ configure-stamp:
 	PYTHON=`which python` PYTHON_CONFIG=`which python-config` CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath --disable-rpath-install \
 		--bundled-libraries=NONE \
 		--minimum-library-version="$(shell ./debian/autodeps.py --minimum-library-version)" \
-		--with-modulesdir=/usr/lib
+		--with-modulesdir=/usr/lib/ldb/modules
 	touch configure-stamp
 
 get-orig-source:
@@ -40,7 +40,6 @@ install: configure
 	dh_installdirs
 	$(MAKE) install DESTDIR=$(DESTDIR)
 	ar cr $(DESTDIR)/usr/lib/libldb.a bin/default/common/*.o
-	mv $(DESTDIR)/usr/lib/ldb/ldap.so $(DESTDIR)/usr/lib/ldb/ldap.openldap.so
 	dh_install --fail-missing --list-missing --sourcedir=$(DESTDIR)
 
 binary-indep: 
@@ -51,6 +50,7 @@ binary-arch: build install
 	dh_installman
 	dh_installexamples
 	dh_installchangelogs 
+	dh_lintian
 	dh_link
 	dh_strip
 	dh_compress
