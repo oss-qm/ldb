@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 if [ -z "$SAMBA_GIT_URL" ]; then
 	SAMBA_GIT_URL=git://git.samba.org/samba.git
@@ -8,7 +8,7 @@ LDBTMP=`mktemp -d`
 git clone --depth 1 $SAMBA_GIT_URL $LDBTMP
 if [ ! -z "$REFSPEC" ]; then
 	pushd $LDBTMP
-	git checkout $REFSPEC || exit 1
+	git checkout $REFSPEC
 	popd
 fi
 pushd $LDBTMP/source4/lib/ldb
