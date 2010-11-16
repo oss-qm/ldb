@@ -24,6 +24,7 @@ if len(args) != 1:
 else:
     tree = args[0]
 
+
 def update_relation(line, pkg, kind, version):
     """Update a relation in a control field.
 
@@ -111,6 +112,7 @@ def update_control():
     update_deps(source, "Build-Depends", "libtdb-dev", min_tdb_version)
     update_deps(source, "Build-Depends", "python-tdb", min_tdb_version)
     update_deps(source, "Build-Depends", "libtalloc-dev", min_talloc_version)
+    update_deps(source, "Build-Depends", "libtalloc-util-dev", min_talloc_version)
     update_deps(source, "Build-Depends", "libtevent-dev", min_tevent_version)
 
     o = open("debian/control", "w+")
