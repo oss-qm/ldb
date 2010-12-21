@@ -56,7 +56,7 @@ binary-arch: build install
 	dh_compress
 	dh_fixperms
 	dh_makeshlibs -- -c4
-	dh_pycentral
+	dh_pysupport
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol

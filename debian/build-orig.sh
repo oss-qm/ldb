@@ -5,7 +5,11 @@ if [ -z "$SAMBA_GIT_URL" ]; then
 fi
 
 LDBTMP=`mktemp -d`
-git clone --depth 1 $SAMBA_GIT_URL $LDBTMP
+if [ -d $SAMBA_GIT_URL/.bzr ]; then
+	bzr co --lightweight $SAMBA_GIT_URL $LDBTMP
+else
+	git clone --depth 1 $SAMBA_GIT_URL $LDBTMP
+fi
 if [ ! -z "$REFSPEC" ]; then
 	pushd $LDBTMP
 	git checkout $REFSPEC
