@@ -10,11 +10,6 @@ if [ -d $SAMBA_GIT_URL/.bzr ]; then
 else
 	git clone --depth 1 $SAMBA_GIT_URL $LDBTMP
 fi
-if [ ! -z "$REFSPEC" ]; then
-	pushd $LDBTMP
-	git checkout $REFSPEC
-	popd
-fi
 pushd $LDBTMP/source4/lib/ldb
 ./configure
 make dist

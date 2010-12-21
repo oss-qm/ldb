@@ -16,12 +16,20 @@ WAF=buildtools/bin/waf
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
-	./autogen-waf.sh
 	PYTHON=`which python` PYTHON_CONFIG=`which python-config` CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath --disable-rpath-install \
 		--bundled-libraries=NONE \
 		--minimum-library-version="$(shell ./debian/autodeps.py --minimum-library-version)" \
 		--with-modulesdir=/usr/lib/ldb/modules
 	touch configure-stamp
+
+build: build-stamp
+build-stamp: configure
+	dh_testdir
+	$(MAKE)
+ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
+	LD_LIBRARY_PATH=bin/shared:bin/shared/private $(MAKE) check
+endif
+	touch build-stamp
 
 get-orig-source:
 	./debian/build-orig.sh
@@ -29,13 +37,13 @@ get-orig-source:
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f configure-stamp
+	rm -f build-stamp configure-stamp
 	-$(WAF) clean
 	rm -rf buildtools/bin/.waf-*
 	rm -f buildtools/wafsamba/*.pyc
 	dh_clean
 
-install: configure
+install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k

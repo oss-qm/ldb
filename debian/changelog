@@ -5,8 +5,9 @@ ldb (1:0.9.22-1) unstable; urgency=low
    + Uses version symbols.
   * Switch to python-support.
   * Link with --as-needed.
+  * Run test suite during build.
 
- -- Jelmer Vernooij <jelmer@debian.org>  Tue, 21 Dec 2010 20:28:25 +0100
+ -- Jelmer Vernooij <jelmer@debian.org>  Wed, 22 Dec 2010 00:05:26 +0100
 
 ldb (1:0.9.16~git20101019-1) unstable; urgency=low
 
