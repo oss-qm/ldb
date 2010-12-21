@@ -4,8 +4,9 @@ ldb (1:0.9.22-1) unstable; urgency=low
    + Add python-ldb-dev package.
    + Uses version symbols.
   * Switch to python-support.
+  * Link with --as-needed.
 
- -- Jelmer Vernooij <jelmer@debian.org>  Tue, 21 Dec 2010 16:14:30 +0100
+ -- Jelmer Vernooij <jelmer@debian.org>  Tue, 21 Dec 2010 20:28:25 +0100
 
 ldb (1:0.9.16~git20101019-1) unstable; urgency=low
 
