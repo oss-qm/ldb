@@ -12,6 +12,7 @@ if [ ! -z "$REFSPEC" ]; then
 	popd
 fi
 pushd $LDBTMP/source4/lib/ldb
+./autogen.sh
 ./configure
 make dist
 popd

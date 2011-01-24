@@ -14,7 +14,6 @@ WAF=buildtools/bin/waf
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
-	./autogen-waf.sh
 	PYTHON=`which python` PYTHON_CONFIG=`which python-config` CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath --disable-rpath-install \
 		--bundled-libraries=NONE \
 		--minimum-library-version="$(shell ./debian/autodeps.py --minimum-library-version)" \

@@ -1,6 +1,6 @@
-ldb (1:0.9.21~git20101216-1) UNRELEASED; urgency=low
+ldb (1:0.9.22-1) UNRELEASED; urgency=low
 
-  * New upstream snapshot.
+  * New upstream release.
    + Add python-ldb-dev package.
   * Add watch file.
 
