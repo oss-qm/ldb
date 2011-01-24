@@ -2,6 +2,7 @@ ldb (1:0.9.21~git20101216-1) UNRELEASED; urgency=low
 
   * New upstream snapshot.
    + Add python-ldb-dev package.
+  * Add watch file.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Sat, 23 Oct 2010 20:00:40 +0200
 
