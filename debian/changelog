@@ -1,4 +1,4 @@
-ldb (1:0.9.22-1) UNRELEASED; urgency=low
+ldb (1:0.9.24-1) unstable; urgency=low
 
   * New upstream release.
    + Add python-ldb-dev package.

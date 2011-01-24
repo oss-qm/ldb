@@ -6,10 +6,11 @@ libldb.so.0 #PACKAGE# #MINVER#
  LDB_0.9.17@LDB_0.9.17 0.9.21
  LDB_0.9.18@LDB_0.9.18 0.9.21
  LDB_0.9.19@LDB_0.9.19 0.9.21
- LDB_0.9.21@LDB_0.9.21 0.9.21
- check_critical_controls@LDB_0.9.21 0.9.21
- controls_except_specified@LDB_0.9.21 0.9.21
- (optional)dummy_snprintf@LDB_0.9.21 0.9.21
+ LDB_0.9.22@LDB_0.9.22 0.9.22
+ LDB_0.9.23@LDB_0.9.23 0.9.23
+ LDB_0.9.24@LDB_0.9.24 0.9.24
+ ldb_check_critical_controls@LDB_0.9.22 0.9.22
+ ldb_controls_except_specified@LDB_0.9.22 0.9.22
  ldb_add@LDB_0.9.10 0.9.21
  ldb_any_comparison@LDB_0.9.10 0.9.21
  ldb_asprintf_errstring@LDB_0.9.10 0.9.21
@@ -62,6 +63,7 @@ libldb.so.0 #PACKAGE# #MINVER#
  ldb_dn_get_comp_num@LDB_0.9.10 0.9.21
  ldb_dn_get_component_name@LDB_0.9.10 0.9.21
  ldb_dn_get_component_val@LDB_0.9.10 0.9.21
+ ldb_dn_get_extended_comp_num@LDB_0.9.23 1:0.9.23
  ldb_dn_get_extended_component@LDB_0.9.10 0.9.21
  ldb_dn_get_extended_linearized@LDB_0.9.10 0.9.21
  ldb_dn_get_linearized@LDB_0.9.10 0.9.21
@@ -75,6 +77,7 @@ libldb.so.0 #PACKAGE# #MINVER#
  ldb_dn_map_local@LDB_0.9.10 0.9.21
  ldb_dn_map_rebase_remote@LDB_0.9.10 0.9.21
  ldb_dn_map_remote@LDB_0.9.10 0.9.21
+ ldb_dn_minimise@LDB_0.9.23 1:0.9.23
  ldb_dn_new@LDB_0.9.10 0.9.21
  ldb_dn_new_fmt@LDB_0.9.10 0.9.21
  ldb_dn_remove_base_components@LDB_0.9.10 0.9.21
@@ -112,7 +115,12 @@ libldb.so.0 #PACKAGE# #MINVER#
  ldb_ldif_write_file@LDB_0.9.10 0.9.21
  ldb_ldif_write_string@LDB_0.9.10 0.9.21
  ldb_load_modules@LDB_0.9.10 0.9.21
+ ldb_map_add@LDB_0.9.22 0.9.22
+ ldb_map_delete@LDB_0.9.22 0.9.22
  ldb_map_init@LDB_0.9.10 0.9.21
+ ldb_map_modify@LDB_0.9.22 0.9.22
+ ldb_map_rename@LDB_0.9.22 0.9.22
+ ldb_map_search@LDB_0.9.22 0.9.22
  ldb_match_msg@LDB_0.9.10 0.9.21
  ldb_match_msg_error@LDB_0.9.15 0.9.21
  ldb_match_msg_objectclass@LDB_0.9.10 0.9.21
@@ -196,6 +204,7 @@ libldb.so.0 #PACKAGE# #MINVER#
  ldb_reply_get_control@LDB_0.9.10 0.9.21
  ldb_req_is_untrusted@LDB_0.9.16 0.9.21
  ldb_req_location@LDB_0.9.15 0.9.21
+ ldb_req_mark_trusted@LDB_0.9.24 1:0.9.24
  ldb_req_mark_untrusted@LDB_0.9.16 0.9.21
  ldb_req_set_location@LDB_0.9.15 0.9.21
  ldb_request@LDB_0.9.10 0.9.21
@@ -247,27 +256,4 @@ libldb.so.0 #PACKAGE# #MINVER#
  ldb_val_to_time@LDB_0.9.10 0.9.21
  ldb_valid_attr_name@LDB_0.9.10 0.9.21
  ldb_wait@LDB_0.9.10 0.9.21
- map_add@LDB_0.9.21 0.9.21
- map_attr_check_remote@LDB_0.9.21 0.9.21
- map_attr_find_local@LDB_0.9.21 0.9.21
- map_attr_find_remote@LDB_0.9.21 0.9.21
- map_attr_map_local@LDB_0.9.21 0.9.21
- map_attr_map_remote@LDB_0.9.21 0.9.21
- map_attrs_merge@LDB_0.9.21 0.9.21
- map_build_fixup_req@LDB_0.9.21 0.9.21
- map_check_local_db@LDB_0.9.21 0.9.21
- map_delete@LDB_0.9.21 0.9.21
- map_get_context@LDB_0.9.21 0.9.21
- map_init_context@LDB_0.9.21 0.9.21
- map_modify@LDB_0.9.21 0.9.21
- map_rename@LDB_0.9.21 0.9.21
- map_return_entry@LDB_0.9.21 0.9.21
- map_search@LDB_0.9.21 0.9.21
- map_search_base_req@LDB_0.9.21 0.9.21
- map_subtree_collect_remote_simple@LDB_0.9.21 0.9.21
- (optional)rep_getpass@LDB_0.9.21 0.9.21
- (optional)rep_strerror_r@LDB_0.9.21 0.9.21
- (optional)rep_strlcat@LDB_0.9.21 0.9.21
- (optional)rep_strlcpy@LDB_0.9.21 0.9.21
- (optional)replace_dummy@LDB_0.9.21 0.9.21
- save_controls@LDB_0.9.21 0.9.21
+ ldb_save_controls@LDB_0.9.22 0.9.22
