@@ -28,7 +28,7 @@ get-orig-source:
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f configure-stamp
+	rm -f build-stamp configure-stamp
 	-$(WAF) clean
 	rm -rf buildtools/bin/.waf-*
 	rm -f buildtools/wafsamba/*.pyc
@@ -64,7 +64,7 @@ binary-arch: build install
 	dh_compress
 	dh_fixperms
 	dh_makeshlibs -- -c4
-	dh_pycentral
+	dh_pysupport
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol
