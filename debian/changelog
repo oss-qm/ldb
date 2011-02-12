@@ -1,3 +1,9 @@
+ldb (1:1.0.0-2) unstable; urgency=low
+
+  * Add breaks/conflicts for libldb0.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Sat, 12 Feb 2011 18:23:07 +0100
+
 ldb (1:1.0.0-1) unstable; urgency=low
 
   * Run test suite during package build.
@@ -14,6 +20,17 @@ ldb (1:0.9.24-1) experimental; urgency=low
   * Add watch file.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Sat, 23 Oct 2010 20:00:40 +0200
+
+ldb (1:0.9.22-2) experimental; urgency=low
+
+  * New upstream release.
+   + Add python-ldb-dev package.
+   + Uses version symbols.
+  * Switch to python-support.
+  * Link with --as-needed.
+  * Run test suite during build.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Wed, 22 Dec 2010 00:05:26 +0100
 
 ldb (1:0.9.22-1) unstable; urgency=low
 

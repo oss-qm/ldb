@@ -12,6 +12,8 @@ Package: libldb1
 Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Replaces: libldb0
+Breaks: libldb0
 Description: LDAP-like embedded database - shared library
  ldb is a LDAP-like embedded database built on top of TDB.
  .
