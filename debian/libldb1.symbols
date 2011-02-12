@@ -1,4 +1,4 @@
-libldb.so.0 #PACKAGE# #MINVER#
+libldb.so.1 #PACKAGE# #MINVER#
  LDB_0.9.10@LDB_0.9.10 0.9.21
  LDB_0.9.12@LDB_0.9.12 0.9.21
  LDB_0.9.15@LDB_0.9.15 0.9.21
@@ -9,6 +9,7 @@ libldb.so.0 #PACKAGE# #MINVER#
  LDB_0.9.22@LDB_0.9.22 0.9.22
  LDB_0.9.23@LDB_0.9.23 0.9.23
  LDB_0.9.24@LDB_0.9.24 0.9.24
+ LDB_1.0.0@LDB_1.0.0 1.0.0
  ldb_check_critical_controls@LDB_0.9.22 0.9.22
  ldb_controls_except_specified@LDB_0.9.22 0.9.22
  ldb_add@LDB_0.9.10 0.9.21
@@ -63,7 +64,7 @@ libldb.so.0 #PACKAGE# #MINVER#
  ldb_dn_get_comp_num@LDB_0.9.10 0.9.21
  ldb_dn_get_component_name@LDB_0.9.10 0.9.21
  ldb_dn_get_component_val@LDB_0.9.10 0.9.21
- ldb_dn_get_extended_comp_num@LDB_0.9.23 1:0.9.23
+ ldb_dn_get_extended_comp_num@LDB_0.9.23 0.9.23
  ldb_dn_get_extended_component@LDB_0.9.10 0.9.21
  ldb_dn_get_extended_linearized@LDB_0.9.10 0.9.21
  ldb_dn_get_linearized@LDB_0.9.10 0.9.21
@@ -77,7 +78,7 @@ libldb.so.0 #PACKAGE# #MINVER#
  ldb_dn_map_local@LDB_0.9.10 0.9.21
  ldb_dn_map_rebase_remote@LDB_0.9.10 0.9.21
  ldb_dn_map_remote@LDB_0.9.10 0.9.21
- ldb_dn_minimise@LDB_0.9.23 1:0.9.23
+ ldb_dn_minimise@LDB_0.9.23 0.9.23
  ldb_dn_new@LDB_0.9.10 0.9.21
  ldb_dn_new_fmt@LDB_0.9.10 0.9.21
  ldb_dn_remove_base_components@LDB_0.9.10 0.9.21
@@ -204,7 +205,7 @@ libldb.so.0 #PACKAGE# #MINVER#
  ldb_reply_get_control@LDB_0.9.10 0.9.21
  ldb_req_is_untrusted@LDB_0.9.16 0.9.21
  ldb_req_location@LDB_0.9.15 0.9.21
- ldb_req_mark_trusted@LDB_0.9.24 1:0.9.24
+ ldb_req_mark_trusted@LDB_0.9.24 0.9.24
  ldb_req_mark_untrusted@LDB_0.9.16 0.9.21
  ldb_req_set_location@LDB_0.9.15 0.9.21
  ldb_request@LDB_0.9.10 0.9.21
