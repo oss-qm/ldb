@@ -14,10 +14,14 @@ Copyright:
  2004 Stefan Metzmacher
  2004-2005 Derrell Lipman
 License: LGPL-3+
+ The text of the license is available on Debian systems in the 
+ /usr/share/common-licenses/LGPL-3 file.
 
 Files: common/qsort.c
 Copyright: 1991,1992,1996,1997,1999,2004 Free Software Foundation, Inc.
 License: LGPL-3+
+ The text of the license is available on Debian systems in the 
+ /usr/share/common-licenses/LGPL-3 file.
 
 Files: tools/*
 Copyright:
@@ -25,6 +29,8 @@ Copyright:
  2004 Stefan Metzmacher
  2009 Matthieu Patou
 License: GPL-3+
+ The text of the license is available on Debian systems in the 
+ /usr/share/common-licenses/GPL-3 file.
 
 Files: lib/popt/*
 Copyright:
@@ -58,6 +64,8 @@ Copyright:
  2003-2010 Andrew Tridgell
  2010 Jelmer Vernooij
 License: LGPL-3+
+ The text of the license is available on Debian systems in the 
+ /usr/share/common-licenses/LGPL-3 file.
 
 Files: lib/tdb/*
 Copyright:
@@ -70,6 +78,8 @@ Copyright:
  2004-2006 Tim Potter
  2007-2008 Jelmer Vernooij
 License: LGPL-3+
+ The text of the license is available on Debian systems in the 
+ /usr/share/common-licenses/LGPL-3 file.
 
 Files: lib/talloc/*
 Copyright:
@@ -77,6 +87,8 @@ Copyright:
  2008-2010 Jelmer Vernooij
  2006 Stefan Metzmacher
 License: LGPL-3+
+ The text of the license is available on Debian systems in the 
+ /usr/share/common-licenses/LGPL-3 file.
 
 Files: lib/replace/*.c
 Copyright:
@@ -88,6 +100,8 @@ Copyright:
  2010 Matthieu Patou
  1995 Patrick Powell
 License: LGPL-3+
+ The text of the license is available on Debian systems in the 
+ /usr/share/common-licenses/LGPL-3 file.
 
 Files: lib/replace/inet_ntop.c lib/replace/inet_pton.c
 Copyright: 1996-2001 Internet Software Consortium
@@ -161,3 +175,5 @@ License:
 Files: debian/*
 Copyright: 2007-2010 Jelmer Vernooij <jelmer@samba.org>
 License: LGPL-3+
+ The text of the license is available on Debian systems in the 
+ /usr/share/common-licenses/LGPL-3 file.
