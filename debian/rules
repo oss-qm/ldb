@@ -50,14 +50,14 @@ install: build
 	ar cr $(DESTDIR)/usr/lib/libldb.a bin/default/common/*.o
 	dh_install --fail-missing --list-missing --sourcedir=$(DESTDIR)
 
-binary-indep: 
+binary-indep:
 binary-arch: build install
 	dh_testdir
 	dh_testroot
-	dh_installdocs 
+	dh_installdocs
 	dh_installman
 	dh_installexamples
-	dh_installchangelogs 
+	dh_installchangelogs
 	dh_lintian
 	dh_link
 	dh_strip
