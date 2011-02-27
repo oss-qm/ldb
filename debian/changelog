@@ -1,3 +1,9 @@
+ldb (1:1.0.2-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Sun, 27 Feb 2011 14:29:46 +0100
+
 ldb (1:1.0.0-2) unstable; urgency=low
 
   * Add breaks/conflicts for libldb0.
