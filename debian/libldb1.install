@@ -1,2 +1,2 @@
-usr/lib/libldb.so.*
 usr/lib/ldb/modules
+usr/lib/libldb.so.*
