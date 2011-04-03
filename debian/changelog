@@ -1,3 +1,10 @@
+ldb (1:1.0.2~git20110403-1) experimental; urgency=low
+
+  * New upstream snapshot.
+  * Switch to dh_python2.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Sun, 03 Apr 2011 21:51:32 +0200
+
 ldb (1:1.0.1~git20120220-1) experimental; urgency=low
 
   * New upstream snapshot.
