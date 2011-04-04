@@ -1,8 +1,9 @@
-ldb (1:1.0.2-3) UNRELEASED; urgency=low
+ldb (1:1.0.2+git20110403-1) experimental; urgency=low
 
+  * New upstream snapshot.
   * Switch to dh_python2. Closes: #616857
 
- -- Jelmer Vernooij <jelmer@debian.org>  Mon, 07 Mar 2011 03:32:30 +0100
+ -- Jelmer Vernooij <jelmer@debian.org>  Sun, 03 Apr 2011 21:51:32 +0200
 
 ldb (1:1.0.2-2) unstable; urgency=low
 
@@ -15,6 +16,12 @@ ldb (1:1.0.2-1) unstable; urgency=low
   * New upstream release.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Sun, 27 Feb 2011 14:29:46 +0100
+
+ldb (1:1.0.1~git20120220-1) experimental; urgency=low
+
+  * New upstream snapshot.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Sun, 20 Feb 2011 14:42:57 +0100
 
 ldb (1:1.0.0-2) unstable; urgency=low
 

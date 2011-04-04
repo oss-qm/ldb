@@ -11,7 +11,6 @@ else
 	git clone --depth 1 $SAMBA_GIT_URL $LDBTMP
 fi
 pushd $LDBTMP/source4/lib/ldb
-./autogen.sh
 ./configure
 make dist
 popd
