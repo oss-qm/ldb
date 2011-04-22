@@ -13,6 +13,7 @@ libldb.so.1 #PACKAGE# #MINVER#
  LDB_1.0.0@LDB_1.0.0 1.0.2~
  LDB_1.0.1@LDB_1.0.1 1.0.1~
  LDB_1.0.2@LDB_1.0.2 1.0.2~
+ LDB_1.1.0@LDB_1.1.0 1.1.0
  ldb_check_critical_controls@LDB_0.9.22 0.9.22
  ldb_controls_except_specified@LDB_0.9.22 0.9.22
  ldb_control_to_string@LDB_1.0.2 1.0.2~git20110403
@@ -113,6 +114,7 @@ libldb.so.1 #PACKAGE# #MINVER#
  ldb_handler_fold@LDB_0.9.10 0.9.21
  ldb_init@LDB_0.9.10 0.9.21
  ldb_ldif_message_string@LDB_0.9.10 0.9.21
+ ldb_ldif_parse_modrdn@LDB_1.1.0 1.1.0
  ldb_ldif_read@LDB_0.9.10 0.9.21
  ldb_ldif_read_file@LDB_0.9.10 0.9.21
  ldb_ldif_read_free@LDB_0.9.10 0.9.21
@@ -209,10 +211,12 @@ libldb.so.1 #PACKAGE# #MINVER#
  ldb_rename@LDB_0.9.10 0.9.21
  ldb_reply_add_control@LDB_0.9.10 0.9.21
  ldb_reply_get_control@LDB_0.9.10 0.9.21
+ ldb_req_get_custom_flags@LDB_1.1.0 1.1.0
  ldb_req_is_untrusted@LDB_0.9.16 0.9.21
  ldb_req_location@LDB_0.9.15 0.9.21
  ldb_req_mark_trusted@LDB_0.9.24 0.9.24
  ldb_req_mark_untrusted@LDB_0.9.16 0.9.21
+ ldb_req_set_custom_flags@LDB_1.1.0 1.1.0
  ldb_req_set_location@LDB_0.9.15 0.9.21
  ldb_request@LDB_0.9.10 0.9.21
  ldb_request_add_control@LDB_0.9.10 0.9.21

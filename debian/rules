@@ -16,7 +16,7 @@ WAF=buildtools/bin/waf
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
-	PYTHON=`which python` PYTHON_CONFIG=`which python-config` CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath-install \
+	PYTHON=$(shell pyversions -r) CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath-install \
 		--bundled-libraries=NONE \
 		--minimum-library-version="$(shell ./debian/autodeps.py --minimum-library-version)" \
 		--with-modulesdir=/usr/lib/ldb/modules
