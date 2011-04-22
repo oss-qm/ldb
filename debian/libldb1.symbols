@@ -6,12 +6,16 @@ libldb.so.1 #PACKAGE# #MINVER#
  LDB_0.9.17@LDB_0.9.17 0.9.21
  LDB_0.9.18@LDB_0.9.18 0.9.21
  LDB_0.9.19@LDB_0.9.19 0.9.21
+ LDB_0.9.20@LDB_0.9.20 0.9.21
  LDB_0.9.22@LDB_0.9.22 0.9.22
  LDB_0.9.23@LDB_0.9.23 0.9.23
  LDB_0.9.24@LDB_0.9.24 0.9.24
- LDB_1.0.2@LDB_1.0.2 1.0.2
+ LDB_1.0.0@LDB_1.0.0 1.0.2~
+ LDB_1.0.1@LDB_1.0.1 1.0.1~
+ LDB_1.0.2@LDB_1.0.2 1.0.2~
  ldb_check_critical_controls@LDB_0.9.22 0.9.22
  ldb_controls_except_specified@LDB_0.9.22 0.9.22
+ ldb_control_to_string@LDB_1.0.2 1.0.2~git20110403
  ldb_add@LDB_0.9.10 0.9.21
  ldb_any_comparison@LDB_0.9.10 0.9.21
  ldb_asprintf_errstring@LDB_0.9.10 0.9.21
@@ -193,7 +197,7 @@ libldb.so.1 #PACKAGE# #MINVER#
  ldb_next_start_trans@LDB_0.9.10 0.9.21
  ldb_op_default_callback@LDB_0.9.10 0.9.21
  ldb_options_find@LDB_0.9.17 0.9.21
- ldb_parse_control_from_string@LDB_1.0.2 1.0.2
+ ldb_parse_control_from_string@LDB_1.0.2 1.0.2~git20110403
  ldb_parse_control_strings@LDB_0.9.10 0.9.21
  ldb_parse_tree@LDB_0.9.10 0.9.21
  ldb_parse_tree_attr_replace@LDB_0.9.10 0.9.21

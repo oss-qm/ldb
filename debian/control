@@ -9,7 +9,7 @@ Build-Depends: debhelper (>> 6.0.7~),
                libpopt-dev,
                libtalloc-dev (>= 2.0.5~),
                libtdb-dev (>= 1.2.9~),
-               libtevent-dev (>= 0.9.10~),
+               libtevent-dev (>= 0.9.11~),
                pkg-config,
                python-dev (>= 2.6.6-3),
                python-talloc-dev (>= 2.0.5~),
@@ -18,7 +18,7 @@ Build-Depends: debhelper (>> 6.0.7~),
 Homepage: http://ldb.samba.org/
 Standards-Version: 3.9.1
 Vcs-Bzr: http://bzr.debian.org/pkg-samba/ldb/unstable
-X-Python-Version: >= 2.4
+X-Python-Version: 2.7
 
 Package: libldb1
 Architecture: any
@@ -77,6 +77,7 @@ Depends: libldb1 (= ${binary:Version}),
          ${python:Depends},
          ${shlibs:Depends}
 Provides: ${python:Provides}
+Breaks: ${python:Breaks}
 Description: Python bindings for LDB
  ldb is a LDAP-like embedded database built on top of TDB.
  .
