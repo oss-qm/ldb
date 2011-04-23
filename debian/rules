@@ -13,10 +13,13 @@ LDFLAGS += -Wl,--as-needed
 DESTDIR=$(CURDIR)/debian/tmp
 WAF=buildtools/bin/waf
 
+export PYTHON=$(shell which `pyversions -r`)
+
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
-	PYTHON=$(shell pyversions -r) CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath-install \
+	$(PYTHON) --version
+	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath-install \
 		--bundled-libraries=NONE \
 		--minimum-library-version="$(shell ./debian/autodeps.py --minimum-library-version)" \
 		--with-modulesdir=/usr/lib/ldb/modules
