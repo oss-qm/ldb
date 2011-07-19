@@ -16,9 +16,9 @@ if [ -d $SAMBA_GIT_URL/.bzr ]; then
 else
 	git clone --depth 1 $SAMBA_GIT_URL $LDBTMP
 fi
-pushd $LDBTMP/source4/lib/ldb
+pushd $LDBTMP/lib/ldb
 ./configure
 make dist
 popd
-mv $LDBTMP/source4/lib/ldb/ldb-*.tar.gz ldb_$version.orig.tar.gz
+mv $LDBTMP/lib/ldb/ldb-*.tar.gz ldb_$version.orig.tar.gz
 rm -rf $LDBTMP

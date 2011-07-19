@@ -20,6 +20,7 @@ configure-stamp:
 	dh_testdir
 	$(PYTHON) --version
 	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath-install \
+		--builtin-libraries=ccan,replace,tdb_compat \
 		--bundled-libraries=NONE \
 		--minimum-library-version="$(shell ./debian/autodeps.py --minimum-library-version)" \
 		--with-modulesdir=/usr/lib/ldb/modules
