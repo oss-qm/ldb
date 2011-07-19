@@ -1,3 +1,10 @@
+ldb (1:1.1.1~git20110719-1) UNRELEASED; urgency=low
+
+  * New upstream snapshot.
+  * Bump standards version to 3.9.2 (no changes).
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Tue, 19 Jul 2011 21:45:21 +0200
+
 ldb (1:1.1.0-1) unstable; urgency=low
 
   * New upstream release.

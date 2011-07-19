@@ -17,7 +17,7 @@ Build-Depends: debhelper (>> 6.0.7~),
                python-tdb (>= 1.2.9~),
                xsltproc
 Homepage: http://ldb.samba.org/
-Standards-Version: 3.9.1
+Standards-Version: 3.9.2
 Vcs-Bzr: http://bzr.debian.org/pkg-samba/ldb/unstable
 X-Python-Version: 2.6
 
