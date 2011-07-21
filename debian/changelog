@@ -1,3 +1,10 @@
+ldb (1:1.1.1~git20110719-2) unstable; urgency=low
+
+  * Fix build dependency to be on tevent 0.9.13 rather than 0.9.11. Thanks
+    Nobuhiro Iwamatsu.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Thu, 21 Jul 2011 16:24:08 +0200
+
 ldb (1:1.1.1~git20110719-1) unstable; urgency=low
 
   * New upstream snapshot.
