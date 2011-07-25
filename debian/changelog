@@ -1,3 +1,9 @@
+ldb (1:1.1.1~git20110719-3) unstable; urgency=low
+
+  * Switch to python2.7.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Mon, 25 Jul 2011 17:41:20 +0200
+
 ldb (1:1.1.1~git20110719-2) unstable; urgency=low
 
   * Fix build dependency to be on tevent 0.9.13 rather than 0.9.11. Thanks
