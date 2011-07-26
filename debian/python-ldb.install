@@ -1,2 +1,2 @@
-usr/lib/libpyldb-util.so.*
+usr/lib/*/libpyldb-util.so.*
 usr/lib/python*

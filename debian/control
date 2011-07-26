@@ -2,7 +2,7 @@ Source: ldb
 Section: devel
 Priority: optional
 Maintainer: Jelmer Vernooij <jelmer@debian.org>
-Build-Depends: debhelper (>> 6.0.7~),
+Build-Depends: debhelper (>> 8.1.3),
                docbook-xml,
                docbook-xsl,
                libldap2-dev,
@@ -22,11 +22,13 @@ Vcs-Bzr: http://bzr.debian.org/pkg-samba/ldb/unstable
 X-Python-Version: 2.7
 
 Package: libldb1
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
 Architecture: any
 Section: libs
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Replaces: libldb0
-Breaks: libldb0
+Breaks: libldb0, libsamdb0 (<< 4.0.0~alpha17~git20110724.dfsg1-1)
 Description: LDAP-like embedded database - shared library
  ldb is a LDAP-like embedded database built on top of TDB.
  .
@@ -71,6 +73,7 @@ Description: LDAP-like embedded database - development files
  This package contains the development files.
 
 Package: python-ldb
+Pre-Depends: ${misc:Pre-Depends}
 Section: python
 Architecture: any
 Depends: libldb1 (= ${binary:Version}),

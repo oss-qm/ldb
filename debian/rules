@@ -14,6 +14,9 @@ DESTDIR=$(CURDIR)/debian/tmp
 WAF=buildtools/bin/waf
 
 export PYTHON=$(shell which `pyversions -r`)
+export PYTHON_CONFIG=$(shell which `pyversions -r`-config)
+
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
 configure: configure-stamp
 configure-stamp:
@@ -23,7 +26,8 @@ configure-stamp:
 		--builtin-libraries=ccan,replace,tdb_compat \
 		--bundled-libraries=NONE \
 		--minimum-library-version="$(shell ./debian/autodeps.py --minimum-library-version)" \
-		--with-modulesdir=/usr/lib/ldb/modules
+		--libdir=/usr/lib/$(DEB_HOST_MULTIARCH) \
+		--with-modulesdir=/usr/lib/$(DEB_HOST_MULTIARCH)/ldb/modules
 	touch configure-stamp
 
 get-orig-source:
@@ -51,7 +55,7 @@ install: build
 	dh_clean -k
 	dh_installdirs
 	$(MAKE) install DESTDIR=$(DESTDIR)
-	ar cr $(DESTDIR)/usr/lib/libldb.a bin/default/common/*.o
+	ar cr $(DESTDIR)/usr/lib/$(DEB_HOST_MULTIARCH)/libldb.a bin/default/common/*.o
 	dh_install --fail-missing --list-missing --sourcedir=$(DESTDIR)
 
 binary-indep:
