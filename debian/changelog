@@ -1,8 +1,9 @@
 ldb (1:1.1.1~git20110719-4) UNRELEASED; urgency=low
 
   * Add multi-arch support to libldb1.
+  * Add debug packages python-ldb-dbg and libldb1-dbg.
 
- -- Jelmer Vernooij <jelmer@debian.org>  Tue, 26 Jul 2011 21:24:11 +0200
+ -- Jelmer Vernooij <jelmer@debian.org>  Tue, 26 Jul 2011 22:08:11 +0200
 
 ldb (1:1.1.1~git20110719-3) unstable; urgency=low
 
