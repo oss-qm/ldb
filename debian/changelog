@@ -1,4 +1,4 @@
-ldb (1:1.1.1~git20110719-4) UNRELEASED; urgency=low
+ldb (1:1.1.1~git20110719-4) experimental; urgency=low
 
   * Add multi-arch support to libldb1.
   * Add debug packages python-ldb-dbg and libldb1-dbg.

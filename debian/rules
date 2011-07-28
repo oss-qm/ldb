@@ -73,7 +73,7 @@ binary-arch: build install
 	dh_strip -pldb-tools
 	dh_compress
 	dh_fixperms
-	dh_makeshlibs -- -c4
+	dh_makeshlibs -plibldb1 -ppython-ldb -- -c4
 	dh_python2
 	dh_installdeb
 	dh_shlibdeps
