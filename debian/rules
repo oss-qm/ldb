@@ -18,68 +18,43 @@ export PYTHON_CONFIG=$(shell which `pyversions -r`-config)
 
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
-configure: configure-stamp
-configure-stamp:
-	dh_testdir
-	$(PYTHON) --version
+%:
+	dh $*
+
+override_dh_auto_configure:
 	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath-install \
 		--builtin-libraries=ccan,replace,tdb_compat \
 		--bundled-libraries=NONE \
 		--minimum-library-version="$(shell ./debian/autodeps.py --minimum-library-version)" \
 		--libdir=/usr/lib/$(DEB_HOST_MULTIARCH) \
 		--with-modulesdir=/usr/lib/$(DEB_HOST_MULTIARCH)/ldb/modules
-	touch configure-stamp
 
 get-orig-source:
 	./debian/build-orig.sh
 
-clean:
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp configure-stamp
+override_dh_auto_clean:
 	-$(WAF) clean
 	rm -rf buildtools/bin/.waf-*
 	rm -f buildtools/wafsamba/*.pyc
-	dh_clean
 
-build: configure build-stamp
-build-stamp: 
+override_dh_auto_build:
 	$(MAKE)
+
+override_dh_auto_test:
 ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
 	$(MAKE) check
 endif
 
-install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
+override_dh_auto_install:
 	$(MAKE) install DESTDIR=$(DESTDIR)
 	ar cr $(DESTDIR)/usr/lib/$(DEB_HOST_MULTIARCH)/libldb.a bin/default/common/*.o
-	dh_install --fail-missing --list-missing --sourcedir=$(DESTDIR)
+	rm $(DESTDIR)/usr/lib/python*/*/_tevent.so
 
-binary-indep:
-binary-arch: build install
-	dh_testdir
-	dh_testroot
-	dh_installdocs
-	dh_installman
-	dh_installexamples
-	dh_installchangelogs
-	dh_lintian
-	dh_link
+override_dh_strip:
+	dh_strip -pldb-tools
 	dh_strip -ppython-ldb --dbg-package=python-ldb-dbg
 	dh_strip -plibldb1 --dbg-package=libldb1-dbg
-	dh_strip -pldb-tools
-	dh_compress
-	dh_fixperms
-	dh_makeshlibs -plibldb1 -ppython-ldb -- -c4
-	dh_python2
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
 
-binary: binary-arch binary-indep
-.PHONY: build clean binary-indep binary-arch binary install configure 
+override_dh_makeshlibs:
+	dh_makeshlibs -Xldb.so -ppython-ldb -- -c4
+	dh_makeshlibs -X/usr/lib/$(DEB_HOST_MULTIARCH)/ldb -plibldb1 -- -c4

@@ -1,3 +1,11 @@
+ldb (1:1.1.1~git20110728-1) unstable; urgency=low
+
+  * Upload to unstable.
+  * Switch to new style debhelper.
+  * New upstream snapshot.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Thu, 28 Jul 2011 16:51:49 +0200
+
 ldb (1:1.1.1~git20110719-4) experimental; urgency=low
 
   * Add multi-arch support to libldb1.
