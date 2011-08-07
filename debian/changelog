@@ -1,3 +1,10 @@
+ldb (1:1.1.2~git20110807-1) UNRELEASED; urgency=low
+
+  * New upstream snapshot.
+   + Adds proper symbol versioning to libpyldb-util. LP: #777517
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Sun, 07 Aug 2011 16:06:59 +0200
+
 ldb (1:1.1.1~git20110728-1) unstable; urgency=low
 
   * Upload to unstable.

@@ -15,6 +15,7 @@ libldb.so.1 #PACKAGE# #MINVER#
  LDB_1.0.2@LDB_1.0.2 1.0.2~
  LDB_1.1.0@LDB_1.1.0 1.1.0
  LDB_1.1.1@LDB_1.1.1 1.1.1~
+ LDB_1.1.2@LDB_1.1.2 1.1.2~
  ldb_check_critical_controls@LDB_0.9.22 0.9.22
  ldb_controls_except_specified@LDB_0.9.22 0.9.22
  ldb_control_to_string@LDB_1.0.2 1.0.2~git20110403
@@ -91,6 +92,7 @@ libldb.so.1 #PACKAGE# #MINVER#
  ldb_dn_remove_base_components@LDB_0.9.10 0.9.21
  ldb_dn_remove_child_components@LDB_0.9.10 0.9.21
  ldb_dn_remove_extended_components@LDB_0.9.10 0.9.21
+ ldb_dn_replace_components@LDB_1.1.2 1.1.2~
  ldb_dn_set_component@LDB_0.9.10 0.9.21
  ldb_dn_set_extended_component@LDB_0.9.10 0.9.21
  ldb_dn_update_components@LDB_0.9.10 0.9.21
@@ -205,6 +207,7 @@ libldb.so.1 #PACKAGE# #MINVER#
  ldb_parse_tree@LDB_0.9.10 0.9.21
  ldb_parse_tree_attr_replace@LDB_0.9.10 0.9.21
  ldb_parse_tree_copy_shallow@LDB_0.9.10 0.9.21
+ ldb_parse_tree_walk@LDB_1.1.2 1.1.2~
  ldb_qsort@LDB_0.9.10 0.9.21
  ldb_register_backend@LDB_0.9.10 0.9.21
  ldb_register_hook@LDB_0.9.18 0.9.21
