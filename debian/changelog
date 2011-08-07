@@ -1,4 +1,4 @@
-ldb (1:1.1.2~git20110807-1) UNRELEASED; urgency=low
+ldb (1:1.1.2~git20110807-1) unstable; urgency=low
 
   * New upstream snapshot.
    + Adds proper symbol versioning to libpyldb-util. LP: #777517

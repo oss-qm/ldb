@@ -11,10 +11,10 @@ endif
 LDFLAGS += -Wl,--as-needed
 
 DESTDIR=$(CURDIR)/debian/tmp
-WAF=buildtools/bin/waf
 
 export PYTHON=$(shell which `pyversions -r`)
 export PYTHON_CONFIG=$(shell which `pyversions -r`-config)
+export WAF=$(PYTHON) ./buildtools/bin/waf
 
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
@@ -22,7 +22,7 @@ DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 	dh $*
 
 override_dh_auto_configure:
-	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --disable-rpath-install \
+	CFLAGS="$(CFLAGS)" $(WAF) configure --prefix=/usr --disable-rpath-install \
 		--builtin-libraries=ccan,replace,tdb_compat \
 		--bundled-libraries=NONE \
 		--minimum-library-version="$(shell ./debian/autodeps.py --minimum-library-version)" \
@@ -38,15 +38,15 @@ override_dh_auto_clean:
 	rm -f buildtools/wafsamba/*.pyc
 
 override_dh_auto_build:
-	$(MAKE)
+	$(WAF) build
 
 override_dh_auto_test:
 ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
-	$(MAKE) check
+	$(WAF) test
 endif
 
 override_dh_auto_install:
-	$(MAKE) install DESTDIR=$(DESTDIR)
+	DESTDIR=$(DESTDIR) $(WAF) install
 	ar cr $(DESTDIR)/usr/lib/$(DEB_HOST_MULTIARCH)/libldb.a bin/default/common/*.o
 	rm $(DESTDIR)/usr/lib/python*/*/_tevent.so
 
