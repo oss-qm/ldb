@@ -1,3 +1,10 @@
+ldb (1:1.1.2~git20110807-2) UNRELEASED; urgency=low
+
+  * Explicitly build with dh_python2.
+  * Build against system Python rather than specifically 2.7. Closes: #642436
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Tue, 27 Sep 2011 19:49:00 +0200
+
 ldb (1:1.1.2~git20110807-1) unstable; urgency=low
 
   * New upstream snapshot.

@@ -12,17 +12,18 @@ LDFLAGS += -Wl,--as-needed
 
 DESTDIR=$(CURDIR)/debian/tmp
 
-export PYTHON=$(shell which `pyversions -r`)
-export PYTHON_CONFIG=$(shell which `pyversions -r`-config)
+export PYTHON=$(shell which `pyversions -d`)
+export PYTHON_CONFIG="$(PYTHON)-config"
 export WAF=$(PYTHON) ./buildtools/bin/waf
 
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
 %:
-	dh $*
+	dh $* --with python2
 
 override_dh_auto_configure:
-	CFLAGS="$(CFLAGS)" $(WAF) configure --prefix=/usr --disable-rpath-install \
+	PYTHON="$(PYTHON)" PYTHON_CONFIG="$(PYTHON_CONFIG)" CFLAGS="$(CFLAGS)"\
+		$(WAF) configure --prefix=/usr --disable-rpath-install \
 		--builtin-libraries=ccan,replace,tdb_compat \
 		--bundled-libraries=NONE \
 		--minimum-library-version="$(shell ./debian/autodeps.py --minimum-library-version)" \
@@ -44,6 +45,9 @@ override_dh_auto_test:
 ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
 	$(WAF) test
 endif
+
+override_dh_python2:
+	dh_python2 --no-guessing-versions
 
 override_dh_auto_install:
 	DESTDIR=$(DESTDIR) $(WAF) install

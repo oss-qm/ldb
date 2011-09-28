@@ -20,7 +20,6 @@ Build-Depends: debhelper (>> 8.1.3),
 Homepage: http://ldb.samba.org/
 Standards-Version: 3.9.2
 Vcs-Bzr: http://bzr.debian.org/pkg-samba/ldb/unstable
-X-Python-Version: 2.7
 
 Package: libldb1
 Multi-Arch: same
