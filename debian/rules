@@ -25,7 +25,7 @@ override_dh_auto_configure:
 	PYTHON="$(PYTHON)" PYTHON_CONFIG="$(PYTHON_CONFIG)" CFLAGS="$(CFLAGS)"\
 		$(WAF) configure --prefix=/usr --disable-rpath-install \
 		--builtin-libraries=ccan,replace,tdb_compat \
-		--bundled-libraries=NONE \
+		--bundled-libraries=NONE,pytevent \
 		--minimum-library-version="$(shell ./debian/autodeps.py --minimum-library-version)" \
 		--libdir=/usr/lib/$(DEB_HOST_MULTIARCH) \
 		--with-modulesdir=/usr/lib/$(DEB_HOST_MULTIARCH)/ldb/modules
@@ -52,7 +52,6 @@ override_dh_python2:
 override_dh_auto_install:
 	DESTDIR=$(DESTDIR) $(WAF) install
 	ar cr $(DESTDIR)/usr/lib/$(DEB_HOST_MULTIARCH)/libldb.a bin/default/common/*.o
-	rm $(DESTDIR)/usr/lib/python*/*/_tevent.so
 
 override_dh_strip:
 	dh_strip -pldb-tools
