@@ -28,7 +28,8 @@ override_dh_auto_configure:
 		--bundled-libraries=NONE,pytevent \
 		--minimum-library-version="$(shell ./debian/autodeps.py --minimum-library-version)" \
 		--libdir=/usr/lib/$(DEB_HOST_MULTIARCH) \
-		--with-modulesdir=/usr/lib/$(DEB_HOST_MULTIARCH)/ldb/modules
+		--with-modulesdir=/usr/lib/$(DEB_HOST_MULTIARCH)/ldb/modules \
+		--disable-tdb2
 
 get-orig-source:
 	./debian/build-orig.sh
