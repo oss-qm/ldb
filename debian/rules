@@ -31,13 +31,14 @@ override_dh_auto_configure:
 		--with-modulesdir=/usr/lib/$(DEB_HOST_MULTIARCH)/ldb/modules \
 		--disable-tdb2
 
-get-orig-source:
+get-packaged-orig-source:
 	./debian/build-orig.sh
 
 override_dh_auto_clean:
 	-$(WAF) clean
-	rm -rf buildtools/bin/.waf-*
-	rm -f buildtools/wafsamba/*.pyc
+	rm -f buildtools/wafsamba/*.pyc \
+		buildtools/wafadmin/*.pyc \
+		buildtools/wafadmin/Tools/*.pyc
 
 override_dh_auto_build:
 	$(WAF) build
@@ -52,6 +53,8 @@ override_dh_python2:
 
 override_dh_auto_install:
 	DESTDIR=$(DESTDIR) $(WAF) install
+	rm $(DESTDIR)/usr/lib/python*/dist-packages/_tevent.so
+	rm $(DESTDIR)/usr/lib/python*/dist-packages/tevent.py
 	ar cr $(DESTDIR)/usr/lib/$(DEB_HOST_MULTIARCH)/libldb.a bin/default/common/*.o
 
 override_dh_strip:
