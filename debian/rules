@@ -36,6 +36,11 @@ get-packaged-orig-source:
 
 override_dh_auto_clean:
 	-$(WAF) clean
+	# Waf should be doing this; see
+	# https://bugzilla.samba.org/show_bug.cgi?id=8854
+	rm -f .lock-wscript
+	# Waf should be doing this; see
+	# https://bugzilla.samba.org/show_bug.cgi?id=8855
 	rm -f buildtools/wafsamba/*.pyc \
 		buildtools/wafadmin/*.pyc \
 		buildtools/wafadmin/Tools/*.pyc
@@ -55,7 +60,8 @@ override_dh_auto_install:
 	DESTDIR=$(DESTDIR) $(WAF) install
 	rm $(DESTDIR)/usr/lib/python*/dist-packages/_tevent.so
 	rm $(DESTDIR)/usr/lib/python*/dist-packages/tevent.py
-	ar cr $(DESTDIR)/usr/lib/$(DEB_HOST_MULTIARCH)/libldb.a bin/default/common/*.o
+	ar cr libldb.a bin/default/common/*.o
+	mv libldb.a $(DESTDIR)/usr/lib/$(DEB_HOST_MULTIARCH)
 
 override_dh_strip:
 	dh_strip -pldb-tools

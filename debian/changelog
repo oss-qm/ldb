@@ -3,6 +3,7 @@ ldb (1:1.1.4+git20120206-2) UNRELEASED; urgency=low
   * Bump standards version to 3.9.3 (no changes).
   * Drop unnecessary lintian overrides (upstream no longer uses private
     libraries with rpath).
+  * Properly clean up after build.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Wed, 28 Mar 2012 15:00:34 +0200
 

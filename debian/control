@@ -114,7 +114,7 @@ Depends: libc6-dev,
 Description: LDB python bindings - development files
  ldb is a LDAP-like embedded database built on top of TDB.
  .
- What ldb does is provide a fast database with an LDAP-like API designed
+ It is a fast database with an LDAP-like API designed
  to be used within an application. In some ways it can be seen as a
  intermediate solution between key-value pair databases and a real LDAP
  database.
