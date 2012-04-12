@@ -1,4 +1,4 @@
-ldb (1:1.1.5-1) UNRELEASED; urgency=low
+ldb (1:1.1.5-1) unstable; urgency=low
 
   * Bump standards version to 3.9.3 (no changes).
   * Drop unnecessary lintian overrides (upstream no longer uses private

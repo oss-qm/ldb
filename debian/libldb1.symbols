@@ -18,6 +18,7 @@ libldb.so.1 #PACKAGE# #MINVER#
  LDB_1.1.2@LDB_1.1.2 1.1.2~
  LDB_1.1.3@LDB_1.1.3 1.1.3
  LDB_1.1.4@LDB_1.1.4 1.1.4
+ LDB_1.1.5@LDB_1.1.5 1.1.5
  ldb_check_critical_controls@LDB_0.9.22 0.9.22
  ldb_controls_except_specified@LDB_0.9.22 0.9.22
  ldb_control_to_string@LDB_1.0.2 1.0.2~git20110403
@@ -122,6 +123,7 @@ libldb.so.1 #PACKAGE# #MINVER#
  ldb_ldif_parse_modrdn@LDB_1.1.0 1.1.0
  ldb_ldif_read@LDB_0.9.10 0.9.21
  ldb_ldif_read_file@LDB_0.9.10 0.9.21
+ ldb_ldif_read_file_state@LDB_1.1.5 1.1.5
  ldb_ldif_read_free@LDB_0.9.10 0.9.21
  ldb_ldif_read_string@LDB_0.9.10 0.9.21
  ldb_ldif_write@LDB_0.9.10 0.9.21
