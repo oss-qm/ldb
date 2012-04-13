@@ -1,3 +1,9 @@
+ldb (1:1.1.5-2) UNRELEASED; urgency=low
+
+  * Add explicit dependency on tdb 1.2.10. Closes: #668576
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Fri, 13 Apr 2012 11:14:29 +0200
+
 ldb (1:1.1.5-1) unstable; urgency=low
 
   * Bump standards version to 3.9.3 (no changes).
