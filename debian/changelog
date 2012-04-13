@@ -1,4 +1,4 @@
-ldb (1:1.1.5-2) UNRELEASED; urgency=low
+ldb (1:1.1.5-2) unstable; urgency=low
 
   * Add explicit dependency on tdb 1.2.10. Closes: #668576
 
