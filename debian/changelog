@@ -1,3 +1,9 @@
+ldb (1:1.1.6-1) UNRELEASED; urgency=low
+
+  * New upstream release.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Thu, 19 Apr 2012 15:00:14 +0200
+
 ldb (1:1.1.5-2) unstable; urgency=low
 
   * Add explicit dependency on tdb 1.2.10. Closes: #668576
