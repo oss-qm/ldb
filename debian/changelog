@@ -1,6 +1,7 @@
 ldb (1:1.1.13-1) UNRELEASED; urgency=low
 
   * New upstream release.
+  * Change Vcs-Git after migration to Git.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Sat, 03 Nov 2012 15:51:49 +0100
 
