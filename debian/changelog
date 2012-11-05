@@ -2,6 +2,8 @@ ldb (1:1.1.13-1) UNRELEASED; urgency=low
 
   * New upstream release.
   * Change Vcs-Git after migration to Git.
+  * Add 01_exclude_symbols, fixing a bug in wafsamba which causes
+    private symbols to be exported.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Sat, 03 Nov 2012 15:51:49 +0100
 
