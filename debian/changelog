@@ -1,4 +1,4 @@
-ldb (1:1.1.13-1) UNRELEASED; urgency=low
+ldb (1:1.1.13-1) experimental; urgency=low
 
   * New upstream release.
   * Change Vcs-Git after migration to Git.
