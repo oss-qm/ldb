@@ -27,6 +27,8 @@ libldb.so.1 #PACKAGE# #MINVER#
  LDB_1.1.11@LDB_1.1.11 1.1.12
  LDB_1.1.12@LDB_1.1.12 1.1.12
  LDB_1.1.13@LDB_1.1.13 1.1.13
+ LDB_1.1.14@LDB_1.1.14 1:1.1.15-1.1
+ LDB_1.1.15@LDB_1.1.15 1:1.1.15-1.1
  ldb_check_critical_controls@LDB_0.9.22 0.9.22
  ldb_controls_except_specified@LDB_0.9.22 0.9.22
  ldb_control_to_string@LDB_1.0.2 1.0.2~git20110403
@@ -216,6 +218,7 @@ libldb.so.1 #PACKAGE# #MINVER#
  ldb_next_start_trans@LDB_0.9.10 0.9.21
  ldb_op_default_callback@LDB_0.9.10 0.9.21
  ldb_options_find@LDB_0.9.17 0.9.21
+ ldb_pack_data@LDB_1.1.14 1:1.1.15-1.1
  ldb_parse_control_from_string@LDB_1.0.2 1.0.2~git20110403
  ldb_parse_control_strings@LDB_0.9.10 0.9.21
  ldb_parse_tree@LDB_0.9.10 0.9.21
@@ -278,6 +281,7 @@ libldb.so.1 #PACKAGE# #MINVER#
  ldb_transaction_commit@LDB_0.9.10 0.9.21
  ldb_transaction_prepare_commit@LDB_0.9.10 0.9.21
  ldb_transaction_start@LDB_0.9.10 0.9.21
+ ldb_unpack_data@LDB_1.1.14 1:1.1.15-1.1
  ldb_val_dup@LDB_0.9.10 0.9.21
  ldb_val_equal_exact@LDB_0.9.10 0.9.21
  ldb_val_map_local@LDB_0.9.10 0.9.21

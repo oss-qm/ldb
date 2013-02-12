@@ -1,3 +1,11 @@
+ldb (1:1.1.15-1.1) experimental; urgency=low
+
+  * Non-maintainer upload.
+  * New upstream release.
+  * Drop 01_exclude_symbols, now upstream 
+
+ -- Andrew Bartlett <abartlet@samba.org>  Tue, 12 Feb 2013 19:02:05 +1100
+
 ldb (1:1.1.13-1) experimental; urgency=low
 
   * New upstream release.
