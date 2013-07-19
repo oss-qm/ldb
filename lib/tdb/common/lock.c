@@ -36,6 +36,7 @@ static int fcntl_lock(struct tdb_context *tdb,
 		      int rw, off_t off, off_t len, bool waitflag)
 {
 	struct flock fl;
+	int cmd;
 
 	fl.l_type = rw;
 	fl.l_whence = SEEK_SET;
@@ -43,10 +44,9 @@ static int fcntl_lock(struct tdb_context *tdb,
 	fl.l_len = len;
 	fl.l_pid = 0;
 
-	if (waitflag)
-		return fcntl(tdb->fd, F_SETLKW, &fl);
-	else
-		return fcntl(tdb->fd, F_SETLK, &fl);
+	cmd = waitflag ? F_SETLKW : F_SETLK;
+
+	return fcntl(tdb->fd, cmd, &fl);
 }
 
 static int fcntl_unlock(struct tdb_context *tdb, int rw, off_t off, off_t len)
@@ -169,8 +169,8 @@ int tdb_brlock(struct tdb_context *tdb,
 		 * EAGAIN is an expected return from non-blocking
 		 * locks. */
 		if (!(flags & TDB_LOCK_PROBE) && errno != EAGAIN) {
-			TDB_LOG((tdb, TDB_DEBUG_TRACE,"tdb_brlock failed (fd=%d) at offset %d rw_type=%d flags=%d len=%d\n",
-				 tdb->fd, offset, rw_type, flags, (int)len));
+			TDB_LOG((tdb, TDB_DEBUG_TRACE,"tdb_brlock failed (fd=%d) at offset %u rw_type=%d flags=%d len=%zu\n",
+				 tdb->fd, offset, rw_type, flags, len));
 		}
 		return -1;
 	}
@@ -191,21 +191,49 @@ int tdb_brunlock(struct tdb_context *tdb,
 	} while (ret == -1 && errno == EINTR);
 
 	if (ret == -1) {
-		TDB_LOG((tdb, TDB_DEBUG_TRACE,"tdb_brunlock failed (fd=%d) at offset %d rw_type=%d len=%d\n",
-			 tdb->fd, offset, rw_type, (int)len));
+		TDB_LOG((tdb, TDB_DEBUG_TRACE,"tdb_brunlock failed (fd=%d) at offset %u rw_type=%u len=%zu\n",
+			 tdb->fd, offset, rw_type, len));
 	}
 	return ret;
 }
 
 /*
-  upgrade a read lock to a write lock. This needs to be handled in a
-  special way as some OSes (such as solaris) have too conservative
-  deadlock detection and claim a deadlock when progress can be
-  made. For those OSes we may loop for a while.
+ * Do a tdb_brlock in a loop. Some OSes (such as solaris) have too
+ * conservative deadlock detection and claim a deadlock when progress can be
+ * made. For those OSes we may loop for a while.
+ */
+
+static int tdb_brlock_retry(struct tdb_context *tdb,
+			    int rw_type, tdb_off_t offset, size_t len,
+			    enum tdb_lock_flags flags)
+{
+	int count = 1000;
+
+	while (count--) {
+		struct timeval tv;
+		int ret;
+
+		ret = tdb_brlock(tdb, rw_type, offset, len, flags);
+		if (ret == 0) {
+			return 0;
+		}
+		if (errno != EDEADLK) {
+			break;
+		}
+		/* sleep for as short a time as we can - more portable than usleep() */
+		tv.tv_sec = 0;
+		tv.tv_usec = 1;
+		select(0, NULL, NULL, NULL, &tv);
+	}
+	return -1;
+}
+
+/*
+  upgrade a read lock to a write lock.
 */
 int tdb_allrecord_upgrade(struct tdb_context *tdb)
 {
-	int count = 1000;
+	int ret;
 
 	if (tdb->allrecord_lock.count != 1) {
 		TDB_LOG((tdb, TDB_DEBUG_ERROR,
@@ -220,21 +248,12 @@ int tdb_allrecord_upgrade(struct tdb_context *tdb)
 		return -1;
 	}
 
-	while (count--) {
-		struct timeval tv;
-		if (tdb_brlock(tdb, F_WRLCK, FREELIST_TOP, 0,
-			       TDB_LOCK_WAIT|TDB_LOCK_PROBE) == 0) {
-			tdb->allrecord_lock.ltype = F_WRLCK;
-			tdb->allrecord_lock.off = 0;
-			return 0;
-		}
-		if (errno != EDEADLK) {
-			break;
-		}
-		/* sleep for as short a time as we can - more portable than usleep() */
-		tv.tv_sec = 0;
-		tv.tv_usec = 1;
-		select(0, NULL, NULL, NULL, &tv);
+	ret = tdb_brlock_retry(tdb, F_WRLCK, FREELIST_TOP, 0,
+			       TDB_LOCK_WAIT|TDB_LOCK_PROBE);
+	if (ret == 0) {
+		tdb->allrecord_lock.ltype = F_WRLCK;
+		tdb->allrecord_lock.off = 0;
+		return 0;
 	}
 	TDB_LOG((tdb, TDB_DEBUG_TRACE,"tdb_allrecord_upgrade failed\n"));
 	return -1;
@@ -259,7 +278,7 @@ int tdb_nest_lock(struct tdb_context *tdb, uint32_t offset, int ltype,
 {
 	struct tdb_lock_type *new_lck;
 
-	if (offset >= lock_offset(tdb->header.hash_size)) {
+	if (offset >= lock_offset(tdb->hash_size)) {
 		tdb->ecode = TDB_ERR_LOCK;
 		TDB_LOG((tdb, TDB_DEBUG_ERROR,"tdb_lock: invalid offset %u for ltype=%d\n",
 			 offset, ltype));
@@ -422,8 +441,8 @@ int tdb_nest_unlock(struct tdb_context *tdb, uint32_t offset, int ltype,
 		return 0;
 
 	/* Sanity checks */
-	if (offset >= lock_offset(tdb->header.hash_size)) {
-		TDB_LOG((tdb, TDB_DEBUG_ERROR, "tdb_unlock: offset %u invalid (%d)\n", offset, tdb->header.hash_size));
+	if (offset >= lock_offset(tdb->hash_size)) {
+		TDB_LOG((tdb, TDB_DEBUG_ERROR, "tdb_unlock: offset %u invalid (%d)\n", offset, tdb->hash_size));
 		return ret;
 	}
 
@@ -588,15 +607,15 @@ int tdb_allrecord_lock(struct tdb_context *tdb, int ltype,
 	 * It is (1) which cause the starvation problem, so we're only
 	 * gradual for that. */
 	if (tdb_chainlock_gradual(tdb, ltype, flags, FREELIST_TOP,
-				  tdb->header.hash_size * 4) == -1) {
+				  tdb->hash_size * 4) == -1) {
 		return -1;
 	}
 
 	/* Grab individual record locks. */
-	if (tdb_brlock(tdb, ltype, lock_offset(tdb->header.hash_size), 0,
+	if (tdb_brlock(tdb, ltype, lock_offset(tdb->hash_size), 0,
 		       flags) == -1) {
 		tdb_brunlock(tdb, ltype, FREELIST_TOP,
-			     tdb->header.hash_size * 4);
+			     tdb->hash_size * 4);
 		return -1;
 	}
 
@@ -860,7 +879,7 @@ void tdb_release_transaction_locks(struct tdb_context *tdb)
 	unsigned int i, active = 0;
 
 	if (tdb->allrecord_lock.count != 0) {
-		tdb_brunlock(tdb, tdb->allrecord_lock.ltype, FREELIST_TOP, 0);
+		tdb_allrecord_unlock(tdb, tdb->allrecord_lock.ltype, false);
 		tdb->allrecord_lock.count = 0;
 	}
 

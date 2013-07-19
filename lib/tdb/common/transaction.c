@@ -195,7 +195,7 @@ static int transaction_read(struct tdb_context *tdb, tdb_off_t off, void *buf,
 	return 0;
 
 fail:
-	TDB_LOG((tdb, TDB_DEBUG_FATAL, "transaction_read: failed at off=%d len=%d\n", off, len));
+	TDB_LOG((tdb, TDB_DEBUG_FATAL, "transaction_read: failed at off=%u len=%u\n", off, len));
 	tdb->ecode = TDB_ERR_IO;
 	tdb->transaction->transaction_error = 1;
 	return -1;
@@ -249,14 +249,8 @@ static int transaction_write(struct tdb_context *tdb, tdb_off_t off,
 	if (tdb->transaction->num_blocks <= blk) {
 		uint8_t **new_blocks;
 		/* expand the blocks array */
-		if (tdb->transaction->blocks == NULL) {
-			new_blocks = (uint8_t **)malloc(
-				(blk+1)*sizeof(uint8_t *));
-		} else {
-			new_blocks = (uint8_t **)realloc(
-				tdb->transaction->blocks,
-				(blk+1)*sizeof(uint8_t *));
-		}
+		new_blocks = (uint8_t **)realloc(tdb->transaction->blocks,
+						 (blk+1)*sizeof(uint8_t *));
 		if (new_blocks == NULL) {
 			tdb->ecode = TDB_ERR_OOM;
 			goto fail;
@@ -309,7 +303,7 @@ static int transaction_write(struct tdb_context *tdb, tdb_off_t off,
 	return 0;
 
 fail:
-	TDB_LOG((tdb, TDB_DEBUG_FATAL, "transaction_write: failed at off=%d len=%d\n",
+	TDB_LOG((tdb, TDB_DEBUG_FATAL, "transaction_write: failed at off=%u len=%u\n",
 		 (blk*tdb->transaction->block_size) + off, len));
 	tdb->transaction->transaction_error = 1;
 	return -1;
@@ -371,7 +365,7 @@ static int transaction_write_existing(struct tdb_context *tdb, tdb_off_t off,
 static void transaction_next_hash_chain(struct tdb_context *tdb, uint32_t *chain)
 {
 	uint32_t h = *chain;
-	for (;h < tdb->header.hash_size;h++) {
+	for (;h < tdb->hash_size;h++) {
 		/* the +1 takes account of the freelist */
 		if (0 != tdb->transaction->hash_heads[h+1]) {
 			break;
@@ -495,7 +489,7 @@ static int _tdb_transaction_start(struct tdb_context *tdb,
 	/* setup a copy of the hash table heads so the hash scan in
 	   traverse can be fast */
 	tdb->transaction->hash_heads = (uint32_t *)
-		calloc(tdb->header.hash_size+1, sizeof(uint32_t));
+		calloc(tdb->hash_size+1, sizeof(uint32_t));
 	if (tdb->transaction->hash_heads == NULL) {
 		tdb->ecode = TDB_ERR_OOM;
 		goto fail;
@@ -636,28 +630,37 @@ _PUBLIC_ int tdb_transaction_cancel(struct tdb_context *tdb)
 /*
   work out how much space the linearised recovery data will consume
 */
-static tdb_len_t tdb_recovery_size(struct tdb_context *tdb)
+static bool tdb_recovery_size(struct tdb_context *tdb, tdb_len_t *result)
 {
 	tdb_len_t recovery_size = 0;
 	int i;
 
 	recovery_size = sizeof(uint32_t);
 	for (i=0;i<tdb->transaction->num_blocks;i++) {
+		tdb_len_t block_size;
 		if (i * tdb->transaction->block_size >= tdb->transaction->old_map_size) {
 			break;
 		}
 		if (tdb->transaction->blocks[i] == NULL) {
 			continue;
 		}
-		recovery_size += 2*sizeof(tdb_off_t);
+		if (!tdb_add_len_t(recovery_size, 2*sizeof(tdb_off_t),
+				   &recovery_size)) {
+			return false;
+		}
 		if (i == tdb->transaction->num_blocks-1) {
-			recovery_size += tdb->transaction->last_block_size;
+			block_size = tdb->transaction->last_block_size;
 		} else {
-			recovery_size += tdb->transaction->block_size;
+			block_size =  tdb->transaction->block_size;
+		}
+		if (!tdb_add_len_t(recovery_size, block_size,
+				   &recovery_size)) {
+			return false;
 		}
 	}
 
-	return recovery_size;
+	*result = recovery_size;
+	return true;
 }
 
 int tdb_recovery_area(struct tdb_context *tdb,
@@ -706,7 +709,11 @@ static int tdb_recovery_allocate(struct tdb_context *tdb,
 		return -1;
 	}
 
-	*recovery_size = tdb_recovery_size(tdb);
+	if (!tdb_recovery_size(tdb, recovery_size)) {
+		TDB_LOG((tdb, TDB_DEBUG_FATAL, "tdb_recovery_allocate: "
+			 "overflow recovery size\n"));
+		return -1;
+	}
 
 	/* Existing recovery area? */
 	if (recovery_head != 0 && *recovery_size <= rec.rec_len) {
@@ -734,7 +741,12 @@ static int tdb_recovery_allocate(struct tdb_context *tdb,
 
 			/* the tdb_free() call might have increased
 			 * the recovery size */
-			*recovery_size = tdb_recovery_size(tdb);
+			if (!tdb_recovery_size(tdb, recovery_size)) {
+				TDB_LOG((tdb, TDB_DEBUG_FATAL,
+					 "tdb_recovery_allocate: "
+					 "overflow recovery size\n"));
+				return -1;
+			}
 		}
 
 		/* New head will be at end of file. */
@@ -750,7 +762,12 @@ static int tdb_recovery_allocate(struct tdb_context *tdb,
 					       tdb->page_size)
 		- sizeof(rec);
 
-	new_end = recovery_head + sizeof(rec) + *recovery_max_size;
+	if (!tdb_add_off_t(recovery_head, sizeof(rec), &new_end) ||
+	    !tdb_add_off_t(new_end, *recovery_max_size, &new_end)) {
+		TDB_LOG((tdb, TDB_DEBUG_FATAL, "tdb_recovery_allocate: "
+			 "overflow recovery area\n"));
+		return -1;
+	}
 
 	if (methods->tdb_expand_file(tdb, tdb->transaction->old_map_size,
 				     new_end - tdb->transaction->old_map_size)
@@ -1223,7 +1240,7 @@ int tdb_transaction_recover(struct tdb_context *tdb)
 
 		if (tdb->methods->tdb_write(tdb, ofs, p+8, len) == -1) {
 			free(data);
-			TDB_LOG((tdb, TDB_DEBUG_FATAL, "tdb_transaction_recover: failed to recover %d bytes at offset %d\n", len, ofs));
+			TDB_LOG((tdb, TDB_DEBUG_FATAL, "tdb_transaction_recover: failed to recover %u bytes at offset %u\n", len, ofs));
 			tdb->ecode = TDB_ERR_IO;
 			return -1;
 		}
@@ -1261,7 +1278,7 @@ int tdb_transaction_recover(struct tdb_context *tdb)
 		return -1;
 	}
 
-	TDB_LOG((tdb, TDB_DEBUG_TRACE, "tdb_transaction_recover: recovered %d byte database\n",
+	TDB_LOG((tdb, TDB_DEBUG_TRACE, "tdb_transaction_recover: recovered %u byte database\n",
 		 recovery_eof));
 
 	/* all done */

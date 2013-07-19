@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 APPNAME = 'ldb'
-VERSION = '1.1.15'
+VERSION = '1.1.16'
 
 blddir = 'bin'
 
@@ -64,7 +64,7 @@ def configure(conf):
 
         # we don't want any libraries or modules to rely on runtime
         # resolution of symbols
-        if sys.platform != "openbsd4" and sys.platform != "openbsd5":
+        if not sys.platform.startswith("openbsd"):
             conf.ADD_LDFLAGS('-Wl,-no-undefined', testflags=True)
 
     conf.DEFINE('HAVE_CONFIG_H', 1, add_to_cflags=True)
@@ -133,7 +133,7 @@ def build(bld):
 
         bld.SAMBA_LIBRARY('ldb',
                           COMMON_SRC + ' ' + LDB_MAP_SRC,
-                          deps='tevent LIBLDB_MAIN',
+                          deps='tevent LIBLDB_MAIN replace',
                           includes='include',
                           public_headers='include/ldb.h include/ldb_errors.h '\
                           'include/ldb_module.h include/ldb_handlers.h',
