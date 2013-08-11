@@ -4,13 +4,16 @@ ldb (1:1.1.16-1) UNRELEASED; urgency=low
   * New upstream release.
     + Fixes FTBFS. Closes: #713096
 
- -- Jelmer Vernooij <jelmer@samba.org>  Fri, 19 Jul 2013 22:37:05 +1000
+  [ Jelmer Vernooij ]
+  * Bump standards version to 3.9.4 (no changes).
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Fri, 19 Jul 2013 22:37:05 +1000
 
 ldb (1:1.1.15-1.1) experimental; urgency=low
 
   * Non-maintainer upload.
   * New upstream release.
-  * Drop 01_exclude_symbols, now upstream 
+  * Drop 01_exclude_symbols, now upstream.
 
  -- Andrew Bartlett <abartlet@samba.org>  Tue, 12 Feb 2013 19:02:05 +1100
 
