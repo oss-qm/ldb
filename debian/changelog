@@ -1,8 +1,10 @@
 ldb (1:1.1.16-1) UNRELEASED; urgency=low
 
+  [ Andrew Bartlett ]
   * New upstream release.
+    + Fixes FTBFS. Closes: #713096
 
- -- Andrew Bartlett <abartlet@samba.org>  Fri, 19 Jul 2013 22:37:05 +1000
+ -- Jelmer Vernooij <jelmer@samba.org>  Fri, 19 Jul 2013 22:37:05 +1000
 
 ldb (1:1.1.15-1.1) experimental; urgency=low
 
