@@ -1,4 +1,4 @@
-ldb (1:1.1.16-1) UNRELEASED; urgency=low
+ldb (1:1.1.16-1) unstable; urgency=low
 
   [ Andrew Bartlett ]
   * New upstream release.
