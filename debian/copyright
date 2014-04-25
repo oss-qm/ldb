@@ -152,7 +152,7 @@ License:
 Files: lib/replace/getaddrinfo.c
 Copyright:
  1996-2005 The PostgreSQL Global Development Group
- 1994 Teh Regents of the University of California
+ 1994 The Regents of the University of California
  1998 Jeremy Allison
 License:
  Permission to use, copy, modify, and distribute this software and its
