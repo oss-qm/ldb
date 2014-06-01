@@ -1,4 +1,4 @@
-ldb (1:1.1.17-1) UNRELEASED; urgency=medium
+ldb (1:1.1.17-1) unstable; urgency=medium
 
   * Change maintainer to Debian Samba maintainers, move myself to
     uploaders.
