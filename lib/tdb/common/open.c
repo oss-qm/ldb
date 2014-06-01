@@ -170,6 +170,7 @@ _PUBLIC_ struct tdb_context *tdb_open_ex(const char *name, int hash_size, int td
 				const struct tdb_logging_context *log_ctx,
 				tdb_hash_func hash_fn)
 {
+	int orig_errno = errno;
 	struct tdb_header header;
 	struct tdb_context *tdb;
 	struct stat st;
@@ -188,6 +189,11 @@ _PUBLIC_ struct tdb_context *tdb_open_ex(const char *name, int hash_size, int td
 		goto fail;
 	}
 	tdb_io_init(tdb);
+
+	if (tdb_flags & TDB_INTERNAL) {
+		tdb_flags |= TDB_INCOMPATIBLE_HASH;
+	}
+
 	tdb->fd = -1;
 #ifdef TDB_TRACE
 	tdb->tracefd = -1;
@@ -484,6 +490,7 @@ _PUBLIC_ struct tdb_context *tdb_open_ex(const char *name, int hash_size, int td
 	}
 	tdb->next = tdbs;
 	tdbs = tdb;
+	errno = orig_errno;
 	return tdb;
 
  fail:
@@ -629,6 +636,7 @@ static int tdb_reopen_internal(struct tdb_context *tdb, bool active_lock)
 	/* We may still think we hold the active lock. */
 	tdb->num_lockrecs = 0;
 	SAFE_FREE(tdb->lockrecs);
+	tdb->lockrecs_array_length = 0;
 
 	if (active_lock && tdb_nest_lock(tdb, ACTIVE_LOCK, F_RDLCK, TDB_LOCK_WAIT) == -1) {
 		TDB_LOG((tdb, TDB_DEBUG_FATAL, "tdb_reopen: failed to obtain active lock\n"));

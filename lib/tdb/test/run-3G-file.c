@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 {
 	struct tdb_context *tdb;
 	TDB_DATA key, orig_data, data;
-	uint32_t hash;
+	uint32_t hashval;
 	tdb_off_t rec_ptr;
 	struct tdb_record rec;
 	int ret;
@@ -79,9 +79,9 @@ int main(int argc, char *argv[])
 	tdb->methods = &large_io_methods;
 
 	key.dsize = strlen("hi");
-	key.dptr = (void *)"hi";
+	key.dptr = discard_const_p(uint8_t, "hi");
 	orig_data.dsize = strlen("world");
-	orig_data.dptr = (void *)"world";
+	orig_data.dptr = discard_const_p(uint8_t, "world");
 
 	/* Enlarge the file (internally multiplies by 2). */
 	ret = tdb_expand(tdb, 1500000000);
@@ -113,8 +113,8 @@ int main(int argc, char *argv[])
 	free(data.dptr);
 
 	/* That currently fills at the end, make sure that's true. */
-	hash = tdb->hash_fn(&key);
-	rec_ptr = tdb_find_lock_hash(tdb, key, hash, F_RDLCK, &rec);
+	hashval = tdb->hash_fn(&key);
+	rec_ptr = tdb_find_lock_hash(tdb, key, hashval, F_RDLCK, &rec);
 	ok1(rec_ptr);
 	ok1(rec_ptr > 2U*1024*1024*1024);
 	tdb_unlock(tdb, BUCKET(rec.full_hash), F_RDLCK);

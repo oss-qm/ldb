@@ -197,6 +197,7 @@ struct tdb_context {
 	struct tdb_lock_type allrecord_lock; /* .offset == upgradable */
 	int num_lockrecs;
 	struct tdb_lock_type *lockrecs; /* only real locks, all with count>0 */
+	int lockrecs_array_length;
 	enum TDB_ERROR ecode; /* error code for last tdb error */
 	uint32_t hash_size;
 	uint32_t flags; /* the flags passed to tdb_open */
@@ -254,7 +255,8 @@ int tdb_ofs_read(struct tdb_context *tdb, tdb_off_t offset, tdb_off_t *d);
 int tdb_ofs_write(struct tdb_context *tdb, tdb_off_t offset, tdb_off_t *d);
 void *tdb_convert(void *buf, uint32_t size);
 int tdb_free(struct tdb_context *tdb, tdb_off_t offset, struct tdb_record *rec);
-tdb_off_t tdb_allocate(struct tdb_context *tdb, tdb_len_t length, struct tdb_record *rec);
+tdb_off_t tdb_allocate(struct tdb_context *tdb, int hash, tdb_len_t length,
+		       struct tdb_record *rec);
 int tdb_ofs_read(struct tdb_context *tdb, tdb_off_t offset, tdb_off_t *d);
 int tdb_ofs_write(struct tdb_context *tdb, tdb_off_t offset, tdb_off_t *d);
 int tdb_lock_record(struct tdb_context *tdb, tdb_off_t off);
@@ -271,6 +273,10 @@ int tdb_parse_data(struct tdb_context *tdb, TDB_DATA key,
 		   void *private_data);
 tdb_off_t tdb_find_lock_hash(struct tdb_context *tdb, TDB_DATA key, uint32_t hash, int locktype,
 			   struct tdb_record *rec);
+tdb_off_t tdb_find_dead(struct tdb_context *tdb, uint32_t hash,
+			struct tdb_record *r, tdb_len_t length,
+			tdb_off_t *p_last_ptr);
+int tdb_purge_dead(struct tdb_context *tdb, uint32_t hash);
 void tdb_io_init(struct tdb_context *tdb);
 int tdb_expand(struct tdb_context *tdb, tdb_off_t size);
 tdb_off_t tdb_expand_adjust(tdb_off_t map_size, tdb_off_t size, int page_size);
