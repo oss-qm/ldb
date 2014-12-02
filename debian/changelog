@@ -1,4 +1,4 @@
-ldb (1:1.1.18-1) UNRELEASED; urgency=medium
+ldb (1:1.1.18-1) unstable; urgency=medium
 
   * New upstream release.
    + Depend on tdb >= 1.3.2.
