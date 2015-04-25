@@ -19,7 +19,7 @@ Build-Depends: debhelper (>> 8.1.3),
                python-tdb (>= 1.3.2~),
                xsltproc
 Homepage: http://ldb.samba.org/
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Vcs-Git: git://anonscm.debian.org/pkg-samba/ldb.git -b unstable
 
 Package: libldb1
