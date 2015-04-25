@@ -1,4 +1,4 @@
-ldb (1:1.1.20-1) UNRELEASED; urgency=medium
+ldb (1:1.1.20-1) unstable; urgency=medium
 
   * New upstream release.
   * Bump standards version to 3.9.6 (no changes).
