@@ -113,7 +113,7 @@ Depends: libc6-dev,
          pkg-config,
          python-ldb (= ${binary:Version}),
          ${misc:Depends}
-Description: LDB python bindings - development files
+Description: LDB Python bindings - development files
  ldb is a LDAP-like embedded database built on top of TDB.
  .
  It is a fast database with an LDAP-like API designed

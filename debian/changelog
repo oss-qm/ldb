@@ -5,6 +5,7 @@ ldb (1:1.1.20-1) UNRELEASED; urgency=medium
   * Add patch 03_revert_ldflags_atend: revert upstream change preventing
     use of -Wl,--as-needed.
   * Make libldb1-dbg Multi-Arch: same.
+  * python-ldb-dev: Fix capitalization of 'python'.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Sat, 25 Apr 2015 14:13:06 +0000
 
