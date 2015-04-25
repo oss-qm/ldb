@@ -27,7 +27,7 @@ DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 	dh $* --with python2
 
 override_dh_auto_configure:
-	PYTHON="$(PYTHON)" PYTHON_CONFIG="$(PYTHON_CONFIG)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" \
+	PYTHON="$(PYTHON)" PYTHON_CONFIG="$(PYTHON_CONFIG)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" CPPFLAGS="$(CPPFLAGS)" \
 		$(WAF) configure --prefix=/usr --disable-rpath-install \
 		--builtin-libraries=ccan,replace,tdb_compat \
 		--bundled-libraries=NONE,pytevent \
