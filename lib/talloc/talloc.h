@@ -761,7 +761,11 @@ type *talloc_get_type(const void *ptr, #type);
  */
 void *talloc_get_type_abort(const void *ptr, #type);
 #else
+#ifdef TALLOC_GET_TYPE_ABORT_NOOP
+#define talloc_get_type_abort(ptr, type) (type *)(ptr)
+#else
 #define talloc_get_type_abort(ptr, type) (type *)_talloc_get_type_abort(ptr, #type, __location__)
+#endif
 void *_talloc_get_type_abort(const void *ptr, const char *name, const char *location);
 #endif
 
@@ -893,7 +897,7 @@ void *_talloc_pooled_object(const void *ctx,
  *
  * @param[in]  ctx      The chunk to be freed.
  */
-#define TALLOC_FREE(ctx) do { talloc_free(ctx); ctx=NULL; } while(0)
+#define TALLOC_FREE(ctx) do { if (ctx != NULL) { talloc_free(ctx); ctx=NULL; } } while(0)
 
 /* @} ******************************************************************/
 

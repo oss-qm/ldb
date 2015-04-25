@@ -130,6 +130,11 @@ struct ldb_context *ldb_init(TALLOC_CTX *mem_ctx, struct tevent_context *ev_ctx)
 	ldb_set_create_perms(ldb, 0666);
 	ldb_set_modules_dir(ldb, LDB_MODULESDIR);
 	ldb_set_event_context(ldb, ev_ctx);
+	ret = ldb_register_extended_match_rules(ldb);
+	if (ret != LDB_SUCCESS) {
+		talloc_free(ldb);
+		return NULL;
+	}
 
 	/* TODO: get timeout from options if available there */
 	ldb->default_timeout = 300; /* set default to 5 minutes */
@@ -371,10 +376,14 @@ int ldb_transaction_start(struct ldb_context *ldb)
 				ldb_strerror(status),
 				status);
 		}
-	}
-	if ((module && module->ldb->flags & LDB_FLG_ENABLE_TRACING)) { 
-		ldb_debug(module->ldb, LDB_DEBUG_TRACE, "start ldb transaction error: %s", 
-			  ldb_errstring(module->ldb));				
+		if ((module && module->ldb->flags & LDB_FLG_ENABLE_TRACING)) {
+			ldb_debug(module->ldb, LDB_DEBUG_TRACE, "start ldb transaction error: %s",
+				  ldb_errstring(module->ldb));
+		}
+	} else {
+		if ((module && module->ldb->flags & LDB_FLG_ENABLE_TRACING)) {
+			ldb_debug(module->ldb, LDB_DEBUG_TRACE, "start ldb transaction success");
+		}
 	}
 	return status;
 }

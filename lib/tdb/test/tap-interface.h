@@ -33,7 +33,7 @@
 #define plan_tests(num)
 #define fail(...) do { \
 	fprintf(stderr, __VA_ARGS__); \
-	fprintf(stdout, "\n"); \
+	fprintf(stderr, "\n"); \
 	fflush(stderr); \
 	exit(1); \
 } while(0)
@@ -54,4 +54,5 @@
 	} \
 } while(0)
 #define ok1(e) ok((e), "%s:%s", __location__, #e)
+#define skip(n, ...) diag(__VA_ARGS__)
 #define exit_status() 0

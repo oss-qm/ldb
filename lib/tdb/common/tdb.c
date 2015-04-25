@@ -511,7 +511,7 @@ static int _tdb_store(struct tdb_context *tdb, TDB_DATA key,
 			goto fail;
 		}
 	}
-	/* reset the error code potentially set by the tdb_update() */
+	/* reset the error code potentially set by the tdb_update_hash() */
 	tdb->ecode = TDB_SUCCESS;
 
 	/* delete any existing record - if it doesn't exist we don't
@@ -720,6 +720,15 @@ _PUBLIC_ void tdb_remove_flags(struct tdb_context *tdb, unsigned flags)
 		tdb->ecode = TDB_ERR_NESTING;
 		TDB_LOG((tdb, TDB_DEBUG_FATAL, "tdb_remove_flags: "
 			"allow_nesting and disallow_nesting are not allowed together!"));
+		return;
+	}
+
+	if ((flags & TDB_NOLOCK) &&
+	    (tdb->feature_flags & TDB_FEATURE_FLAG_MUTEX) &&
+	    (tdb->mutexes == NULL)) {
+		tdb->ecode = TDB_ERR_LOCK;
+		TDB_LOG((tdb, TDB_DEBUG_FATAL, "tdb_remove_flags: "
+			 "Can not remove NOLOCK flag on mutexed databases"));
 		return;
 	}
 
