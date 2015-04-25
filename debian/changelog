@@ -2,6 +2,8 @@ ldb (1:1.1.20-1) UNRELEASED; urgency=medium
 
   * New upstream release.
   * Bump standards version to 3.9.6 (no changes).
+  * Add patch 03_revert_ldflags_atend: revert upstream change preventing
+    use of -Wl,--as-needed.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Sat, 25 Apr 2015 14:13:06 +0000
 
