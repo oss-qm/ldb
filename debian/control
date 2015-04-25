@@ -41,6 +41,7 @@ Description: LDAP-like embedded database - shared library
  This package contains the shared library file.
 
 Package: libldb1-dbg
+Multi-Arch: same
 Architecture: any
 Section: debug
 Priority: extra
