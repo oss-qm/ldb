@@ -1,3 +1,10 @@
+ldb (2:1.1.20-2) UNRELEASED; urgency=medium
+
+  * Add patch 01_manpage_dates: add fixed manpage dates, making the
+    build reproducible.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Mon, 27 Apr 2015 23:35:02 +0000
+
 ldb (2:1.1.20-1) unstable; urgency=medium
 
   * New upstream release.
