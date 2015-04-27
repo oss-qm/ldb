@@ -1,4 +1,4 @@
-ldb (2:1.1.20-2) UNRELEASED; urgency=medium
+ldb (2:1.1.20-2) unstable; urgency=medium
 
   * Add patch 01_manpage_dates: add fixed manpage dates, making the
     build reproducible.
