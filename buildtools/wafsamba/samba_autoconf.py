@@ -229,7 +229,18 @@ def CHECK_DECLS(conf, vars, reverse=False, headers=None, always=False):
                               headers=headers,
                               msg='Checking for declaration of %s' % v,
                               always=always):
-            ret = False
+            if not CHECK_CODE(conf,
+                      '''
+                      return (int)%s;
+                      ''' % (v),
+                      execute=False,
+                      link=False,
+                      msg='Checking for declaration of %s (as enum)' % v,
+                      local_include=False,
+                      headers=headers,
+                      define=define,
+                      always=always):
+                ret = False
     return ret
 
 
@@ -677,6 +688,8 @@ def SAMBA_CONFIG_H(conf, path=None):
                         testflags=True)
         conf.ADD_CFLAGS('-Werror=return-type -Wreturn-type',
                         testflags=True)
+        conf.ADD_CFLAGS('-Werror=uninitialized -Wuninitialized',
+                        testflags=True)
 
         conf.ADD_CFLAGS('-Wformat=2 -Wno-format-y2k', testflags=True)
         # This check is because for ldb_search(), a NULL format string
@@ -702,6 +715,11 @@ int main(void) {
 
     if Options.options.pedantic:
         conf.ADD_CFLAGS('-W', testflags=True)
+
+    if Options.options.address_sanitizer:
+        conf.ADD_CFLAGS('-fno-omit-frame-pointer -O1 -fsanitize=address', testflags=True)
+        conf.ADD_LDFLAGS('-fsanitize=address', testflags=True)
+        conf.env['ADDRESS_SANITIZER'] = True
 
 
     # Let people pass an additional ADDITIONAL_{CFLAGS,LDFLAGS}
@@ -839,3 +857,7 @@ def SAMBA_CHECK_UNDEFINED_SYMBOL_FLAGS(conf):
     if not sys.platform.startswith("openbsd") and conf.env.undefined_ignore_ldflags == []:
         if conf.CHECK_LDFLAGS(['-undefined', 'dynamic_lookup']):
             conf.env.undefined_ignore_ldflags = ['-undefined', 'dynamic_lookup']
+
+@conf
+def CHECK_CFG(self, *k, **kw):
+    return self.check_cfg(*k, **kw)
