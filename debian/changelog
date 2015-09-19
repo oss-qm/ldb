@@ -1,6 +1,7 @@
 ldb (2:1.1.21-1) UNRELEASED; urgency=medium
 
   * New upstream release.
+  * Drop patch 03_revert_ldflags_atend: applied upstream.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Sat, 19 Sep 2015 03:01:43 +0000
 
