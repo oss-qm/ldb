@@ -76,6 +76,10 @@ def configure(conf):
         if not sys.platform.startswith("openbsd"):
             conf.ADD_LDFLAGS('-Wl,-no-undefined', testflags=True)
 
+        # Work around pthread bug on the hurd (#578432)
+        if sys.platform.startswith("gnu"):
+            conf.ADD_LDFLAGS('-pthread', testflags=True)
+
     conf.DEFINE('HAVE_CONFIG_H', 1, add_to_cflags=True)
 
     conf.SAMBA_CONFIG_H()
