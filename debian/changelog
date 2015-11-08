@@ -1,3 +1,9 @@
+ldb (2:1.1.23-1) UNRELEASED; urgency=medium
+
+  * New upstream version.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Sun, 08 Nov 2015 21:17:41 +0000
+
 ldb (2:1.1.21-1) unstable; urgency=medium
 
   * New upstream release.
