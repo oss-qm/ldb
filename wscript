@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 APPNAME = 'ldb'
-VERSION = '1.1.21'
+VERSION = '1.1.23'
 
 blddir = 'bin'
 
@@ -56,11 +56,11 @@ def configure(conf):
 
     if not conf.env.standalone_ldb:
         if conf.CHECK_BUNDLED_SYSTEM_PKG('pyldb-util', minversion=VERSION,
-                                     onlyif='talloc tdb tevent ldb',
+                                     onlyif='talloc tdb tevent',
                                      implied_deps='replace talloc tdb tevent ldb'):
             conf.define('USING_SYSTEM_PYLDB_UTIL', 1)
             if conf.CHECK_BUNDLED_SYSTEM_PKG('ldb', minversion=VERSION,
-                                         onlyif='talloc tdb tevent',
+                                         onlyif='talloc tdb tevent pyldb-util',
                                          implied_deps='replace talloc tdb tevent'):
                 conf.define('USING_SYSTEM_LDB', 1)
 
@@ -120,18 +120,34 @@ def build(bld):
         bld.env.PACKAGE_VERSION = VERSION
         bld.env.PKGCONFIGDIR = '${LIBDIR}/pkgconfig'
 
-    if not bld.CONFIG_SET('USING_SYSTEM_PYLDB_UTIL'):
-        bld.SAMBA_LIBRARY('pyldb-util',
-                          deps='ldb',
-                          source='pyldb_util.c',
-                          public_headers='pyldb.h',
-                          public_headers_install=not private_library,
-                          vnum=VERSION,
-                          private_library=private_library,
-                          pc_files='pyldb-util.pc',
-                          pyembed=True,
-                          abi_directory='ABI',
-                          abi_match='pyldb_*')
+    if not bld.env.disable_python:
+        if not bld.CONFIG_SET('USING_SYSTEM_PYLDB_UTIL'):
+            for env in bld.gen_python_environments(['PKGCONFIGDIR']):
+                name = bld.pyembed_libname('pyldb-util')
+                bld.SAMBA_LIBRARY(name,
+                                  deps='ldb',
+                                  source='pyldb_util.c',
+                                  public_headers='pyldb.h',
+                                  public_headers_install=not private_library,
+                                  vnum=VERSION,
+                                  private_library=private_library,
+                                  pc_files='pyldb-util.pc',
+                                  pyembed=True,
+                                  abi_directory='ABI',
+                                  abi_match='pyldb_*')
+
+                if not bld.CONFIG_SET('USING_SYSTEM_LDB'):
+                    bld.SAMBA_PYTHON('pyldb', 'pyldb.c',
+                                     deps='ldb ' + name,
+                                     realname='ldb.so',
+                                     cflags='-DPACKAGE_VERSION=\"%s\"' % VERSION)
+
+        for env in bld.gen_python_environments(['PKGCONFIGDIR']):
+            bld.SAMBA_SCRIPT('_ldb_text.py',
+                             pattern='_ldb_text.py',
+                             installdir='python')
+
+            bld.INSTALL_FILES('${PYTHONARCHDIR}', '_ldb_text.py')
 
     if not bld.CONFIG_SET('USING_SYSTEM_LDB'):
         if Options.is_install:
@@ -166,11 +182,6 @@ def build(bld):
                                 public_headers_install=not private_library)
         t.env.LDB_VERSION = VERSION
 
-
-        bld.SAMBA_PYTHON('pyldb', 'pyldb.c',
-                         deps='ldb pyldb-util',
-                         realname='ldb.so',
-                         cflags='-DPACKAGE_VERSION=\"%s\"' % VERSION)
 
         bld.SAMBA_MODULE('ldb_paged_results',
                          'modules/paged_results.c',
@@ -284,8 +295,15 @@ def test(ctx):
     cmd = 'tests/test-tdb.sh %s' % Utils.g_module.blddir
     ret = samba_utils.RUN_COMMAND(cmd)
     print("testsuite returned %d" % ret)
-    # FIXME: Run python testsuite
-    sys.exit(ret)
+
+    tmp_dir = os.path.join(test_prefix, 'tmp')
+    if not os.path.exists(tmp_dir):
+        os.mkdir(tmp_dir)
+    pyret = samba_utils.RUN_PYTHON_TESTS(
+        ['tests/python/api.py'],
+        extra_env={'SELFTEST_PREFIX': test_prefix})
+    print("Python testsuite returned %d" % pyret)
+    sys.exit(ret or pyret)
 
 def dist():
     '''makes a tarball for distribution'''
