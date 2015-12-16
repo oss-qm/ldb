@@ -1,0 +1,7 @@
+python-ldb/
+libldb0/
+libldb-dev
+ldb-tools/
+*.substvars
+*.debhelper
+*.debhelper.logs
