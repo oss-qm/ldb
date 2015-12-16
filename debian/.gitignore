@@ -1,7 +1,11 @@
 python-ldb/
-libldb0/
+python-ldb-dev/
+python-ldb-dbg/
+libldb1/
 libldb-dev
+libldb1-dbg
 ldb-tools/
+tmp/
 *.substvars
 *.debhelper
-*.debhelper.logs
+*.debhelper.log
