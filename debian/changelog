@@ -1,6 +1,7 @@
-ldb (2:1.1.23-2) UNRELEASED; urgency=medium
+ldb (2:1.1.24-1) UNRELEASED; urgency=medium
 
   * Drop '-b unstable' flag to Vcs-Git.
+  * New upstream release.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Sun, 13 Dec 2015 16:11:45 +0000
 
