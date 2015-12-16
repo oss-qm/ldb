@@ -282,7 +282,7 @@ def SAMBA_LIBRARY(bld, libname, source,
             if not vscriptpath:
                 raise Utils.WafError("unable to find vscript path for %s" % vscript)
             bld.add_manual_dependency(fullpath, vscriptpath)
-            if Options.is_install:
+            if bld.is_install:
                 # also make the .inst file depend on the vscript
                 instname = apply_pattern(bundled_name + '.inst', bld.env.shlib_PATTERN)
                 bld.add_manual_dependency(bld.path.find_or_declare(instname), bld.path.find_or_declare(vscript))
@@ -674,7 +674,7 @@ Build.BuildContext.SAMBA_GENERATOR = SAMBA_GENERATOR
 
 
 
-@runonce
+@Utils.run_once
 def SETUP_BUILD_GROUPS(bld):
     '''setup build groups used to ensure that the different build
     phases happen consecutively'''
@@ -727,7 +727,7 @@ def SAMBA_SCRIPT(bld, name, pattern, installdir, installname=None):
     '''used to copy scripts from the source tree into the build directory
        for use by selftest'''
 
-    source = bld.path.ant_glob(pattern)
+    source = bld.path.ant_glob(pattern, flat=True)
 
     bld.SET_BUILD_GROUP('build_source')
     for s in TO_LIST(source):
@@ -856,7 +856,7 @@ Build.BuildContext.INSTALL_FILES = INSTALL_FILES
 def INSTALL_WILDCARD(bld, destdir, pattern, chmod=MODE_644, flat=False,
                      python_fixup=False, exclude=None, trim_path=None):
     '''install a set of files matching a wildcard pattern'''
-    files=TO_LIST(bld.path.ant_glob(pattern))
+    files=TO_LIST(bld.path.ant_glob(pattern, flat=True))
     if trim_path:
         files2 = []
         for f in files:
