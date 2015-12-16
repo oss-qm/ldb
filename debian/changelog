@@ -1,7 +1,9 @@
-ldb (2:1.1.24-1) UNRELEASED; urgency=medium
+ldb (2:1.1.24-1) UNRELEASED; urgency=high
 
   * Drop '-b unstable' flag to Vcs-Git.
-  * New upstream release.
+  * New upstream release. Fixes:
+  - CVE-2015-3223: Denial of Service.
+  - CVE-2015-5330: Remote memory read.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Sun, 13 Dec 2015 16:11:45 +0000
 
