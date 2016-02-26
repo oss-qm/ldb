@@ -1,7 +1,8 @@
-ldb (2:1.1.26-1) UNRELEASED; urgency=medium
+ldb (2:1.1.26-1) unstable; urgency=medium
 
   * New upstream version.
    + Fixes compatiblity with s390. Closes: #808769
+   + Depend on tevent 0.9.27.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Fri, 26 Feb 2016 03:18:59 +0000
 
