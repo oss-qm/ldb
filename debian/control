@@ -41,23 +41,6 @@ Description: LDAP-like embedded database - shared library
  .
  This package contains the shared library file.
 
-Package: libldb1-dbg
-Multi-Arch: same
-Architecture: any
-Section: debug
-Priority: extra
-Depends: libldb1 (= ${binary:Version}), ${misc:Depends}
-Recommends: libc6-dbg
-Description: LDAP-like embedded database - debug symbols
- ldb is a LDAP-like embedded database built on top of TDB.
- .
- It provides a fast database with an LDAP-like API designed
- to be used within an application. In some ways it can be seen as a
- intermediate solution between key-value pair databases and a real LDAP
- database.
- .
- This package contains the debug symbols.
-
 Package: ldb-tools
 Section: utils
 Architecture: any
@@ -123,15 +106,3 @@ Description: LDB Python bindings - development files
  database.
  .
  This package contains the development files for the Python bindings.
-
-Package: python-ldb-dbg
-Section: debug
-Priority: extra
-Architecture: any
-Depends: python-ldb (= ${binary:Version}), ${misc:Depends}, ${python:Depends}
-Provides: ${python:Provides}
-Recommends: python-dbg, python-talloc-dbg, python-tdb-dbg
-Description: Python bindings for LDB - debug extension
- ldb is a LDAP-like embedded database built on top of TDB.
- .
- This package contains the Python debug extension.

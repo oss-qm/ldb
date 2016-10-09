@@ -68,9 +68,7 @@ override_dh_auto_install:
 	mv libldb.a $(DESTDIR)/usr/lib/$(DEB_HOST_MULTIARCH)
 
 override_dh_strip:
-	dh_strip -pldb-tools
-	dh_strip -ppython-ldb --dbg-package=python-ldb-dbg
-	dh_strip -plibldb1 --dbg-package=libldb1-dbg
+	dh_strip --dbgsym-migration='python-ldb-dbg (<< 2:1.1.27-1~), libldb1-dbg (<< 2:1.1.27-1~)'
 
 override_dh_makeshlibs:
 	dh_makeshlibs -Xldb.so -ppython-ldb -- -c4
