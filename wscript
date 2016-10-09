@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 APPNAME = 'ldb'
-VERSION = '1.1.26'
+VERSION = '1.1.27'
 
 blddir = 'bin'
 
@@ -75,10 +75,6 @@ def configure(conf):
         # resolution of symbols
         if not sys.platform.startswith("openbsd"):
             conf.ADD_LDFLAGS('-Wl,-no-undefined', testflags=True)
-
-        # Work around pthread bug on the hurd (#578432)
-        if sys.platform.startswith("gnu"):
-            conf.ADD_LDFLAGS('-pthread', testflags=True)
 
     conf.DEFINE('HAVE_CONFIG_H', 1, add_to_cflags=True)
 
