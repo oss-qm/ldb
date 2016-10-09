@@ -58,6 +58,7 @@ Description: LDAP-like embedded database - tools
 Package: libldb-dev
 Section: libdevel
 Architecture: any
+Multi-Arch: same
 Depends: libc6-dev,
          libldb1 (= ${binary:Version}),
          libtalloc-dev,
@@ -92,6 +93,7 @@ Description: Python bindings for LDB
 Package: python-ldb-dev
 Section: libdevel
 Architecture: any
+Multi-Arch: same
 Depends: libc6-dev,
          libldb-dev,
          pkg-config,
