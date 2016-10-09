@@ -54,7 +54,7 @@ struct ldb_dn_component {
 
 struct ldb_dn_ext_component {
 
-	char *name;
+	const char *name;
 	struct ldb_val value;
 };
 
@@ -171,7 +171,7 @@ struct ldb_dn *ldb_dn_new_fmt(TALLOC_CTX *mem_ctx,
 	char *strdn;
 	va_list ap;
 
-	if ( (! mem_ctx) || (! ldb)) return NULL;
+	if (! ldb) return NULL;
 
 	va_start(ap, new_fmt);
 	strdn = talloc_vasprintf(mem_ctx, new_fmt, ap);
@@ -408,11 +408,7 @@ static bool ldb_dn_explode(struct ldb_dn *dn)
 					goto failed;
 				}
 
-				dn->ext_components[dn->ext_comp_num].name = talloc_strdup(dn->ext_components, ex_name);
-				if (!dn->ext_components[dn->ext_comp_num].name) {
-					/* ouch */
-					goto failed;
-				}
+				dn->ext_components[dn->ext_comp_num].name = ext_syntax->name;
 				ret = ext_syntax->read_fn(dn->ldb, dn->ext_components,
 							  &ex_val, &dn->ext_components[dn->ext_comp_num].value);
 				if (ret != LDB_SUCCESS) {
@@ -586,6 +582,12 @@ static bool ldb_dn_explode(struct ldb_dn *dn)
 
 				p++;
 				*d++ = '\0';
+
+				/*
+				 * This talloc_memdup() is OK with the
+				 * +1 because *d has been set to '\0'
+				 * just above
+				 */
 				dn->components[dn->comp_num].value.data = \
 					(uint8_t *)talloc_memdup(dn->components, dt, l + 1);
 				dn->components[dn->comp_num].value.length = l;
@@ -708,6 +710,11 @@ static bool ldb_dn_explode(struct ldb_dn *dn)
 	}
 
 	*d++ = '\0';
+	/*
+	 * This talloc_memdup() is OK with the
+	 * +1 because *d has been set to '\0'
+	 * just above.
+	 */
 	dn->components[dn->comp_num].value.length = l;
 	dn->components[dn->comp_num].value.data =
 		(uint8_t *)talloc_memdup(dn->components, dt, l + 1);
@@ -1901,17 +1908,37 @@ int ldb_dn_set_component(struct ldb_dn *dn, int num,
 		return LDB_ERR_OTHER;
 	}
 
+	if (num < 0) {
+		return LDB_ERR_OTHER;
+	}
+
+	if (val.length > val.length + 1) {
+		return LDB_ERR_OTHER;
+	}
+
 	n = talloc_strdup(dn, name);
 	if ( ! n) {
 		return LDB_ERR_OTHER;
 	}
 
 	v.length = val.length;
-	v.data = (uint8_t *)talloc_memdup(dn, val.data, v.length+1);
+
+	/*
+	 * This is like talloc_memdup(dn, v.data, v.length + 1), but
+	 * avoids the over-read
+	 */
+	v.data = (uint8_t *)talloc_size(dn, v.length+1);
 	if ( ! v.data) {
 		talloc_free(n);
 		return LDB_ERR_OTHER;
 	}
+	memcpy(v.data, val.data, val.length);
+
+	/*
+	 * Enforce NUL termination outside the stated length, as is
+	 * traditional in LDB
+	 */
+	v.data[v.length] = '\0';
 
 	talloc_free(dn->components[num].name);
 	talloc_free(dn->components[num].value.data);
@@ -1959,12 +1986,14 @@ int ldb_dn_set_extended_component(struct ldb_dn *dn,
 	struct ldb_dn_ext_component *p;
 	unsigned int i;
 	struct ldb_val v2;
-
+	const struct ldb_dn_extended_syntax *ext_syntax;
+	
 	if ( ! ldb_dn_validate(dn)) {
 		return LDB_ERR_OTHER;
 	}
 
-	if (!ldb_dn_extended_syntax_by_name(dn->ldb, name)) {
+	ext_syntax = ldb_dn_extended_syntax_by_name(dn->ldb, name);
+	if (ext_syntax == NULL) {
 		/* We don't know how to handle this type of thing */
 		return LDB_ERR_INVALID_DN_SYNTAX;
 	}
@@ -1975,10 +2004,8 @@ int ldb_dn_set_extended_component(struct ldb_dn *dn,
 				dn->ext_components[i].value =
 					ldb_val_dup(dn->ext_components, val);
 
-				dn->ext_components[i].name =
-					talloc_strdup(dn->ext_components, name);
-				if (!dn->ext_components[i].name ||
-				    !dn->ext_components[i].value.data) {
+				dn->ext_components[i].name = ext_syntax->name;
+				if (!dn->ext_components[i].value.data) {
 					ldb_dn_mark_invalid(dn);
 					return LDB_ERR_OPERATIONS_ERROR;
 				}
@@ -2139,7 +2166,6 @@ bool ldb_dn_minimise(struct ldb_dn *dn)
 	 */
 
 	for (i = 1; i < dn->ext_comp_num; i++) {
-		LDB_FREE(dn->ext_components[i].name);
 		LDB_FREE(dn->ext_components[i].value.data);
 	}
 	dn->ext_comp_num = 1;
