@@ -38,6 +38,9 @@ libldb.so.1 #PACKAGE# #MINVER#
  LDB_1.1.22@LDB_1.1.22 2:1.1.22
  LDB_1.1.23@LDB_1.1.23 2:1.1.23
  LDB_1.1.24@LDB_1.1.24 2:1.1.24
+ LDB_1.1.25@LDB_1.1.25 2:1.1.25
+ LDB_1.1.26@LDB_1.1.26 2:1.1.26
+ LDB_1.1.27@LDB_1.1.27 2:1.1.27
  ldb_check_critical_controls@LDB_0.9.22 0.9.22
  ldb_controls_except_specified@LDB_0.9.22 0.9.22
  ldb_control_to_string@LDB_1.0.2 1.0.2~git20110403
@@ -293,6 +296,8 @@ libldb.so.1 #PACKAGE# #MINVER#
  ldb_transaction_prepare_commit@LDB_0.9.10 0.9.21
  ldb_transaction_start@LDB_0.9.10 0.9.21
  ldb_unpack_data@LDB_1.1.14 1:1.1.15
+ ldb_unpack_data_only_attr_list@LDB_1.1.25 2:1.1.25
+ ldb_unpack_data_only_attr_list_flags@LDB_1.1.27 2:1.1.27
  ldb_val_dup@LDB_0.9.10 0.9.21
  ldb_val_equal_exact@LDB_0.9.10 0.9.21
  ldb_val_map_local@LDB_0.9.10 0.9.21
