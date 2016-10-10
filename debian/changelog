@@ -1,8 +1,15 @@
-ldb (2:1.1.27-1) UNRELEASED; urgency=medium
+ldb (2:1.1.27-1) unstable; urgency=medium
 
   * New upstream version.
+    - Bump Buid-Depends: talloc 2.1.8, tdb 1.3.10 and tevent 0.9.29
+    - Update symbols
+  * Use secure Vcs-* uris (Closes: #805719)
+  * Add me to uploaders
+  * Bump standards version to 3.9.8 (no changes)
+  * Use automatic debug packages (-dbgsym)
+  * Mark libldb-dev and python-ldb-dev "Multi-Arch: same"
 
- -- Mathieu Parent <sathieu@debian.org>  Sun, 09 Oct 2016 20:11:03 +0200
+ -- Mathieu Parent <sathieu@debian.org>  Mon, 10 Oct 2016 10:02:53 +0200
 
 ldb (2:1.1.26-1) unstable; urgency=medium
 
