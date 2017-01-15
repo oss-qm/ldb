@@ -80,9 +80,10 @@
 
 #define TALLOC_MAGIC_BASE 0xe814ec70
 static unsigned int talloc_magic = (
-	TALLOC_MAGIC_BASE +
-	(TALLOC_VERSION_MAJOR << 12) +
-	(TALLOC_VERSION_MINOR << 4));
+	~TALLOC_FLAG_MASK & (
+		TALLOC_MAGIC_BASE +
+		(TALLOC_VERSION_MAJOR << 12) +
+		(TALLOC_VERSION_MINOR << 4)));
 
 /* by default we abort when given a bad pointer (such as when talloc_free() is called
    on a pointer that came from malloc() */
@@ -263,7 +264,32 @@ typedef int (*talloc_destructor_t)(void *);
 struct talloc_pool_hdr;
 
 struct talloc_chunk {
+	/*
+	 * flags includes the talloc magic, which is randomised to
+	 * make overwrite attacks harder
+	 */
 	unsigned flags;
+
+	/*
+	 * If you have a logical tree like:
+	 *
+	 *           <parent>
+	 *           /   |   \
+	 *          /    |    \
+	 *         /     |     \
+	 * <child 1> <child 2> <child 3>
+	 *
+	 * The actual talloc tree is:
+	 *
+	 *  <parent>
+	 *     |
+	 *  <child 1> - <child 2> - <child 3>
+	 *
+	 * The children are linked with next/prev pointers, and
+	 * child 1 is linked to the parent with parent/child
+	 * pointers.
+	 */
+
 	struct talloc_chunk *next, *prev;
 	struct talloc_chunk *parent, *child;
 	struct talloc_reference_handle *refs;
@@ -2476,8 +2502,12 @@ _PUBLIC_ char *talloc_strndup_append_buffer(char *s, const char *a, size_t n)
 #endif
 
 static struct talloc_chunk *_vasprintf_tc(const void *t,
-						const char *fmt,
-						va_list ap)
+					  const char *fmt,
+					  va_list ap) PRINTF_ATTRIBUTE(2,0);
+
+static struct talloc_chunk *_vasprintf_tc(const void *t,
+					  const char *fmt,
+					  va_list ap)
 {
 	int len;
 	char *ret;
