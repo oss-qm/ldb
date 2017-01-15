@@ -34,18 +34,24 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
+
+#include <assert.h>
+
 #include "talloc_testsuite.h"
 
-static struct timeval timeval_current(void)
+static struct timeval private_timeval_current(void)
 {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 	return tv;
 }
 
-static double timeval_elapsed(struct timeval *tv)
+static double private_timeval_elapsed(struct timeval *tv)
 {
-	struct timeval tv2 = timeval_current();
+	struct timeval tv2 = private_timeval_current();
 	return (tv2.tv_sec - tv->tv_sec) + 
 	       (tv2.tv_usec - tv->tv_usec)*1.0e-6;
 }
@@ -604,7 +610,7 @@ static bool test_realloc_child(void)
 	void *root;
 	struct el2 {
 		const char *name;
-	} *el2;	
+	} *el2, *el2_2, *el2_3;
 	struct el1 {
 		int count;
 		struct el2 **list, **list2, **list3;
@@ -628,13 +634,22 @@ static bool test_realloc_child(void)
 	el1->list3[0]->name = talloc_strdup(el1->list3[0], "testing2");
 	
 	el2 = talloc(el1->list, struct el2);
-	el2 = talloc(el1->list2, struct el2);
-	el2 = talloc(el1->list3, struct el2);
-	(void)el2;
+	CHECK_PARENT("el2", el2, el1->list);
+	el2_2 = talloc(el1->list2, struct el2);
+	CHECK_PARENT("el2", el2_2, el1->list2);
+	el2_3 = talloc(el1->list3, struct el2);
+	CHECK_PARENT("el2", el2_3, el1->list3);
 
 	el1->list = talloc_realloc(el1, el1->list, struct el2 *, 100);
+	CHECK_PARENT("el1_after_realloc", el1->list, el1);
 	el1->list2 = talloc_realloc(el1, el1->list2, struct el2 *, 200);
+	CHECK_PARENT("el1_after_realloc", el1->list2, el1);
 	el1->list3 = talloc_realloc(el1, el1->list3, struct el2 *, 300);
+	CHECK_PARENT("el1_after_realloc", el1->list3, el1);
+
+	CHECK_PARENT("el2", el2, el1->list);
+	CHECK_PARENT("el2", el2_2, el1->list2);
+	CHECK_PARENT("el2", el2_3, el1->list3);
 
 	talloc_free(root);
 
@@ -835,7 +850,7 @@ static bool test_speed(void)
 
 	printf("test: speed\n# TALLOC VS MALLOC SPEED\n");
 
-	tv = timeval_current();
+	tv = private_timeval_current();
 	count = 0;
 	do {
 		void *p1, *p2, *p3;
@@ -848,15 +863,15 @@ static bool test_speed(void)
 			talloc_free(p1);
 		}
 		count += 3 * loop;
-	} while (timeval_elapsed(&tv) < 5.0);
+	} while (private_timeval_elapsed(&tv) < 5.0);
 
-	fprintf(stderr, "talloc: %.0f ops/sec\n", count/timeval_elapsed(&tv));
+	fprintf(stderr, "talloc: %.0f ops/sec\n", count/private_timeval_elapsed(&tv));
 
 	talloc_free(ctx);
 
 	ctx = talloc_pool(NULL, 1024);
 
-	tv = timeval_current();
+	tv = private_timeval_current();
 	count = 0;
 	do {
 		void *p1, *p2, *p3;
@@ -869,13 +884,13 @@ static bool test_speed(void)
 			talloc_free(p1);
 		}
 		count += 3 * loop;
-	} while (timeval_elapsed(&tv) < 5.0);
+	} while (private_timeval_elapsed(&tv) < 5.0);
 
 	talloc_free(ctx);
 
-	fprintf(stderr, "talloc_pool: %.0f ops/sec\n", count/timeval_elapsed(&tv));
+	fprintf(stderr, "talloc_pool: %.0f ops/sec\n", count/private_timeval_elapsed(&tv));
 
-	tv = timeval_current();
+	tv = private_timeval_current();
 	count = 0;
 	do {
 		void *p1, *p2, *p3;
@@ -888,8 +903,8 @@ static bool test_speed(void)
 			free(p3);
 		}
 		count += 3 * loop;
-	} while (timeval_elapsed(&tv) < 5.0);
-	fprintf(stderr, "malloc: %.0f ops/sec\n", count/timeval_elapsed(&tv));
+	} while (private_timeval_elapsed(&tv) < 5.0);
+	fprintf(stderr, "malloc: %.0f ops/sec\n", count/private_timeval_elapsed(&tv));
 
 	printf("success: speed\n");
 
@@ -1750,7 +1765,8 @@ static void *thread_fn(void *arg)
 		ret = pthread_cond_wait(&condvar, &mtx);
 		if (ret != 0) {
 			talloc_free(top_ctx);
-			pthread_mutex_unlock(&mtx);
+			ret = pthread_mutex_unlock(&mtx);
+			assert(ret == 0);
 			return NULL;
 		}
 	}
@@ -1760,7 +1776,8 @@ static void *thread_fn(void *arg)
 
 	/* Tell the main thread it's ready for pickup. */
 	pthread_cond_broadcast(&condvar);
-	pthread_mutex_unlock(&mtx);
+	ret = pthread_mutex_unlock(&mtx);
+	assert(ret == 0);
 
 	talloc_free(top_ctx);
 	return NULL;
@@ -1795,11 +1812,11 @@ static bool test_pthread_talloc_passing(void)
 	 * They will use their own toplevel contexts.
 	 */
 	for (i = 0; i < NUM_THREADS; i++) {
-		(void)snprintf(str_array[i],
-				20,
-				"thread:%d",
-				i);
-		if (str_array[i] == NULL) {
+		ret = snprintf(str_array[i],
+			       20,
+			       "thread:%d",
+			       i);
+		if (ret < 0) {
 			printf("snprintf %d failed\n", i);
 			return false;
 		}
@@ -1831,8 +1848,8 @@ static bool test_pthread_talloc_passing(void)
 				printf("pthread_cond_wait %d failed (%d)\n", i,
 					ret);
 				talloc_free(mem_ctx);
-				pthread_mutex_unlock(&mtx);
-				return false;
+				ret = pthread_mutex_unlock(&mtx);
+				assert(ret == 0);
 			}
 		}
 
@@ -1841,7 +1858,8 @@ static bool test_pthread_talloc_passing(void)
 
 		/* Tell the sub-threads we're ready for another. */
 		pthread_cond_broadcast(&condvar);
-		pthread_mutex_unlock(&mtx);
+		ret = pthread_mutex_unlock(&mtx);
+		assert(ret == 0);
 	}
 
 	CHECK_SIZE("pthread_talloc_passing", mem_ctx, NUM_THREADS * 100);
@@ -1865,6 +1883,11 @@ static void test_magic_protection_abort(const char *reason)
 	}
 }
 
+static int test_magic_protection_destructor(int *ptr)
+{
+	_exit(404); /* Not 42 */
+}
+
 static bool test_magic_protection(void)
 {
 	void *pool = talloc_pool(NULL, 1024);
@@ -1883,6 +1906,7 @@ static bool test_magic_protection(void)
 	pid = fork();
 	if (pid == 0) {
 		talloc_set_abort_fn(test_magic_protection_abort);
+		talloc_set_destructor(p2, test_magic_protection_destructor);
 
 		/*
 		 * Simulate a security attack

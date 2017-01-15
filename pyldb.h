@@ -60,11 +60,18 @@ typedef struct {
 } PyLdbModuleObject;
 #define pyldb_Module_AsModule(pyobj) ((PyLdbModuleObject *)pyobj)->mod
 
+/*
+ * NOTE: el (and so the return value of
+ * pyldb_MessageElement_AsMessageElement()) may not be a valid talloc
+ * context, it could be part of an array
+ */
+
 typedef struct {
 	PyObject_HEAD
 	TALLOC_CTX *mem_ctx;
 	struct ldb_message_element *el;
 } PyLdbMessageElementObject;
+
 #define pyldb_MessageElement_AsMessageElement(pyobj) ((PyLdbMessageElementObject *)pyobj)->el
 
 typedef struct {
@@ -88,11 +95,12 @@ typedef struct {
 	struct ldb_control *data;
 } PyLdbControlObject;
 
-#define PyErr_LDB_ERROR_IS_ERR_RAISE(err,ret,ldb) \
+#define PyErr_LDB_ERROR_IS_ERR_RAISE(err,ret,ldb) do { \
 	if (ret != LDB_SUCCESS) { \
 		PyErr_SetLdbError(err, ret, ldb); \
 		return NULL; \
-	}
+	} \
+} while(0)
 
 /* Picked out of thin air. To do this properly, we should probably have some part of the 
  * errors in LDB be allocated to bindings ? */
