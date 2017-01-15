@@ -2,21 +2,22 @@ Source: ldb
 Section: devel
 Priority: optional
 Maintainer: Debian Samba Maintainers <pkg-samba-maint@lists.alioth.debian.org>
-Uploaders: Jelmer Vernooij <jelmer@debian.org>, Mathieu Parent <sathieu@debian.org>
+Uploaders: Jelmer Vernooij <jelmer@debian.org>,
+           Mathieu Parent <sathieu@debian.org>
 Build-Depends: debhelper (>> 8.1.3),
                docbook-xml,
                docbook-xsl,
                libldap2-dev,
                libpopt-dev,
                libtalloc-dev (>= 2.1.8~),
-               libtdb-dev (>= 1.3.10~),
-               libtevent-dev (>= 0.9.29~),
+               libtdb-dev (>= 1.3.12~),
+               libtevent-dev (>= 0.9.31~),
                pkg-config,
                python (>= 2.6.6-3),
                python-all-dbg (>= 2.6.6-3),
                python-all-dev (>= 2.6.6-3),
                python-talloc-dev (>= 2.1.8~),
-               python-tdb (>= 1.3.10~),
+               python-tdb (>= 1.3.12~),
                xsltproc
 Homepage: http://ldb.samba.org/
 Standards-Version: 3.9.8
@@ -28,9 +29,11 @@ Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Architecture: any
 Section: libs
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends},
+         ${shlibs:Depends}
 Replaces: libldb0
-Breaks: libldb0, libsamdb0 (<< 4.0.0~alpha17~git20110724.dfsg1-1)
+Breaks: libldb0,
+        libsamdb0 (<< 4.0.0~alpha17~git20110724.dfsg1-1)
 Description: LDAP-like embedded database - shared library
  ldb is a LDAP-like embedded database built on top of TDB.
  .
@@ -44,7 +47,8 @@ Description: LDAP-like embedded database - shared library
 Package: ldb-tools
 Section: utils
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends},
+         ${shlibs:Depends}
 Description: LDAP-like embedded database - tools
  ldb is a LDAP-like embedded database built on top of TDB.
  .
