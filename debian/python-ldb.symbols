@@ -1,3 +1,6 @@
+ldb.so python-ldb #MINVER#
+ PyStr_AsUTF8AndSize@Base 2:1.1.29
+ initldb@Base 2:1.1.29
 libpyldb-util.so.1 #PACKAGE# #MINVER#
  PYLDB_UTIL_1.1.2@PYLDB_UTIL_1.1.2 1.1.2~
  PYLDB_UTIL_1.1.3@PYLDB_UTIL_1.1.3 1.1.3
