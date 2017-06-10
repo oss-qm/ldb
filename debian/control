@@ -84,6 +84,7 @@ Package: python-ldb
 Pre-Depends: ${misc:Pre-Depends}
 Section: python
 Architecture: any
+Multi-Arch: same
 Depends: libldb1 (= ${binary:Version}),
          ${misc:Depends},
          ${python:Depends},
