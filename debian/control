@@ -22,7 +22,7 @@ Build-Depends: debhelper (>> 9),
 Homepage: http://ldb.samba.org/
 Standards-Version: 3.9.8
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-samba/ldb.git
-Vcs-Git: https://anonscm.debian.org/git/pkg-samba/ldb.git -b experimental
+Vcs-Git: https://anonscm.debian.org/git/pkg-samba/ldb.git
 
 Package: libldb1
 Multi-Arch: same
