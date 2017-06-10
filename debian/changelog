@@ -1,10 +1,27 @@
 ldb (2:1.1.29-1) experimental; urgency=medium
 
+  [ Jelmer Vernooĳ ]
   * New upstream release.
-  * Bump minimum tdb version to 1.3.12 and minimum tevent version to
-    0.9.31.
+    - Update symbols
+    - Bump tdb and tevent Build-depends (resp. 1.3.12 and 0.9.31)
 
- -- Jelmer Vernooĳ <jelmer@debian.org>  Sun, 15 Jan 2017 15:19:54 +0000
+  [ Mathieu Parent ]
+  * gbp.conf: pristine-tar = True
+  * New upstream version 1.1.29
+  * Thanks lintian:
+    - Debhelper compat 9
+    - Fix missing-build-dependency-for-dh_-command dh_python2 => dh-python
+      + Update symbols, again
+    - Remove unused overrides: ldb-tools/python-ldb:
+      binary-or-shlib-defines-rpath * /usr/lib/ldb
+    - Remove empty libldb1.postinst
+    - Hardening: Add DEB_BUILD_MAINT_OPTIONS = hardening=+all and
+      DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+    - Add override for python-ldb-dev: wrong-section-according-to-package-name
+    - Add missing header and fix d/copyright
+    - Mark python-ldb Multi-Arch: same
+
+ -- Mathieu Parent <sathieu@debian.org>  Sat, 10 Jun 2017 23:03:32 +0200
 
 ldb (2:1.1.27-1) unstable; urgency=medium
 
