@@ -1,3 +1,9 @@
+ldb (2:1.1.29-2) unstable; urgency=medium
+
+  * Upload to unstable
+
+ -- Mathieu Parent <sathieu@debian.org>  Mon, 19 Jun 2017 17:25:13 +0200
+
 ldb (2:1.1.29-1) experimental; urgency=medium
 
   [ Jelmer Vernooĳ ]
