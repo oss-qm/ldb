@@ -43,6 +43,11 @@ libldb.so.1 #PACKAGE# #MINVER#
  LDB_1.1.27@LDB_1.1.27 2:1.1.27
  LDB_1.1.28@LDB_1.1.28 2:1.1.29
  LDB_1.1.29@LDB_1.1.29 2:1.1.29
+ LDB_1.1.30@LDB_1.1.30 2:1.1.30
+ LDB_1.1.31@LDB_1.1.31 2:1.1.31
+ LDB_1.2.0@LDB_1.2.0 2:1.2.0
+ LDB_1.2.1@LDB_1.2.1 2:1.2.1
+ LDB_1.2.2@LDB_1.2.2 2:1.2.2
  ldb_check_critical_controls@LDB_0.9.22 0.9.22
  ldb_controls_except_specified@LDB_0.9.22 0.9.22
  ldb_control_to_string@LDB_1.0.2 1.0.2~git20110403
@@ -140,10 +145,13 @@ libldb.so.1 #PACKAGE# #MINVER#
  ldb_get_root_basedn@LDB_0.9.10 0.9.21
  ldb_get_schema_basedn@LDB_0.9.10 0.9.21
  ldb_global_init@LDB_0.9.10 0.9.21
+ ldb_handle_get_event_context@LDB_1.1.30 2:1.2.2
  ldb_handle_new@LDB_0.9.10 0.9.21
+ ldb_handle_use_global_event_context@LDB_1.1.30 2:1.2.2
  ldb_handler_copy@LDB_0.9.10 0.9.21
  ldb_handler_fold@LDB_0.9.10 0.9.21
  ldb_init@LDB_0.9.10 0.9.21
+ ldb_ldif_message_redacted_string@LDB_1.2.2 2:1.2.2
  ldb_ldif_message_string@LDB_0.9.10 0.9.21
  ldb_ldif_parse_modrdn@LDB_1.1.0 1.1.0
  ldb_ldif_read@LDB_0.9.10 0.9.21
@@ -214,6 +222,8 @@ libldb.so.1 #PACKAGE# #MINVER#
  ldb_msg_find_attr_as_string@LDB_0.9.10 0.9.21
  ldb_msg_find_attr_as_uint64@LDB_0.9.10 0.9.21
  ldb_msg_find_attr_as_uint@LDB_0.9.10 0.9.21
+ ldb_msg_find_common_values@LDB_1.1.31 2:1.2.2
+ ldb_msg_find_duplicate_val@LDB_1.1.31 2:1.2.2
  ldb_msg_find_element@LDB_0.9.10 0.9.21
  ldb_msg_find_ldb_val@LDB_0.9.10 0.9.21
  ldb_msg_find_val@LDB_0.9.10 0.9.21
@@ -228,6 +238,8 @@ libldb.so.1 #PACKAGE# #MINVER#
  ldb_next_end_trans@LDB_0.9.10 0.9.21
  ldb_next_init@LDB_0.9.10 0.9.21
  ldb_next_prepare_commit@LDB_0.9.10 0.9.21
+ ldb_next_read_lock@LDB_1.2.0 2:1.2.2
+ ldb_next_read_unlock@LDB_1.2.0 2:1.2.2
  ldb_next_remote_request@LDB_0.9.10 0.9.21
  ldb_next_request@LDB_0.9.10 0.9.21
  ldb_next_start_trans@LDB_0.9.10 0.9.21
@@ -270,6 +282,7 @@ libldb.so.1 #PACKAGE# #MINVER#
  ldb_schema_attribute_remove@LDB_0.9.10 0.9.21
  ldb_schema_attribute_remove_flagged@LDB_1.1.29 2:1.1.29
  ldb_schema_attribute_set_override_handler@LDB_0.9.10 0.9.21
+ ldb_schema_set_override_indexlist@LDB_1.1.30 2:1.2.2
  ldb_search@LDB_0.9.10 0.9.21
  ldb_search_default_callback@LDB_0.9.10 0.9.21
  ldb_sequence_number@LDB_0.9.10 0.9.21
@@ -282,6 +295,7 @@ libldb.so.1 #PACKAGE# #MINVER#
  ldb_set_flags@LDB_0.9.10 0.9.21
  ldb_set_modules_dir@LDB_0.9.10 0.9.21
  ldb_set_opaque@LDB_0.9.10 0.9.21
+ ldb_set_require_private_event_context@LDB_1.1.30 2:1.2.2
  ldb_set_timeout@LDB_0.9.10 0.9.21
  ldb_set_timeout_from_prev_req@LDB_0.9.10 0.9.21
  ldb_set_utf8_default@LDB_0.9.10 0.9.21
