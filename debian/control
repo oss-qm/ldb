@@ -33,8 +33,14 @@ Section: libs
 Depends: ${misc:Depends},
          ${shlibs:Depends}
 Replaces: libldb0
-Breaks: libldb0,
-        libsamdb0 (<< 4.0.0~alpha17~git20110724.dfsg1-1)
+Breaks: ldb-tools (<<1.1.30~),
+        libldb0,
+        libsamdb0 (<< 4.0.0~alpha17~git20110724.dfsg1-1),
+        python-samba (<< 2:4.7.0~),
+        samba (<<2:4.7.0~),
+        samba-dsdb-modules (<< 2:4.7.0~),
+        samba-libs (<< 2:4.7.0~),
+        samba-testsuite (<< 2:4.7.0~)
 Description: LDAP-like embedded database - shared library
  ldb is a LDAP-like embedded database built on top of TDB.
  .
