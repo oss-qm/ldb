@@ -43,7 +43,7 @@
     tdb_free() the old record to place it on the normal tdb freelist
     before allocating the new record
 
-  - during transactions, keep a linked list of writes all that have
+  - during transactions, keep a linked list of all writes that have
     been performed by intercepting all tdb_write() calls. The hooked
     transaction versions of tdb_read() and tdb_write() check this
     linked list and try to use the elements of the list in preference
@@ -210,6 +210,10 @@ static int transaction_write(struct tdb_context *tdb, tdb_off_t off,
 {
 	uint32_t blk;
 
+	if (buf == NULL) {
+		return -1;
+	}
+
 	/* Only a commit is allowed on a prepared transaction */
 	if (tdb->transaction->prepared) {
 		tdb->ecode = TDB_ERR_EINVAL;
@@ -234,9 +238,7 @@ static int transaction_write(struct tdb_context *tdb, tdb_off_t off,
 		}
 		len -= len2;
 		off += len2;
-		if (buf != NULL) {
-			buf = (const void *)(len2 + (const char *)buf);
-		}
+		buf = (const void *)(len2 + (const char *)buf);
 	}
 
 	if (len == 0) {
@@ -289,11 +291,7 @@ static int transaction_write(struct tdb_context *tdb, tdb_off_t off,
 	}
 
 	/* overwrite part of an existing block */
-	if (buf == NULL) {
-		memset(tdb->transaction->blocks[blk] + off, 0, len);
-	} else {
-		memcpy(tdb->transaction->blocks[blk] + off, buf, len);
-	}
+	memcpy(tdb->transaction->blocks[blk] + off, buf, len);
 	if (blk == tdb->transaction->num_blocks-1) {
 		if (len + off > tdb->transaction->last_block_size) {
 			tdb->transaction->last_block_size = len + off;
@@ -393,10 +391,20 @@ static int transaction_oob(struct tdb_context *tdb, tdb_off_t off,
 static int transaction_expand_file(struct tdb_context *tdb, tdb_off_t size,
 				   tdb_off_t addition)
 {
-	/* add a write to the transaction elements, so subsequent
-	   reads see the zero data */
-	if (transaction_write(tdb, size, NULL, addition) != 0) {
-		return -1;
+	const char buf_zero[8192] = {0};
+	size_t buf_len = sizeof(buf_zero);
+
+	while (addition > 0) {
+		size_t n = MIN(addition, buf_len);
+		int ret;
+
+		ret = transaction_write(tdb, size, buf_zero, n);
+		if (ret != 0) {
+			return ret;
+		}
+
+		addition -= n;
+		size += n;
 	}
 
 	tdb->transaction->expanded = true;
@@ -412,6 +420,14 @@ static const struct tdb_methods transaction_methods = {
 	transaction_expand_file,
 };
 
+/*
+ * Is a transaction currently active on this context?
+ *
+ */
+_PUBLIC_ bool tdb_transaction_active(struct tdb_context *tdb)
+{
+	return (tdb->transaction != NULL);
+}
 
 /*
   start a tdb transaction. No token is returned, as only a single
@@ -476,6 +492,10 @@ static int _tdb_transaction_start(struct tdb_context *tdb,
 		SAFE_FREE(tdb->transaction);
 		if ((lockflags & TDB_LOCK_WAIT) == 0) {
 			tdb->ecode = TDB_ERR_NOLOCK;
+		} else {
+			TDB_LOG((tdb, TDB_DEBUG_ERROR,
+				 "tdb_transaction_start: "
+				 "failed to get transaction lock\n"));
 		}
 		return -1;
 	}
@@ -982,7 +1002,23 @@ static int _tdb_transaction_prepare_commit(struct tdb_context *tdb)
 
 	/* upgrade the main transaction lock region to a write lock */
 	if (tdb_allrecord_upgrade(tdb) == -1) {
-		TDB_LOG((tdb, TDB_DEBUG_ERROR, "tdb_transaction_prepare_commit: failed to upgrade hash locks\n"));
+		if (tdb->ecode == TDB_ERR_RDONLY && tdb->read_only) {
+			TDB_LOG((tdb, TDB_DEBUG_ERROR,
+				 "tdb_transaction_prepare_commit: "
+				 "failed to upgrade hash locks: "
+				 "database is read only\n"));
+		} else if (tdb->ecode == TDB_ERR_RDONLY
+			   && tdb->traverse_read) {
+			TDB_LOG((tdb, TDB_DEBUG_ERROR,
+				 "tdb_transaction_prepare_commit: "
+				 "failed to upgrade hash locks: "
+				 "a database traverse is in progress\n"));
+		} else {
+			TDB_LOG((tdb, TDB_DEBUG_ERROR,
+				 "tdb_transaction_prepare_commit: "
+				 "failed to upgrade hash locks: %s\n",
+				 tdb_errorstr(tdb)));
+		}
 		_tdb_transaction_cancel(tdb);
 		return -1;
 	}

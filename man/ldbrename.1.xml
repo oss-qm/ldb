@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 <refentry id="ldbrename.1">
-<refentryinfo><date>2015-04-26</date></refentryinfo>
 
 <refmeta>
 	<refentrytitle>ldbrename</refentrytitle>
@@ -95,7 +94,7 @@
 	<title>AUTHOR</title>
 
 	<para> ldb was written by 
-		 <ulink url="http://samba.org/~tridge/">Andrew Tridgell</ulink>.
+		 <ulink url="https://www.samba.org/~tridge/">Andrew Tridgell</ulink>.
 	</para>
 
 	<para>
