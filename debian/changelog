@@ -1,3 +1,9 @@
+ldb (2:1.2.2-2) unstable; urgency=medium
+
+  * Upload to sid
+
+ -- Mathieu Parent <sathieu@debian.org>  Thu, 26 Oct 2017 10:28:05 +0200
+
 ldb (2:1.2.2-1) experimental; urgency=medium
 
   * New upstream version 1.2.2
