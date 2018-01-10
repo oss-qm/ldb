@@ -48,6 +48,7 @@ libldb.so.1 #PACKAGE# #MINVER#
  LDB_1.2.0@LDB_1.2.0 2:1.2.0
  LDB_1.2.1@LDB_1.2.1 2:1.2.1
  LDB_1.2.2@LDB_1.2.2 2:1.2.2
+ LDB_1.2.3@LDB_1.2.3 2:1.2.3
  ldb_check_critical_controls@LDB_0.9.22 0.9.22
  ldb_controls_except_specified@LDB_0.9.22 0.9.22
  ldb_control_to_string@LDB_1.0.2 1.0.2~git20110403
