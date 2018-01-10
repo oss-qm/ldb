@@ -23,8 +23,8 @@ Build-Depends: debhelper (>> 9),
                xsltproc
 Homepage: http://ldb.samba.org/
 Standards-Version: 4.1.1
-Vcs-Browser: https://anonscm.debian.org/cgit/pkg-samba/ldb.git
-Vcs-Git: https://anonscm.debian.org/git/pkg-samba/ldb.git
+Vcs-Browser: https://salsa.debian.org/samba-team/ldb
+Vcs-Git: https://salsa.debian.org/samba-team/ldb.git
 
 Package: libldb1
 Multi-Arch: same
