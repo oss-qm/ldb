@@ -15,6 +15,12 @@ PY3 = sys.version_info > (3, 0)
 TDB_PREFIX = "tdb://"
 MDB_PREFIX = "mdb://"
 
+MDB_INDEX_OBJ = {
+    "dn": "@INDEXLIST",
+    "@IDXONE": [b"1"],
+    "@IDXGUID": [b"objectUUID"],
+    "@IDX_DN_GUID": [b"GUID"]
+}
 
 def tempdir():
     import tempfile
@@ -77,6 +83,10 @@ class SimpleLdb(LdbBaseTest):
         self.testdir = tempdir()
         self.filename = os.path.join(self.testdir, "test.ldb")
         self.ldb = ldb.Ldb(self.url(), flags=self.flags())
+        try:
+            self.ldb.add(self.index)
+        except AttributeError:
+            pass
 
     def tearDown(self):
         shutil.rmtree(self.testdir)
@@ -165,6 +175,7 @@ class SimpleLdb(LdbBaseTest):
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=foo1")
         m["b"] = [b"a"]
+        m["objectUUID"] = b"0123456789abcdef"
         l.add(m)
         self.assertRaises(ldb.LdbError, lambda: l.delete(m.dn, ["search_options:1:2"]))
         l.delete(m.dn)
@@ -177,6 +188,7 @@ class SimpleLdb(LdbBaseTest):
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=foo3")
         m["b"] = ["a"]
+        m["objectUUID"] = b"0123456789abcdef"
         l.add(m)
         try:
             self.assertTrue(ldb.Dn(l, "dc=foo3") in l)
@@ -205,6 +217,7 @@ class SimpleLdb(LdbBaseTest):
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=foo4")
         m["bla"] = b"bla"
+        m["objectUUID"] = b"0123456789abcdef"
         self.assertEqual(len(l.search()), 0)
         l.add(m)
         try:
@@ -245,6 +258,7 @@ class SimpleLdb(LdbBaseTest):
         m1 = ldb.Message()
         m1.dn = ldb.Dn(l, "dc=foo4")
         m1["bla"] = b"bla"
+        m1["objectUUID"] = b"0123456789abcdef"
         l.add(m1)
         try:
             s = l.search_iterator()
@@ -261,6 +275,7 @@ class SimpleLdb(LdbBaseTest):
             m2 = ldb.Message()
             m2.dn = ldb.Dn(l, "dc=foo5")
             m2["bla"] = b"bla"
+            m2["objectUUID"] = b"0123456789abcdee"
             l.add(m2)
 
             s = l.search_iterator()
@@ -317,6 +332,7 @@ class SimpleLdb(LdbBaseTest):
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=foo4")
         m["bla"] = "bla"
+        m["objectUUID"] = b"0123456789abcdef"
         self.assertEqual(len(l.search()), 0)
         l.add(m)
         try:
@@ -335,7 +351,8 @@ class SimpleLdb(LdbBaseTest):
     def test_add_dict(self):
         l = ldb.Ldb(self.url(), flags=self.flags())
         m = {"dn": ldb.Dn(l, "dc=foo5"),
-             "bla": b"bla"}
+             "bla": b"bla",
+             "objectUUID": b"0123456789abcdef"}
         self.assertEqual(len(l.search()), 0)
         l.add(m)
         try:
@@ -346,7 +363,8 @@ class SimpleLdb(LdbBaseTest):
     def test_add_dict_text(self):
         l = ldb.Ldb(self.url(), flags=self.flags())
         m = {"dn": ldb.Dn(l, "dc=foo5"),
-             "bla": "bla"}
+             "bla": "bla",
+             "objectUUID": b"0123456789abcdef"}
         self.assertEqual(len(l.search()), 0)
         l.add(m)
         try:
@@ -356,7 +374,8 @@ class SimpleLdb(LdbBaseTest):
 
     def test_add_dict_string_dn(self):
         l = ldb.Ldb(self.url(), flags=self.flags())
-        m = {"dn": "dc=foo6", "bla": b"bla"}
+        m = {"dn": "dc=foo6", "bla": b"bla",
+             "objectUUID": b"0123456789abcdef"}
         self.assertEqual(len(l.search()), 0)
         l.add(m)
         try:
@@ -366,7 +385,8 @@ class SimpleLdb(LdbBaseTest):
 
     def test_add_dict_bytes_dn(self):
         l = ldb.Ldb(self.url(), flags=self.flags())
-        m = {"dn": b"dc=foo6", "bla": b"bla"}
+        m = {"dn": b"dc=foo6", "bla": b"bla",
+              "objectUUID": b"0123456789abcdef"}
         self.assertEqual(len(l.search()), 0)
         l.add(m)
         try:
@@ -379,6 +399,7 @@ class SimpleLdb(LdbBaseTest):
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=foo7")
         m["bla"] = b"bla"
+        m["objectUUID"] = b"0123456789abcdef"
         self.assertEqual(len(l.search()), 0)
         l.add(m)
         try:
@@ -392,6 +413,7 @@ class SimpleLdb(LdbBaseTest):
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=foo8")
         m["bla"] = b"bla"
+        m["objectUUID"] = b"0123456789abcdef"
         self.assertEqual(len(l.search()), 0)
         l.add(m)
         self.assertEqual(len(l.search()), 1)
@@ -406,14 +428,17 @@ class SimpleLdb(LdbBaseTest):
         self.assertEqual(0, len(l.search()))
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=empty")
+        m["objectUUID"] = b"0123456789abcdef"
         l.add(m)
         rm = l.search()
         self.assertEqual(1, len(rm))
-        self.assertEqual(set(["dn", "distinguishedName"]), set(rm[0].keys()))
+        self.assertEqual(set(["dn", "distinguishedName", "objectUUID"]),
+                         set(rm[0].keys()))
 
         rm = l.search(m.dn)
         self.assertEqual(1, len(rm))
-        self.assertEqual(set(["dn", "distinguishedName"]), set(rm[0].keys()))
+        self.assertEqual(set(["dn", "distinguishedName", "objectUUID"]),
+                         set(rm[0].keys()))
         rm = l.search(m.dn, attrs=["blah"])
         self.assertEqual(1, len(rm))
         self.assertEqual(0, len(rm[0]))
@@ -423,6 +448,7 @@ class SimpleLdb(LdbBaseTest):
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=modifydelete")
         m["bla"] = [b"1234"]
+        m["objectUUID"] = b"0123456789abcdef"
         l.add(m)
         rm = l.search(m.dn)[0]
         self.assertEqual([b"1234"], list(rm["bla"]))
@@ -434,7 +460,8 @@ class SimpleLdb(LdbBaseTest):
             l.modify(m)
             rm = l.search(m.dn)
             self.assertEqual(1, len(rm))
-            self.assertEqual(set(["dn", "distinguishedName"]), set(rm[0].keys()))
+            self.assertEqual(set(["dn", "distinguishedName", "objectUUID"]),
+                             set(rm[0].keys()))
             rm = l.search(m.dn, attrs=["bla"])
             self.assertEqual(1, len(rm))
             self.assertEqual(0, len(rm[0]))
@@ -446,6 +473,7 @@ class SimpleLdb(LdbBaseTest):
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=modifydelete")
         m.text["bla"] = ["1234"]
+        m["objectUUID"] = b"0123456789abcdef"
         l.add(m)
         rm = l.search(m.dn)[0]
         self.assertEqual(["1234"], list(rm.text["bla"]))
@@ -457,7 +485,8 @@ class SimpleLdb(LdbBaseTest):
             l.modify(m)
             rm = l.search(m.dn)
             self.assertEqual(1, len(rm))
-            self.assertEqual(set(["dn", "distinguishedName"]), set(rm[0].keys()))
+            self.assertEqual(set(["dn", "distinguishedName", "objectUUID"]),
+                             set(rm[0].keys()))
             rm = l.search(m.dn, attrs=["bla"])
             self.assertEqual(1, len(rm))
             self.assertEqual(0, len(rm[0]))
@@ -469,6 +498,7 @@ class SimpleLdb(LdbBaseTest):
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=add")
         m["bla"] = [b"1234"]
+        m["objectUUID"] = b"0123456789abcdef"
         l.add(m)
         try:
             m = ldb.Message()
@@ -477,7 +507,7 @@ class SimpleLdb(LdbBaseTest):
             self.assertEqual(ldb.FLAG_MOD_ADD, m["bla"].flags())
             l.modify(m)
             rm = l.search(m.dn)[0]
-            self.assertEqual(2, len(rm))
+            self.assertEqual(3, len(rm))
             self.assertEqual([b"1234", b"456"], list(rm["bla"]))
         finally:
             l.delete(ldb.Dn(l, "dc=add"))
@@ -487,6 +517,7 @@ class SimpleLdb(LdbBaseTest):
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=add")
         m.text["bla"] = ["1234"]
+        m["objectUUID"] = b"0123456789abcdef"
         l.add(m)
         try:
             m = ldb.Message()
@@ -495,7 +526,7 @@ class SimpleLdb(LdbBaseTest):
             self.assertEqual(ldb.FLAG_MOD_ADD, m["bla"].flags())
             l.modify(m)
             rm = l.search(m.dn)[0]
-            self.assertEqual(2, len(rm))
+            self.assertEqual(3, len(rm))
             self.assertEqual(["1234", "456"], list(rm.text["bla"]))
         finally:
             l.delete(ldb.Dn(l, "dc=add"))
@@ -505,6 +536,7 @@ class SimpleLdb(LdbBaseTest):
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=modify2")
         m["bla"] = [b"1234", b"456"]
+        m["objectUUID"] = b"0123456789abcdef"
         l.add(m)
         try:
             m = ldb.Message()
@@ -513,7 +545,7 @@ class SimpleLdb(LdbBaseTest):
             self.assertEqual(ldb.FLAG_MOD_REPLACE, m["bla"].flags())
             l.modify(m)
             rm = l.search(m.dn)[0]
-            self.assertEqual(2, len(rm))
+            self.assertEqual(3, len(rm))
             self.assertEqual([b"789"], list(rm["bla"]))
             rm = l.search(m.dn, attrs=["bla"])[0]
             self.assertEqual(1, len(rm))
@@ -525,6 +557,7 @@ class SimpleLdb(LdbBaseTest):
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=modify2")
         m.text["bla"] = ["1234", "456"]
+        m["objectUUID"] = b"0123456789abcdef"
         l.add(m)
         try:
             m = ldb.Message()
@@ -533,7 +566,7 @@ class SimpleLdb(LdbBaseTest):
             self.assertEqual(ldb.FLAG_MOD_REPLACE, m["bla"].flags())
             l.modify(m)
             rm = l.search(m.dn)[0]
-            self.assertEqual(2, len(rm))
+            self.assertEqual(3, len(rm))
             self.assertEqual(["789"], list(rm.text["bla"]))
             rm = l.search(m.dn, attrs=["bla"])[0]
             self.assertEqual(1, len(rm))
@@ -545,6 +578,7 @@ class SimpleLdb(LdbBaseTest):
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=add")
         m["bla"] = [b"1234"]
+        m["objectUUID"] = b"0123456789abcdef"
         l.add(m)
         try:
             m = ldb.Message()
@@ -553,7 +587,7 @@ class SimpleLdb(LdbBaseTest):
             self.assertEqual(ldb.FLAG_MOD_ADD, m["bla"].flags())
             l.modify(m)
             rm = l.search(m.dn)[0]
-            self.assertEqual(2, len(rm))
+            self.assertEqual(3, len(rm))
             self.assertEqual([b"1234", b"456"], list(rm["bla"]))
 
             # Now create another modify, but switch the flags before we do it
@@ -571,6 +605,7 @@ class SimpleLdb(LdbBaseTest):
         m = ldb.Message()
         m.dn = ldb.Dn(l, "dc=add")
         m.text["bla"] = ["1234"]
+        m["objectUUID"] = b"0123456789abcdef"
         l.add(m)
         try:
             m = ldb.Message()
@@ -579,7 +614,7 @@ class SimpleLdb(LdbBaseTest):
             self.assertEqual(ldb.FLAG_MOD_ADD, m["bla"].flags())
             l.modify(m)
             rm = l.search(m.dn)[0]
-            self.assertEqual(2, len(rm))
+            self.assertEqual(3, len(rm))
             self.assertEqual(["1234", "456"], list(rm.text["bla"]))
 
             # Now create another modify, but switch the flags before we do it
@@ -597,6 +632,7 @@ class SimpleLdb(LdbBaseTest):
         l.transaction_start()
         m = ldb.Message(ldb.Dn(l, "dc=foo9"))
         m["foo"] = [b"bar"]
+        m["objectUUID"] = b"0123456789abcdef"
         l.add(m)
         l.transaction_commit()
         l.delete(m.dn)
@@ -606,6 +642,7 @@ class SimpleLdb(LdbBaseTest):
         l.transaction_start()
         m = ldb.Message(ldb.Dn(l, "dc=foo10"))
         m["foo"] = [b"bar"]
+        m["objectUUID"] = b"0123456789abcdee"
         l.add(m)
         l.transaction_cancel()
         self.assertEqual(0, len(l.search(ldb.Dn(l, "dc=foo10"))))
@@ -625,6 +662,7 @@ class SimpleLdb(LdbBaseTest):
             "cN" : b"LDAPtestUSER",
             "givenname" : b"ldap",
             "displayname" : b"foo\0bar",
+            "objectUUID" : b"0123456789abcdef"
         })
         res = l.search(expression="(dn=dc=somedn)")
         self.assertEqual(b"foo\0bar", res[0]["displayname"][0])
@@ -632,6 +670,17 @@ class SimpleLdb(LdbBaseTest):
     def test_no_crash_broken_expr(self):
         l = ldb.Ldb(self.url(), flags=self.flags())
         self.assertRaises(ldb.LdbError,lambda: l.search("", ldb.SCOPE_SUBTREE, "&(dc=*)(dn=*)", ["dc"]))
+
+# Run the SimpleLdb tests against an lmdb backend
+class SimpleLdbLmdb(SimpleLdb):
+
+    def setUp(self):
+        self.prefix = MDB_PREFIX
+        self.index = MDB_INDEX_OBJ
+        super(SimpleLdbLmdb, self).setUp()
+
+    def tearDown(self):
+        super(SimpleLdbLmdb, self).tearDown()
 
 class SearchTests(LdbBaseTest):
     def tearDown(self):
@@ -646,9 +695,16 @@ class SearchTests(LdbBaseTest):
         super(SearchTests, self).setUp()
         self.testdir = tempdir()
         self.filename = os.path.join(self.testdir, "search_test.ldb")
+        options = ["modules:rdn_name"]
+        if hasattr(self, 'IDXCHECK'):
+            options.append("disable_full_db_scan_for_self_test:1")
         self.l = ldb.Ldb(self.url(),
                          flags=self.flags(),
-                         options=["modules:rdn_name"])
+                         options=options)
+        try:
+            self.l.add(self.index)
+        except AttributeError:
+            pass
 
         self.l.add({"dn": "@ATTRIBUTES",
                     "DC": "CASE_INSENSITIVE"})
@@ -660,7 +716,7 @@ class SearchTests(LdbBaseTest):
 
         self.l.add({"dn": "DC=SAMBA,DC=ORG",
                     "name": b"samba.org",
-                    "objectUUID": b"0123456789abcddf"})
+                    "objectUUID": b"0123456789abcdef"})
         self.l.add({"dn": "OU=ADMIN,DC=SAMBA,DC=ORG",
                     "name": b"Admins",
                     "x": "z", "y": "a",
@@ -929,6 +985,47 @@ class SearchTests(LdbBaseTest):
                               expression="(|(x=y)(y=b))")
         self.assertEqual(len(res11), 20)
 
+    def test_one_unindexable(self):
+        """Testing a search"""
+
+        try:
+            res11 = self.l.search(base="DC=samba,DC=org",
+                                  scope=ldb.SCOPE_ONELEVEL,
+                                  expression="(y=b*)")
+            if hasattr(self, 'IDX') and \
+               not hasattr(self, 'IDXONE') and \
+               hasattr(self, 'IDXCHECK'):
+                self.fail("Should have failed as un-indexed search")
+
+            self.assertEqual(len(res11), 9)
+
+        except ldb.LdbError as err:
+            enum = err.args[0]
+            estr = err.args[1]
+            self.assertEqual(enum, ldb.ERR_INAPPROPRIATE_MATCHING)
+            self.assertIn(estr, "ldb FULL SEARCH disabled")
+
+    def test_one_unindexable_presence(self):
+        """Testing a search"""
+
+        try:
+            res11 = self.l.search(base="DC=samba,DC=org",
+                                  scope=ldb.SCOPE_ONELEVEL,
+                                  expression="(y=*)")
+            if hasattr(self, 'IDX') and \
+               not hasattr(self, 'IDXONE') and \
+               hasattr(self, 'IDXCHECK'):
+                self.fail("Should have failed as un-indexed search")
+
+            self.assertEqual(len(res11), 24)
+
+        except ldb.LdbError as err:
+            enum = err.args[0]
+            estr = err.args[1]
+            self.assertEqual(enum, ldb.ERR_INAPPROPRIATE_MATCHING)
+            self.assertIn(estr, "ldb FULL SEARCH disabled")
+
+
     def test_subtree_and_or(self):
         """Testing a search"""
 
@@ -1009,6 +1106,45 @@ class SearchTests(LdbBaseTest):
                               expression="(@IDXONE=DC=SAMBA,DC=ORG)")
         self.assertEqual(len(res11), 0)
 
+    def test_subtree_unindexable(self):
+        """Testing a search"""
+
+        try:
+            res11 = self.l.search(base="DC=samba,DC=org",
+                                  scope=ldb.SCOPE_SUBTREE,
+                                  expression="(y=b*)")
+            if hasattr(self, 'IDX') and \
+               hasattr(self, 'IDXCHECK'):
+                self.fail("Should have failed as un-indexed search")
+
+            self.assertEqual(len(res11), 9)
+
+        except ldb.LdbError as err:
+            enum = err.args[0]
+            estr = err.args[1]
+            self.assertEqual(enum, ldb.ERR_INAPPROPRIATE_MATCHING)
+            self.assertIn(estr, "ldb FULL SEARCH disabled")
+
+    def test_subtree_unindexable_presence(self):
+        """Testing a search"""
+
+        try:
+            res11 = self.l.search(base="DC=samba,DC=org",
+                                  scope=ldb.SCOPE_SUBTREE,
+                                  expression="(y=*)")
+            if hasattr(self, 'IDX') and \
+               hasattr(self, 'IDXCHECK'):
+                self.fail("Should have failed as un-indexed search")
+
+            self.assertEqual(len(res11), 24)
+
+        except ldb.LdbError as err:
+            enum = err.args[0]
+            estr = err.args[1]
+            self.assertEqual(enum, ldb.ERR_INAPPROPRIATE_MATCHING)
+            self.assertIn(estr, "ldb FULL SEARCH disabled")
+
+
     def test_dn_filter_one(self):
         """Testing that a dn= filter succeeds
         (or fails with disallowDNFilter
@@ -1057,6 +1193,18 @@ class SearchTests(LdbBaseTest):
         self.assertEqual(len(res11), 1)
 
 
+# Run the search tests against an lmdb backend
+class SearchTestsLmdb(SearchTests):
+
+    def setUp(self):
+        self.prefix = MDB_PREFIX
+        self.index = MDB_INDEX_OBJ
+        super(SearchTestsLmdb, self).setUp()
+
+    def tearDown(self):
+        super(SearchTestsLmdb, self).tearDown()
+
+
 class IndexedSearchTests(SearchTests):
     """Test searches using the index, to ensure the index doesn't
        break things"""
@@ -1065,6 +1213,13 @@ class IndexedSearchTests(SearchTests):
         self.l.add({"dn": "@INDEXLIST",
                     "@IDXATTR": [b"x", b"y", b"ou"]})
         self.IDX = True
+
+class IndexedCheckSearchTests(IndexedSearchTests):
+    """Test searches using the index, to ensure the index doesn't
+       break things (full scan disabled)"""
+    def setUp(self):
+        self.IDXCHECK = True
+        super(IndexedCheckSearchTests, self).setUp()
 
 class IndexedSearchDnFilterTests(SearchTests):
     """Test searches using the index, to ensure the index doesn't
@@ -1088,6 +1243,14 @@ class IndexedAndOneLevelSearchTests(SearchTests):
                     "@IDXATTR": [b"x", b"y", b"ou"],
                     "@IDXONE": [b"1"]})
         self.IDX = True
+        self.IDXONE = True
+
+class IndexedCheckedAndOneLevelSearchTests(IndexedAndOneLevelSearchTests):
+    """Test searches using the index including @IDXONE, to ensure
+       the index doesn't break things (full scan disabled)"""
+    def setUp(self):
+        self.IDXCHECK = True
+        super(IndexedCheckedAndOneLevelSearchTests, self).setUp()
 
 class IndexedAndOneLevelDNFilterSearchTests(SearchTests):
     """Test searches using the index including @IDXONE, to ensure
@@ -1108,12 +1271,12 @@ class GUIDIndexedSearchTests(SearchTests):
     """Test searches using the index, to ensure the index doesn't
        break things"""
     def setUp(self):
+        self.index = {"dn": "@INDEXLIST",
+                      "@IDXATTR": [b"x", b"y", b"ou"],
+                      "@IDXGUID": [b"objectUUID"],
+                      "@IDX_DN_GUID": [b"GUID"]}
         super(GUIDIndexedSearchTests, self).setUp()
 
-        self.l.add({"dn": "@INDEXLIST",
-                    "@IDXATTR": [b"x", b"y", b"ou"],
-                    "@IDXGUID": [b"objectUUID"],
-                    "@IDX_DN_GUID": [b"GUID"]})
         self.IDXGUID = True
         self.IDXONE = True
 
@@ -1122,15 +1285,14 @@ class GUIDIndexedDNFilterSearchTests(SearchTests):
     """Test searches using the index, to ensure the index doesn't
        break things"""
     def setUp(self):
+        self.index = {"dn": "@INDEXLIST",
+                      "@IDXATTR": [b"x", b"y", b"ou"],
+                      "@IDXGUID": [b"objectUUID"],
+                      "@IDX_DN_GUID": [b"GUID"]}
         super(GUIDIndexedDNFilterSearchTests, self).setUp()
         self.l.add({"dn": "@OPTIONS",
                     "disallowDNFilter": "TRUE"})
         self.disallowDNFilter = True
-
-        self.l.add({"dn": "@INDEXLIST",
-                    "@IDXATTR": [b"x", b"y", b"ou"],
-                    "@IDXGUID": [b"objectUUID"],
-                    "@IDX_DN_GUID": [b"GUID"]})
         self.IDX = True
         self.IDXGUID = True
 
@@ -1138,19 +1300,46 @@ class GUIDAndOneLevelIndexedSearchTests(SearchTests):
     """Test searches using the index including @IDXONE, to ensure
        the index doesn't break things"""
     def setUp(self):
+        self.index = {"dn": "@INDEXLIST",
+                      "@IDXATTR": [b"x", b"y", b"ou"],
+                      "@IDXGUID": [b"objectUUID"],
+                      "@IDX_DN_GUID": [b"GUID"]}
         super(GUIDAndOneLevelIndexedSearchTests, self).setUp()
         self.l.add({"dn": "@OPTIONS",
                     "disallowDNFilter": "TRUE"})
         self.disallowDNFilter = True
-
-        self.l.add({"dn": "@INDEXLIST",
-                    "@IDXATTR": [b"x", b"y", b"ou"],
-                    "@IDXONE": [b"1"],
-                    "@IDXGUID": [b"objectUUID"],
-                    "@IDX_DN_GUID": [b"GUID"]})
         self.IDX = True
         self.IDXGUID = True
         self.IDXONE = True
+
+class GUIDIndexedSearchTestsLmdb(GUIDIndexedSearchTests):
+
+    def setUp(self):
+        self.prefix = MDB_PREFIX
+        super(GUIDIndexedSearchTestsLmdb, self).setUp()
+
+    def tearDown(self):
+        super(GUIDIndexedSearchTestsLmdb, self).tearDown()
+
+
+class GUIDIndexedDNFilterSearchTestsLmdb(GUIDIndexedDNFilterSearchTests):
+
+    def setUp(self):
+        self.prefix = MDB_PREFIX
+        super(GUIDIndexedDNFilterSearchTestsLmdb, self).setUp()
+
+    def tearDown(self):
+        super(GUIDIndexedDNFilterSearchTestsLmdb, self).tearDown()
+
+
+class GUIDAndOneLevelIndexedSearchTestsLmdb(GUIDAndOneLevelIndexedSearchTests):
+
+    def setUp(self):
+        self.prefix = MDB_PREFIX
+        super(GUIDAndOneLevelIndexedSearchTestsLmdb, self).setUp()
+
+    def tearDown(self):
+        super(GUIDAndOneLevelIndexedSearchTestsLmdb, self).tearDown()
 
 
 class AddModifyTests(LdbBaseTest):
@@ -1168,6 +1357,11 @@ class AddModifyTests(LdbBaseTest):
         self.l = ldb.Ldb(self.url(),
                          flags=self.flags(),
                          options=["modules:rdn_name"])
+        try:
+            self.l.add(self.index)
+        except AttributeError:
+            pass
+
         self.l.add({"dn": "DC=SAMBA,DC=ORG",
                     "name": b"samba.org",
                     "objectUUID": b"0123456789abcdef"})
@@ -1221,6 +1415,19 @@ class AddModifyTests(LdbBaseTest):
                     "name": b"Admins",
                     "x": "z", "y": "a",
                     "objectUUID": b"0123456789abcde2"})
+
+        res2 = self.l.search(base="DC=SAMBA,DC=ORG",
+                             scope=ldb.SCOPE_SUBTREE,
+                             expression="(objectUUID=0123456789abcde1)")
+        self.assertEqual(len(res2), 1)
+        self.assertEqual(str(res2[0].dn), "OU=DUP,DC=SAMBA,DC=ORG")
+
+        res3 = self.l.search(base="DC=SAMBA,DC=ORG",
+                             scope=ldb.SCOPE_SUBTREE,
+                             expression="(objectUUID=0123456789abcde2)")
+        self.assertEqual(len(res3), 1)
+        self.assertEqual(str(res3[0].dn), "OU=DUP2,DC=SAMBA,DC=ORG")
+
         try:
             self.l.rename("OU=DUP,DC=SAMBA,DC=ORG",
                           "OU=DUP2,DC=SAMBA,DC=ORG")
@@ -1296,14 +1503,25 @@ class AddModifyTests(LdbBaseTest):
                     "objectUUID": b"0123456789abcde3"})
 
 
+class AddModifyTestsLmdb(AddModifyTests):
+
+    def setUp(self):
+        self.prefix = MDB_PREFIX
+        self.index = MDB_INDEX_OBJ
+        super(AddModifyTestsLmdb, self).setUp()
+
+    def tearDown(self):
+        super(AddModifyTestsLmdb, self).tearDown()
+
 class IndexedAddModifyTests(AddModifyTests):
     """Test searches using the index, to ensure the index doesn't
        break things"""
     def setUp(self):
+        if not hasattr(self, 'index'):
+            self.index = {"dn": "@INDEXLIST",
+                          "@IDXATTR": [b"x", b"y", b"ou", b"objectUUID"],
+                          "@IDXONE": [b"1"]}
         super(IndexedAddModifyTests, self).setUp()
-        self.l.add({"dn": "@INDEXLIST",
-                    "@IDXATTR": [b"x", b"y", b"ou", b"objectUUID"],
-                    "@IDXONE": [b"1"]})
 
     def test_duplicate_GUID(self):
         try:
@@ -1377,14 +1595,12 @@ class GUIDIndexedAddModifyTests(IndexedAddModifyTests):
     """Test searches using the index, to ensure the index doesn't
        break things"""
     def setUp(self):
+        self.index = {"dn": "@INDEXLIST",
+                      "@IDXATTR": [b"x", b"y", b"ou"],
+                      "@IDXONE": [b"1"],
+                      "@IDXGUID": [b"objectUUID"],
+                      "@IDX_DN_GUID": [b"GUID"]}
         super(GUIDIndexedAddModifyTests, self).setUp()
-        indexlist = {"dn": "@INDEXLIST",
-                     "@IDXATTR": [b"x", b"y", b"ou"],
-                     "@IDXONE": [b"1"],
-                     "@IDXGUID": [b"objectUUID"],
-                     "@IDX_DN_GUID": [b"GUID"]}
-        m = ldb.Message.from_dict(self.l, indexlist, ldb.FLAG_MOD_REPLACE)
-        self.l.modify(m)
 
 
 class GUIDTransIndexedAddModifyTests(GUIDIndexedAddModifyTests):
@@ -1407,6 +1623,23 @@ class TransIndexedAddModifyTests(IndexedAddModifyTests):
         self.l.transaction_commit()
         super(TransIndexedAddModifyTests, self).tearDown()
 
+class GuidIndexedAddModifyTestsLmdb(GUIDIndexedAddModifyTests):
+
+    def setUp(self):
+        self.prefix = MDB_PREFIX
+        super(GuidIndexedAddModifyTestsLmdb, self).setUp()
+
+    def tearDown(self):
+        super(GuidIndexedAddModifyTestsLmdb, self).tearDown()
+
+class GuidTransIndexedAddModifyTestsLmdb(GUIDTransIndexedAddModifyTests):
+
+    def setUp(self):
+        self.prefix = MDB_PREFIX
+        super(GuidTransIndexedAddModifyTestsLmdb, self).setUp()
+
+    def tearDown(self):
+        super(GuidTransIndexedAddModifyTestsLmdb, self).tearDown()
 
 class BadIndexTests(LdbBaseTest):
     def setUp(self):
@@ -1567,7 +1800,6 @@ class GUIDBadIndexTests(BadIndexTests):
 
         super(GUIDBadIndexTests, self).setUp()
 
-
 class DnTests(TestCase):
 
     def setUp(self):
@@ -1701,9 +1933,11 @@ class DnTests(TestCase):
         dn3 = ldb.Dn(self.ldb, "cn=bar,dc=base")
         dn4 = ldb.Dn(self.ldb, "cn=baz,cn=bar,dc=base")
 
+        self.assertTrue(dn1.is_child_of(dn1))
         self.assertTrue(dn2.is_child_of(dn1))
         self.assertTrue(dn4.is_child_of(dn1))
         self.assertTrue(dn4.is_child_of(dn3))
+        self.assertTrue(dn4.is_child_of(dn4))
         self.assertFalse(dn3.is_child_of(dn2))
         self.assertFalse(dn1.is_child_of(dn4))
 
@@ -1719,9 +1953,11 @@ class DnTests(TestCase):
         dn3 = ldb.Dn(self.ldb, dn3_str)
         dn4 = ldb.Dn(self.ldb, dn4_str)
 
+        self.assertTrue(dn1.is_child_of(dn1_str))
         self.assertTrue(dn2.is_child_of(dn1_str))
         self.assertTrue(dn4.is_child_of(dn1_str))
         self.assertTrue(dn4.is_child_of(dn3_str))
+        self.assertTrue(dn4.is_child_of(dn4_str))
         self.assertFalse(dn3.is_child_of(dn2_str))
         self.assertFalse(dn1.is_child_of(dn4_str))
 
@@ -1903,13 +2139,13 @@ class LdbMsgTests(TestCase):
         self.msg.dn = ldb.Dn(ldb.Ldb(), "@BASEINFO")
         self.msg["foo"] = [b"bla"]
         self.msg["bar"] = [b"bla"]
-        self.assertEqual(["dn", "foo", "bar"], self.msg.keys())
+        self.assertEqual(["dn", "foo", "bar"], list(self.msg.keys()))
 
     def test_keys_text(self):
         self.msg.dn = ldb.Dn(ldb.Ldb(), "@BASEINFO")
         self.msg["foo"] = ["bla"]
         self.msg["bar"] = ["bla"]
-        self.assertEqual(["dn", "foo", "bar"], self.msg.text.keys())
+        self.assertEqual(["dn", "foo", "bar"], list(self.msg.text.keys()))
 
     def test_dn(self):
         self.msg.dn = ldb.Dn(ldb.Ldb(), "@BASEINFO")
@@ -2181,19 +2417,36 @@ class LdbResultTests(LdbBaseTest):
         self.testdir = tempdir()
         self.filename = os.path.join(self.testdir, "test.ldb")
         self.l = ldb.Ldb(self.url(), flags=self.flags())
-        self.l.add({"dn": "DC=SAMBA,DC=ORG", "name": b"samba.org"})
-        self.l.add({"dn": "OU=ADMIN,DC=SAMBA,DC=ORG", "name": b"Admins"})
-        self.l.add({"dn": "OU=USERS,DC=SAMBA,DC=ORG", "name": b"Users"})
-        self.l.add({"dn": "OU=OU1,DC=SAMBA,DC=ORG", "name": b"OU #1"})
-        self.l.add({"dn": "OU=OU2,DC=SAMBA,DC=ORG", "name": b"OU #2"})
-        self.l.add({"dn": "OU=OU3,DC=SAMBA,DC=ORG", "name": b"OU #3"})
-        self.l.add({"dn": "OU=OU4,DC=SAMBA,DC=ORG", "name": b"OU #4"})
-        self.l.add({"dn": "OU=OU5,DC=SAMBA,DC=ORG", "name": b"OU #5"})
-        self.l.add({"dn": "OU=OU6,DC=SAMBA,DC=ORG", "name": b"OU #6"})
-        self.l.add({"dn": "OU=OU7,DC=SAMBA,DC=ORG", "name": b"OU #7"})
-        self.l.add({"dn": "OU=OU8,DC=SAMBA,DC=ORG", "name": b"OU #8"})
-        self.l.add({"dn": "OU=OU9,DC=SAMBA,DC=ORG", "name": b"OU #9"})
-        self.l.add({"dn": "OU=OU10,DC=SAMBA,DC=ORG", "name": b"OU #10"})
+        try:
+            self.l.add(self.index)
+        except AttributeError:
+            pass
+        self.l.add({"dn": "DC=SAMBA,DC=ORG", "name": b"samba.org",
+                    "objectUUID": b"0123456789abcde0"})
+        self.l.add({"dn": "OU=ADMIN,DC=SAMBA,DC=ORG", "name": b"Admins",
+                    "objectUUID": b"0123456789abcde1"})
+        self.l.add({"dn": "OU=USERS,DC=SAMBA,DC=ORG", "name": b"Users",
+                    "objectUUID": b"0123456789abcde2"})
+        self.l.add({"dn": "OU=OU1,DC=SAMBA,DC=ORG", "name": b"OU #1",
+                    "objectUUID": b"0123456789abcde3"})
+        self.l.add({"dn": "OU=OU2,DC=SAMBA,DC=ORG", "name": b"OU #2",
+                    "objectUUID": b"0123456789abcde4"})
+        self.l.add({"dn": "OU=OU3,DC=SAMBA,DC=ORG", "name": b"OU #3",
+                    "objectUUID": b"0123456789abcde5"})
+        self.l.add({"dn": "OU=OU4,DC=SAMBA,DC=ORG", "name": b"OU #4",
+                    "objectUUID": b"0123456789abcde6"})
+        self.l.add({"dn": "OU=OU5,DC=SAMBA,DC=ORG", "name": b"OU #5",
+                    "objectUUID": b"0123456789abcde7"})
+        self.l.add({"dn": "OU=OU6,DC=SAMBA,DC=ORG", "name": b"OU #6",
+                    "objectUUID": b"0123456789abcde8"})
+        self.l.add({"dn": "OU=OU7,DC=SAMBA,DC=ORG", "name": b"OU #7",
+                    "objectUUID": b"0123456789abcde9"})
+        self.l.add({"dn": "OU=OU8,DC=SAMBA,DC=ORG", "name": b"OU #8",
+                    "objectUUID": b"0123456789abcdea"})
+        self.l.add({"dn": "OU=OU9,DC=SAMBA,DC=ORG", "name": b"OU #9",
+                    "objectUUID": b"0123456789abcdeb"})
+        self.l.add({"dn": "OU=OU10,DC=SAMBA,DC=ORG", "name": b"OU #10",
+                    "objectUUID": b"0123456789abcdec"})
 
     def tearDown(self):
         shutil.rmtree(self.testdir)
@@ -2294,7 +2547,8 @@ class LdbResultTests(LdbBaseTest):
 
             # write to it
             child_ldb.add({"dn": "OU=OU11,DC=SAMBA,DC=ORG",
-                           "name": b"samba.org"})
+                           "name": b"samba.org",
+                           "objectUUID": b"o123456789acbdef"})
 
             os.write(w1, b"added")
 
@@ -2365,7 +2619,8 @@ class LdbResultTests(LdbBaseTest):
 
             # write to it
             child_ldb.add({"dn": "OU=OU11,DC=SAMBA,DC=ORG",
-                           "name": b"samba.org"})
+                           "name": b"samba.org",
+                           "objectUUID": b"o123456789acbdef"})
 
             os.write(w1, b"added")
 
@@ -2423,6 +2678,17 @@ class LdbResultTests(LdbBaseTest):
 
         (got_pid, status) = os.waitpid(pid, 0)
         self.assertEqual(got_pid, pid)
+
+
+class LdbResultTestsLmdb(LdbResultTests):
+
+    def setUp(self):
+        self.prefix = MDB_PREFIX
+        self.index = MDB_INDEX_OBJ
+        super(LdbResultTestsLmdb, self).setUp()
+
+    def tearDown(self):
+        super(LdbResultTestsLmdb, self).tearDown()
 
 
 class BadTypeTests(TestCase):
