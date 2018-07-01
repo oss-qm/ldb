@@ -5,6 +5,7 @@ Maintainer: Debian Samba Maintainers <pkg-samba-maint@lists.alioth.debian.org>
 Uploaders: Jelmer Vernooij <jelmer@debian.org>,
            Mathieu Parent <sathieu@debian.org>
 Build-Depends: debhelper (>> 11),
+               dh-exec,
                dh-python,
                docbook-xml,
                docbook-xsl,
@@ -20,6 +21,9 @@ Build-Depends: debhelper (>> 11),
                python-all-dev (>= 2.6.6-3),
                python-talloc-dev (>= 2.1.11~),
                python-tdb (>= 1.3.15~),
+               python3-dev,
+               python3-talloc-dev,
+               python3-tdb,
                xsltproc
 Homepage: http://ldb.samba.org/
 Standards-Version: 4.1.4
@@ -121,3 +125,36 @@ Description: LDB Python bindings - development files
  database.
  .
  This package contains the development files for the Python bindings.
+
+Package: python3-ldb
+Pre-Depends: ${misc:Pre-Depends}
+Section: python
+Architecture: any
+Depends: libldb1 (= ${binary:Version}),
+         ${misc:Depends},
+         ${python3:Depends},
+         ${shlibs:Depends}
+Provides: ${python3:Provides}
+Breaks: ${python3:Breaks}
+Description: Python3 bindings for LDB
+ ldb is a LDAP-like embedded database built on top of TDB.
+ .
+ This package contains the Python3 bindings.
+
+Package: python3-ldb-dev
+Section: libdevel
+Architecture: any
+Depends: libc6-dev,
+         libldb-dev,
+         pkg-config,
+         python3-ldb (= ${binary:Version}),
+         ${misc:Depends}
+Description: LDB Python3 bindings - development files
+ ldb is a LDAP-like embedded database built on top of TDB.
+ .
+ It is a fast database with an LDAP-like API designed
+ to be used within an application. In some ways it can be seen as a
+ intermediate solution between key-value pair databases and a real LDAP
+ database.
+ .
+ This package contains the development files for the Python3 bindings.

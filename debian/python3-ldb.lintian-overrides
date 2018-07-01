@@ -1,0 +1,2 @@
+python3-ldb binary: binary-or-shlib-defines-rpath * /usr/lib/ldb
+python3-ldb binary: package-name-doesnt-match-sonames libpyldb-util-py3-1

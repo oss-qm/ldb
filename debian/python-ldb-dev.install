@@ -1,3 +1,4 @@
-usr/include/pyldb.h
+#! /usr/bin/dh-exec
+usr/include/pyldb.h ${DEB_PY2_INCDIR}
 usr/lib/*/libpyldb-util.so
 usr/lib/*/pkgconfig/pyldb-util.pc
