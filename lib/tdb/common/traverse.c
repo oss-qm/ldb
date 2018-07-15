@@ -166,15 +166,8 @@ static int tdb_traverse_internal(struct tdb_context *tdb,
 
 	/* tdb_next_lock places locks on the record returned, and its chain */
 	while ((off = tdb_next_lock(tdb, tl, &rec)) != 0) {
-		tdb_len_t full_len;
+		tdb_len_t full_len = rec.key_len + rec.data_len;
 		int nread;
-
-		if (off == TDB_NEXT_LOCK_ERR) {
-			ret = -1;
-			goto out;
-		}
-
-		full_len = rec.key_len + rec.data_len;
 
 		if (full_len > recbuf_len) {
 			recbuf_len = full_len;
@@ -202,6 +195,10 @@ static int tdb_traverse_internal(struct tdb_context *tdb,
 			}
 		}
 
+		if (off == TDB_NEXT_LOCK_ERR) {
+			ret = -1;
+			goto out;
+		}
 		count++;
 		/* now read the full record */
 		nread = tdb->methods->tdb_read(tdb, tl->off + sizeof(rec),

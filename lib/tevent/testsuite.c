@@ -375,7 +375,6 @@ static bool test_event_fd1(struct torture_context *tctx,
 			   const void *test_data)
 {
 	struct test_event_fd1_state state;
-	int ret;
 
 	ZERO_STRUCT(state);
 	state.tctx = tctx;
@@ -416,9 +415,7 @@ static bool test_event_fd1(struct torture_context *tctx,
 	 */
 	state.sock[0] = -1;
 	state.sock[1] = -1;
-
-	ret = socketpair(AF_UNIX, SOCK_STREAM, 0, state.sock);
-	torture_assert(tctx, ret == 0, "socketpair() failed");
+	socketpair(AF_UNIX, SOCK_STREAM, 0, state.sock);
 
 	state.te = tevent_add_timer(state.ev, state.ev,
 				    timeval_current_ofs(0,1000),

@@ -216,8 +216,7 @@ static int fold_string(int (*fprintf_fn)(void *, const char *, ...), void *priva
 			const char *buf, size_t length, int start_pos)
 {
 	size_t i;
-	size_t total = 0;
-	int ret;
+	int total=0, ret;
 
 	for (i=0;i<length;i++) {
 		ret = fprintf_fn(private_data, "%c", buf[i]);
@@ -281,8 +280,7 @@ static int ldb_ldif_write_trace(struct ldb_context *ldb,
 {
 	TALLOC_CTX *mem_ctx;
 	unsigned int i, j;
-	size_t total = 0;
-	int ret;
+	int total=0, ret;
 	char *p;
 	const struct ldb_message *msg;
 	const char * const * secret_attributes = ldb_get_opaque(ldb, LDB_SECRET_ATTRIBUTE_LIST_OPAQUE);
