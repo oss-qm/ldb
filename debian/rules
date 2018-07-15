@@ -21,22 +21,22 @@ LDFLAGS += -Wl,--as-needed
 DESTDIR=$(CURDIR)/debian/tmp
 
 export PYTHON=$(shell which `pyversions -d`)
+export PYTHON_CONFIG="$(PYTHON)-config"
 export WAF=$(PYTHON) ./buildtools/bin/waf
 
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
 %:
-	dh $* --with python2,python3
+	dh $* --with python2
 
 override_dh_auto_configure:
-	PYTHON="$(PYTHON)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" CPPFLAGS="$(CPPFLAGS)" \
+	PYTHON="$(PYTHON)" PYTHON_CONFIG="$(PYTHON_CONFIG)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" CPPFLAGS="$(CPPFLAGS)" \
 		$(WAF) configure --prefix=/usr --disable-rpath-install \
 		--builtin-libraries=ccan,replace,tdb_compat \
 		--bundled-libraries=NONE,pytevent \
 		--minimum-library-version="$(shell ./debian/autodeps.py --minimum-library-version)" \
 		--libdir=/usr/lib/$(DEB_HOST_MULTIARCH) \
-		--with-modulesdir=/usr/lib/$(DEB_HOST_MULTIARCH)/ldb/modules \
-		--extra-python=python3
+		--with-modulesdir=/usr/lib/$(DEB_HOST_MULTIARCH)/ldb/modules
 
 get-packaged-orig-source:
 	./debian/build-orig.sh
@@ -70,11 +70,6 @@ override_dh_auto_install:
 	ar cr libldb.a bin/default/common/*.o
 	mv libldb.a $(DESTDIR)/usr/lib/$(DEB_HOST_MULTIARCH)
 
-override_dh_install:
-	DEB_PY2_INCDIR=$(shell python-config --includes | sed 's,^-I\([^ ]*\).*,\1,') \
-	DEB_PY3_INCDIR=$(shell python3-config --includes | sed 's,^-I\([^ ]*\).*,\1,') \
-		dh_install
-
 override_dh_missing:
 	dh_missing --list-missing
 
@@ -82,5 +77,5 @@ override_dh_strip:
 	dh_strip --dbgsym-migration='python-ldb-dbg (<< 2:1.1.27-1~), libldb1-dbg (<< 2:1.1.27-1~)'
 
 override_dh_makeshlibs:
-	dh_makeshlibs -Xldb. -X_tevent. -ppython-ldb -ppython3-ldb -- -c3
+	dh_makeshlibs -Xldb.so -ppython-ldb -- -c4
 	dh_makeshlibs -X/usr/lib/$(DEB_HOST_MULTIARCH)/ldb -plibldb1 -- -c4
