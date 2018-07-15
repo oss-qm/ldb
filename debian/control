@@ -5,7 +5,6 @@ Maintainer: Debian Samba Maintainers <pkg-samba-maint@lists.alioth.debian.org>
 Uploaders: Jelmer Vernooij <jelmer@debian.org>,
            Mathieu Parent <sathieu@debian.org>
 Build-Depends: debhelper (>= 11),
-               dh-exec,
                dh-python,
                docbook-xml,
                docbook-xsl,
