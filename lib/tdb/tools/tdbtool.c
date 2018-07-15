@@ -647,6 +647,12 @@ static char *tdb_getline(const char *prompt)
 	return p?thisline:NULL;
 }
 
+static int do_delete_fn(TDB_CONTEXT *the_tdb, TDB_DATA key, TDB_DATA dbuf,
+                     void *state)
+{
+    return tdb_delete(the_tdb, key);
+}
+
 static void first_record(TDB_CONTEXT *the_tdb, TDB_DATA *pkey)
 {
 	TDB_DATA dbuf;
@@ -752,7 +758,7 @@ static int do_command(void)
 			return 0;
 		case CMD_ERASE:
 			bIterate = 0;
-			tdb_wipe_all(tdb);
+			tdb_traverse(tdb, do_delete_fn, NULL);
 			return 0;
 		case CMD_DUMP:
 			bIterate = 0;
@@ -924,13 +930,10 @@ int main(int argc, char *argv[])
 		break;
 	case 5:
 		arg2 = tdb_convert_string(argv[4],&arg2len);
-		FALL_THROUGH;
 	case 4:
 		arg1 = tdb_convert_string(argv[3],&arg1len);
-		FALL_THROUGH;
 	case 3:
 		cmdname = argv[2];
-		FALL_THROUGH;
 	default:
 		do_command();
 		break;

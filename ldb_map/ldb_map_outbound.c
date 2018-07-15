@@ -330,8 +330,7 @@ static int ldb_msg_el_merge(struct ldb_module *module, struct ldb_message *local
 				  attr_name);
 			return LDB_SUCCESS;
 		}
-
-		FALL_THROUGH;
+		/* fall through */
 	case LDB_MAP_KEEP:
 	case LDB_MAP_RENAME:
 	case LDB_MAP_RENDROP:

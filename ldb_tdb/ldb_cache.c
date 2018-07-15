@@ -238,7 +238,7 @@ static int ltdb_index_load(struct ldb_module *module,
 {
 	struct ldb_context *ldb = ldb_module_get_ctx(module);
 	struct ldb_dn *indexlist_dn;
-	int r, lmdb_subdb_version;
+	int r;
 
 	if (ldb->schema.index_handler_override) {
 		/*
@@ -290,20 +290,6 @@ static int ltdb_index_load(struct ldb_module *module,
 	ltdb->cache->GUID_index_dn_component
 		= ldb_msg_find_attr_as_string(ltdb->cache->indexlist,
 					      LTDB_IDX_DN_GUID, NULL);
-
-	lmdb_subdb_version
-		= ldb_msg_find_attr_as_int(ltdb->cache->indexlist,
-					   LTDB_IDX_LMDB_SUBDB, 0);
-
-	if (lmdb_subdb_version != 0) {
-		ldb_set_errstring(ldb,
-				  "FATAL: This ldb_mdb database has "
-				  "been written in a new verson of LDB "
-				  "using a sub-database index that "
-				  "is not understood by ldb "
-				  LDB_VERSION);
-		return -1;
-	}
 
 	return 0;
 }
@@ -400,13 +386,13 @@ int ltdb_cache_load(struct ldb_module *module)
 	uint64_t seq;
 	struct ldb_message *baseinfo = NULL, *options = NULL;
 	const struct ldb_schema_attribute *a;
-	bool have_write_txn = false;
 	int r;
 
 	ldb = ldb_module_get_ctx(module);
 
 	/* a very fast check to avoid extra database reads */
-	if (ltdb->cache != NULL && !ltdb->kv_ops->has_changed(ltdb)) {
+	if (ltdb->cache != NULL && 
+	    tdb_get_seqnum(ltdb->tdb) == ltdb->tdb_seqnum) {
 		return 0;
 	}
 
@@ -421,42 +407,30 @@ int ltdb_cache_load(struct ldb_module *module)
 	baseinfo_dn = ldb_dn_new(baseinfo, ldb, LTDB_BASEINFO);
 	if (baseinfo_dn == NULL) goto failed;
 
-	r = ltdb->kv_ops->lock_read(module);
-	if (r != LDB_SUCCESS) {
-		goto failed;
-	}
 	r= ltdb_search_dn1(module, baseinfo_dn, baseinfo, 0);
 	if (r != LDB_SUCCESS && r != LDB_ERR_NO_SUCH_OBJECT) {
-		goto failed_and_unlock;
+		goto failed;
 	}
-
+	
 	/* possibly initialise the baseinfo */
 	if (r == LDB_ERR_NO_SUCH_OBJECT) {
 
-		/* Give up the read lock, try again with a write lock */
-		r = ltdb->kv_ops->unlock_read(module);
-		if (r != LDB_SUCCESS) {
+		if (tdb_transaction_start(ltdb->tdb) != 0) {
 			goto failed;
 		}
-
-		if (ltdb->kv_ops->begin_write(ltdb) != 0) {
-			goto failed;
-		}
-
-		have_write_txn = true;
 
 		/* error handling for ltdb_baseinfo_init() is by
 		   looking for the record again. */
 		ltdb_baseinfo_init(module);
 
-		if (ltdb_search_dn1(module, baseinfo_dn, baseinfo, 0) != LDB_SUCCESS) {
-			goto failed_and_unlock;
-		}
+		tdb_transaction_commit(ltdb->tdb);
 
+		if (ltdb_search_dn1(module, baseinfo_dn, baseinfo, 0) != LDB_SUCCESS) {
+			goto failed;
+		}
 	}
 
-	/* Ignore the result, and update the sequence number */
-	ltdb->kv_ops->has_changed(ltdb);
+	ltdb->tdb_seqnum = tdb_get_seqnum(ltdb->tdb);
 
 	/* if the current internal sequence number is the same as the one
 	   in the database then assume the rest of the cache is OK */
@@ -467,17 +441,16 @@ int ltdb_cache_load(struct ldb_module *module)
 	ltdb->sequence_number = seq;
 
 	/* Read an interpret database options */
-
 	options = ldb_msg_new(ltdb->cache);
-	if (options == NULL) goto failed_and_unlock;
+	if (options == NULL) goto failed;
 
 	options_dn = ldb_dn_new(options, ldb, LTDB_OPTIONS);
-	if (options_dn == NULL) goto failed_and_unlock;
+	if (options_dn == NULL) goto failed;
 
 	r= ltdb_search_dn1(module, options_dn, options, 0);
 	talloc_free(options_dn);
 	if (r != LDB_SUCCESS && r != LDB_ERR_NO_SUCH_OBJECT) {
-		goto failed_and_unlock;
+		goto failed;
 	}
 	
 	/* set flags if they do exist */
@@ -504,7 +477,7 @@ int ltdb_cache_load(struct ldb_module *module)
 	ltdb_attributes_unload(module);
 
 	if (ltdb_index_load(module, ltdb) == -1) {
-		goto failed_and_unlock;
+		goto failed;
 	}
 
 	/*
@@ -513,7 +486,7 @@ int ltdb_cache_load(struct ldb_module *module)
 	 * partition module.
 	 */
 	if (ltdb_attributes_load(module) == -1) {
-		goto failed_and_unlock;
+		goto failed;
 	}
 
 	ltdb->GUID_index_syntax = NULL;
@@ -528,24 +501,9 @@ int ltdb_cache_load(struct ldb_module *module)
 	}
 
 done:
-	if (have_write_txn) {
-		if (ltdb->kv_ops->finish_write(ltdb) != 0) {
-			goto failed;
-		}
-	} else {
-		ltdb->kv_ops->unlock_read(module);
-	}
-
 	talloc_free(options);
 	talloc_free(baseinfo);
 	return 0;
-
-failed_and_unlock:
-	if (have_write_txn) {
-		ltdb->kv_ops->abort_write(ltdb);
-	} else {
-		ltdb->kv_ops->unlock_read(module);
-	}
 
 failed:
 	talloc_free(options);
@@ -634,7 +592,7 @@ int ltdb_increase_sequence_number(struct ldb_module *module)
 
 	/* updating the tdb_seqnum here avoids us reloading the cache
 	   records due to our own modification */
-	ltdb->kv_ops->has_changed(ltdb);
+	ltdb->tdb_seqnum = tdb_get_seqnum(ltdb->tdb);
 
 	return ret;
 }

@@ -462,8 +462,7 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 	      *decided = raw;
 	    }
 #endif
-
-	  FALL_THROUGH;
+	  /* Fall through.  */
 	case 'D':
 	  /* Match standard day format.  */
 	  if (!recursive (HERE_D_FMT))
@@ -612,8 +611,7 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 	      *decided = raw;
 	    }
 #endif
-
-	  FALL_THROUGH;
+	  /* Fall through.  */
 	case 'T':
 	  if (!recursive (HERE_T_FMT))
 	    return NULL;

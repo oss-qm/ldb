@@ -95,7 +95,7 @@ also accepted as dictionary entries here
         self.VENDOR_SUFFIX=None
         self.VENDOR_PATCH=None
 
-        for a, b in version_dict.items():
+        for a, b in version_dict.iteritems():
             if a.startswith("SAMBA_VERSION_"):
                 setattr(self, a[14:], b)
             else:
