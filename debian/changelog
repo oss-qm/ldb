@@ -1,3 +1,11 @@
+ldb (2:1.4.0+really1.3.5-2) unstable; urgency=high
+
+  * Add patch from upstream to fix FTBFS on some arches (arm64, armhf, mips,
+    mipsel, s390x, ...)
+  * Urgency kept to high
+
+ -- Mathieu Parent <sathieu@debian.org>  Thu, 16 Aug 2018 15:46:12 +0200
+
 ldb (2:1.4.0+really1.3.5-1) unstable; urgency=high
 
   * Upload to unstable
