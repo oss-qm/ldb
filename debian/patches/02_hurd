@@ -2,11 +2,13 @@ Description: Link against pthread on the Hurd, to work around bug #578432
 Author: Gabriele Giacone <1o5g4r8o@gmail.com>
 Bug-Debian: http://bugs.debian.org/749095
 
---- ldb-1.1.16.orig/wscript
-+++ ldb-1.1.16/wscript
-@@ -67,6 +67,10 @@ def configure(conf):
-         if not sys.platform.startswith("openbsd"):
-             conf.ADD_LDFLAGS('-Wl,-no-undefined', testflags=True)
+diff --git a/wscript b/wscript
+index 1ea0fd9..825f4e8 100644
+--- a/wscript
++++ b/wscript
+@@ -196,6 +196,10 @@ def configure(conf):
+             conf.DEFINE('HAVE_LMDB', '1')
+ 
  
 +        # Work around pthread bug on the hurd (#578432)
 +        if sys.platform.startswith("gnu"):
