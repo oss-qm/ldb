@@ -1,3 +1,18 @@
+ldb (2:1.4.2-1) experimental; urgency=medium
+
+  * Upload to experimental
+  * New upstream version 1.4.2
+    - Bump build-dependencies to talloc 2.1.4, tdb 1.3.16 and tevent 0.9.37
+    - Update symbols
+    - Update patch 02_hurd
+  * d/rules: Remove dbgsym-migration in override_dh_strip
+  * d/libldb1.install: Install libldb-mdb-int.so and libldb-key-value.so
+  * d/rules: dh_missing --fail-missing
+  * d/control: Revert "Mark python-ldb Multi-Arch: same" to fix Lintian's
+    multi-arch-same-package-calls-pycompile
+
+ -- Mathieu Parent <sathieu@debian.org>  Tue, 18 Sep 2018 21:21:53 +0200
+
 ldb (2:1.4.0+really1.3.6-1) unstable; urgency=medium
 
   * New upstream version 1.3.6
