@@ -1,2 +1,4 @@
 usr/lib/*/ldb/modules
 usr/lib/*/libldb.so.*
+usr/lib/*/ldb/libldb-mdb-int.so
+usr/lib/*/ldb/libldb-key-value.so
