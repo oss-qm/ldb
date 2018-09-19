@@ -1,3 +1,11 @@
+ldb (2:1.4.2-2) experimental; urgency=medium
+
+  * d/rules: Append -D_FILE_OFFSET_BITS=64 to CFLAGS to fix FTBFS on 32-bit
+    platforms
+  * d/rules: More verbose build log with waf -v
+
+ -- Mathieu Parent <sathieu@debian.org>  Wed, 19 Sep 2018 06:44:59 +0200
+
 ldb (2:1.4.2-1) experimental; urgency=medium
 
   * Upload to experimental
