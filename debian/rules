@@ -23,7 +23,7 @@ DESTDIR=$(CURDIR)/debian/tmp
 
 export PYTHON=$(shell which `pyversions -d`)
 export PYTHON_CONFIG="$(PYTHON)-config"
-export WAF=$(PYTHON) ./buildtools/bin/waf
+export WAF=$(PYTHON) ./buildtools/bin/waf -v
 
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
