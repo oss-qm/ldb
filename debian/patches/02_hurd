@@ -3,11 +3,11 @@ Author: Gabriele Giacone <1o5g4r8o@gmail.com>
 Bug-Debian: http://bugs.debian.org/749095
 
 diff --git a/wscript b/wscript
-index 1ea0fd9..825f4e8 100644
+index cd11baa..b671fd6 100644
 --- a/wscript
 +++ b/wscript
-@@ -196,6 +196,10 @@ def configure(conf):
-             conf.DEFINE('HAVE_LMDB', '1')
+@@ -197,6 +197,10 @@ def configure(conf):
+             conf.env.HAVE_LMDB = True
  
  
 +        # Work around pthread bug on the hurd (#578432)
