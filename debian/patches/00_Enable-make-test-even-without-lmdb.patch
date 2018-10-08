@@ -1,0 +1,175 @@
+From 1835cc677b48be65345628fc6300a1d4f2761f7b Mon Sep 17 00:00:00 2001
+From: Mathieu Parent <math.parent@gmail.com>
+Date: Wed, 3 Oct 2018 20:18:55 +0000
+Subject: [PATCH] Enable make test even without lmdb
+
+---
+ tests/python/api.py   | 18 ++++++++++++++++++
+ tests/python/index.py |  4 ++++
+ wscript               | 24 +++++++++++++-----------
+ 3 files changed, 35 insertions(+), 11 deletions(-)
+
+diff --git a/tests/python/api.py b/tests/python/api.py
+index e401096..4ad9df4 100755
+--- a/tests/python/api.py
++++ b/tests/python/api.py
+@@ -688,6 +688,8 @@ class SimpleLdb(LdbBaseTest):
+ class SimpleLdbLmdb(SimpleLdb):
+ 
+     def setUp(self):
++        if os.environ['HAVE_LMDB'] == '0':
++            self.skipTest("No lmdb backend")
+         self.prefix = MDB_PREFIX
+         self.index = MDB_INDEX_OBJ
+         super(SimpleLdbLmdb, self).setUp()
+@@ -1314,6 +1316,8 @@ class SearchTests(LdbBaseTest):
+ class SearchTestsLmdb(SearchTests):
+ 
+     def setUp(self):
++        if os.environ['HAVE_LMDB'] == '0':
++            self.skipTest("No lmdb backend")
+         self.prefix = MDB_PREFIX
+         self.index = MDB_INDEX_OBJ
+         super(SearchTestsLmdb, self).setUp()
+@@ -1432,6 +1436,8 @@ class GUIDAndOneLevelIndexedSearchTests(SearchTests):
+ class GUIDIndexedSearchTestsLmdb(GUIDIndexedSearchTests):
+ 
+     def setUp(self):
++        if os.environ['HAVE_LMDB'] == '0':
++            self.skipTest("No lmdb backend")
+         self.prefix = MDB_PREFIX
+         super(GUIDIndexedSearchTestsLmdb, self).setUp()
+ 
+@@ -1442,6 +1448,8 @@ class GUIDIndexedSearchTestsLmdb(GUIDIndexedSearchTests):
+ class GUIDIndexedDNFilterSearchTestsLmdb(GUIDIndexedDNFilterSearchTests):
+ 
+     def setUp(self):
++        if os.environ['HAVE_LMDB'] == '0':
++            self.skipTest("No lmdb backend")
+         self.prefix = MDB_PREFIX
+         super(GUIDIndexedDNFilterSearchTestsLmdb, self).setUp()
+ 
+@@ -1452,6 +1460,8 @@ class GUIDIndexedDNFilterSearchTestsLmdb(GUIDIndexedDNFilterSearchTests):
+ class GUIDAndOneLevelIndexedSearchTestsLmdb(GUIDAndOneLevelIndexedSearchTests):
+ 
+     def setUp(self):
++        if os.environ['HAVE_LMDB'] == '0':
++            self.skipTest("No lmdb backend")
+         self.prefix = MDB_PREFIX
+         super(GUIDAndOneLevelIndexedSearchTestsLmdb, self).setUp()
+ 
+@@ -1662,6 +1672,8 @@ class AddModifyTests(LdbBaseTest):
+ class AddModifyTestsLmdb(AddModifyTests):
+ 
+     def setUp(self):
++        if os.environ['HAVE_LMDB'] == '0':
++            self.skipTest("No lmdb backend")
+         self.prefix = MDB_PREFIX
+         self.index = MDB_INDEX_OBJ
+         super(AddModifyTestsLmdb, self).setUp()
+@@ -1782,6 +1794,8 @@ class TransIndexedAddModifyTests(IndexedAddModifyTests):
+ class GuidIndexedAddModifyTestsLmdb(GUIDIndexedAddModifyTests):
+ 
+     def setUp(self):
++        if os.environ['HAVE_LMDB'] == '0':
++            self.skipTest("No lmdb backend")
+         self.prefix = MDB_PREFIX
+         super(GuidIndexedAddModifyTestsLmdb, self).setUp()
+ 
+@@ -1791,6 +1805,8 @@ class GuidIndexedAddModifyTestsLmdb(GUIDIndexedAddModifyTests):
+ class GuidTransIndexedAddModifyTestsLmdb(GUIDTransIndexedAddModifyTests):
+ 
+     def setUp(self):
++        if os.environ['HAVE_LMDB'] == '0':
++            self.skipTest("No lmdb backend")
+         self.prefix = MDB_PREFIX
+         super(GuidTransIndexedAddModifyTestsLmdb, self).setUp()
+ 
+@@ -2839,6 +2855,8 @@ class LdbResultTests(LdbBaseTest):
+ class LdbResultTestsLmdb(LdbResultTests):
+ 
+     def setUp(self):
++        if os.environ['HAVE_LMDB'] == '0':
++            self.skipTest("No lmdb backend")
+         self.prefix = MDB_PREFIX
+         self.index = MDB_INDEX_OBJ
+         super(LdbResultTestsLmdb, self).setUp()
+diff --git a/tests/python/index.py b/tests/python/index.py
+index 2613a4d..14bfb91 100755
+--- a/tests/python/index.py
++++ b/tests/python/index.py
+@@ -1285,6 +1285,8 @@ class MaxIndexKeyLengthTests(LdbBaseTest):
+ class MaxIndexKeyLengthTestsLmdb(MaxIndexKeyLengthTests):
+ 
+     def setUp(self):
++        if os.environ['HAVE_LMDB'] == '0':
++            self.skipTest("No lmdb backend")
+         self.prefix = MDB_PREFIX
+         super(MaxIndexKeyLengthTestsLmdb, self).setUp()
+ 
+@@ -1296,6 +1298,8 @@ class MaxIndexKeyLengthTestsLmdb(MaxIndexKeyLengthTests):
+ class RejectSubDBIndex(LdbBaseTest):
+ 
+     def setUp(self):
++        if os.environ['HAVE_LMDB'] == '0':
++            self.skipTest("No lmdb backend")
+         self.prefix = MDB_PREFIX
+         super(RejectSubDBIndex, self).setUp()
+         self.testdir = tempdir()
+diff --git a/wscript b/wscript
+index 1ea0fd9..da5c96a 100644
+--- a/wscript
++++ b/wscript
+@@ -194,6 +194,7 @@ def configure(conf):
+ 
+         if conf.CHECK_FUNCS_IN('mdb_env_create', 'lmdb', headers='lmdb.h'):
+             conf.DEFINE('HAVE_LMDB', '1')
++            conf.env.HAVE_LMDB = True
+ 
+ 
+     conf.DEFINE('HAVE_CONFIG_H', 1, add_to_cflags=True)
+@@ -530,15 +531,15 @@ def test(ctx):
+     env = samba_utils.LOAD_ENVIRONMENT()
+     ctx.env = env
+ 
+-    if not env.HAVE_LMDB:
+-        raise Utils.WafError('make test called, but ldb was built '
+-                             '--without-ldb-lmdb')
+-
+     test_prefix = "%s/st" % (Utils.g_module.blddir)
+     shutil.rmtree(test_prefix, ignore_errors=True)
+     os.makedirs(test_prefix)
+     os.environ['TEST_DATA_PREFIX'] = test_prefix
+     os.environ['LDB_MODULES_PATH'] = Utils.g_module.blddir + "/modules/ldb"
++    if env.HAVE_LMDB:
++        os.environ['HAVE_LMDB'] = '1'
++    else:
++        os.environ['HAVE_LMDB'] = '0'
+     samba_utils.ADD_LD_LIBRARY_PATH('bin/shared')
+     samba_utils.ADD_LD_LIBRARY_PATH('bin/shared/private')
+ 
+@@ -561,13 +562,14 @@ def test(ctx):
+                  'ldb_tdb_guid_mod_op_test',
+                  'ldb_msg_test',
+                  'ldb_tdb_kv_ops_test',
+-                 'ldb_tdb_test',
+-                 'ldb_mdb_mod_op_test',
+-                 'ldb_lmdb_test',
+-                 # we don't want to run ldb_lmdb_size_test (which proves we can
+-                 # fit > 4G of data into the DB), it would fill up the disk on
+-                 # many of our test instances
+-                 'ldb_mdb_kv_ops_test']
++                 'ldb_tdb_test']
++    if env.HAVE_LMDB:
++        test_exes += ['ldb_mdb_mod_op_test',
++                     'ldb_lmdb_test',
++                     # we don't want to run ldb_lmdb_size_test (which proves we can
++                     # fit > 4G of data into the DB), it would fill up the disk on
++                     # many of our test instances
++                     'ldb_mdb_kv_ops_test']
+ 
+     for test_exe in test_exes:
+             cmd = os.path.join(Utils.g_module.blddir, test_exe)
+-- 
+2.19.0
+
