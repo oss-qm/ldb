@@ -1,3 +1,14 @@
+ldb (2:1.4.2-3) experimental; urgency=medium
+
+  * Fix FTBFS on 32-bit architectures (Samba #13630):
+    - Revert "d/rules: Append -D_FILE_OFFSET_BITS=64 to CFLAGS to fix FTBFS on
+      32-bit platforms"
+    - Enable make test even without lmdb
+    - 02_hurd patch fixup
+    - d/libldb1.install: Do not ship libldb-mdb-int.so on 32-bit architectures
+
+ -- Mathieu Parent <sathieu@debian.org>  Mon, 08 Oct 2018 14:31:20 +0200
+
 ldb (2:1.4.2-2) experimental; urgency=medium
 
   * d/rules: Append -D_FILE_OFFSET_BITS=64 to CFLAGS to fix FTBFS on 32-bit
