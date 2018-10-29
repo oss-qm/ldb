@@ -1,3 +1,10 @@
+ldb (2:1.4.2-4) UNRELEASED; urgency=medium
+
+  * 03_EBADE: Add patch from upstream to fix FTBFS on architectures with no
+    EBADE error code, such as GNU/kFreeBSD.
+
+ -- James Clarke <jrtc27@debian.org>  Mon, 29 Oct 2018 22:14:48 +0000
+
 ldb (2:1.4.2-3) experimental; urgency=medium
 
   * Fix FTBFS on 32-bit architectures (Samba #13630):

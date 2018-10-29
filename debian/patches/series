@@ -1,3 +1,4 @@
 00_Enable-make-test-even-without-lmdb.patch
 01_manpage_dates
 02_hurd
+03_EBADE
