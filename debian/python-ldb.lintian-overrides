@@ -1,1 +1,3 @@
 python-ldb binary: package-name-doesnt-match-sonames libpyldb-util1
+# False positives, see #896012
+python-ldb: library-not-linked-against-libc usr/lib/x86_64-linux-gnu/libpyldb-util.so.*
