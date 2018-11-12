@@ -1,3 +1,17 @@
+ldb (2:1.4.3-1) UNRELEASED; urgency=medium
+
+  * Upload to experimental
+  * New upstream version 1.4.3
+    - Update symbols: no change
+  * Add Debian pipeline (debian/gitlab-ci.yml
+  * Lintian:
+    - debian/python-ldb.lintian-overrides: Override false-positive
+      library-not-linked-against-libc
+    - Fix public-upstream-key-not-minimal
+    - Add Build-Depends-Package field in d/*.symbols
+
+ -- Mathieu Parent <sathieu@debian.org>  Mon, 12 Nov 2018 07:10:24 +0100
+
 ldb (2:1.4.2-4) unstable; urgency=medium
 
   [ James Clarke ]
